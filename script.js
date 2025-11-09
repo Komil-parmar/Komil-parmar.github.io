@@ -1,4 +1,56 @@
 // ===========================
+// Webinars Data
+// ===========================
+// EASY TO EDIT: Add, remove, or reorder webinars by modifying this array
+const webinarsData = [
+    {
+        id: 1,
+        title: "Getting Started with Meta-Learning",
+        date: "March 2024",
+        description: "An introductory session covering the fundamentals of meta-learning, including few-shot learning techniques and practical implementations. Perfect for beginners looking to understand how AI can learn to learn.",
+        image: "images/webinar-meta-learning.jpg", // Add your webinar image here
+        attendees: "150+",
+        linkedInUrl: "https://www.linkedin.com/in/komil-parmar-488967243/"
+    },
+    {
+        id: 2,
+        title: "TensorFlow Deep Dive: Advanced Techniques",
+        date: "February 2024",
+        description: "Exploring advanced TensorFlow features, custom training loops, and optimization strategies. Shared insights from earning the TensorFlow Developer Certification.",
+        image: "images/webinar-tensorflow.jpg",
+        attendees: "200+",
+        linkedInUrl: "https://www.linkedin.com/in/komil-parmar-488967243/"
+    },
+    {
+        id: 3,
+        title: "Self-Learning Journey in ML",
+        date: "January 2024",
+        description: "My personal journey of choosing self-learning over traditional college. Tips, resources, and strategies for aspiring self-taught ML engineers.",
+        image: "images/webinar-self-learning.jpg",
+        attendees: "180+",
+        linkedInUrl: "https://www.linkedin.com/in/komil-parmar-488967243/"
+    },
+    {
+        id: 4,
+        title: "Kaggle Competition Strategies",
+        date: "December 2023",
+        description: "Sharing my approach to Kaggle competitions, from data preprocessing to ensemble methods. How I consistently placed in the top 10%.",
+        image: "images/webinar-kaggle.jpg",
+        attendees: "220+",
+        linkedInUrl: "https://www.linkedin.com/in/komil-parmar-488967243/"
+    },
+    {
+        id: 5,
+        title: "Building ML Projects from Scratch",
+        date: "November 2023",
+        description: "End-to-end walkthrough of building production-ready ML projects. From problem definition to deployment, covering best practices and common pitfalls.",
+        image: "images/webinar-ml-projects.jpg",
+        attendees: "190+",
+        linkedInUrl: "https://www.linkedin.com/in/komil-parmar-488967243/"
+    }
+];
+
+// ===========================
 // Flashcard Data
 // ===========================
 const flashcardsData = [
@@ -232,6 +284,178 @@ class FlashcardSystem {
 }
 
 // ===========================
+// Webinars Carousel
+// ===========================
+class WebinarsCarousel {
+    constructor() {
+        this.currentSlide = 0;
+        this.slides = webinarsData;
+        this.track = document.getElementById('carousel-track');
+        this.prevBtn = document.getElementById('carousel-prev');
+        this.nextBtn = document.getElementById('carousel-next');
+        this.dotsContainer = document.getElementById('carousel-dots');
+
+        if (!this.track) return; // Exit if carousel not on page
+
+        this.init();
+    }
+
+    init() {
+        this.renderSlides();
+        this.renderDots();
+        this.attachEventListeners();
+        this.updateCarousel();
+    }
+
+    renderSlides() {
+        this.track.innerHTML = this.slides.map((webinar, index) => `
+            <div class="carousel-slide" data-index="${index}">
+                <div class="webinar-card">
+                    <div class="webinar-image">
+                        <img src="${webinar.image}" alt="${webinar.title}"
+                             onerror="this.parentElement.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='none';">
+                    </div>
+                    <div class="webinar-content">
+                        <div class="webinar-meta">
+                            <div class="webinar-date">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                ${webinar.date}
+                            </div>
+                            <div class="webinar-attendees">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                ${webinar.attendees} attendees
+                            </div>
+                        </div>
+                        <h3>${webinar.title}</h3>
+                        <p class="webinar-description">${webinar.description}</p>
+                        <a href="${webinar.linkedInUrl}" target="_blank" rel="noopener noreferrer" class="webinar-read-more">
+                            Read more on LinkedIn
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    renderDots() {
+        this.dotsContainer.innerHTML = this.slides.map((_, index) => `
+            <button class="carousel-dot ${index === 0 ? 'active' : ''}"
+                    data-index="${index}"
+                    aria-label="Go to slide ${index + 1}">
+            </button>
+        `).join('');
+    }
+
+    attachEventListeners() {
+        // Arrow buttons
+        this.prevBtn.addEventListener('click', () => this.prevSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+
+        // Dots
+        this.dotsContainer.querySelectorAll('.carousel-dot').forEach(dot => {
+            dot.addEventListener('click', (e) => {
+                const index = parseInt(e.target.dataset.index);
+                this.goToSlide(index);
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') this.prevSlide();
+            if (e.key === 'ArrowRight') this.nextSlide();
+        });
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        this.track.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        this.track.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe();
+        });
+
+        const handleSwipe = () => {
+            if (touchStartX - touchEndX > 50) {
+                this.nextSlide();
+            }
+            if (touchEndX - touchStartX > 50) {
+                this.prevSlide();
+            }
+        };
+
+        this.handleSwipe = handleSwipe;
+    }
+
+    updateCarousel() {
+        // Update slide positions
+        const slideElements = this.track.querySelectorAll('.carousel-slide');
+        slideElements.forEach((slide, index) => {
+            slide.classList.remove('active', 'peek-left', 'peek-right');
+
+            if (index === this.currentSlide) {
+                slide.classList.add('active');
+            } else if (index === this.currentSlide - 1) {
+                slide.classList.add('peek-left');
+            } else if (index === this.currentSlide + 1) {
+                slide.classList.add('peek-right');
+            }
+        });
+
+        // Update transform
+        const slideWidth = slideElements[0]?.offsetWidth || 0;
+        const gap = 32; // 2rem gap
+        const offset = -(this.currentSlide * (slideWidth + gap));
+        this.track.style.transform = `translateX(${offset}px)`;
+
+        // Update dots
+        this.dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentSlide);
+        });
+
+        // Update arrow buttons
+        this.prevBtn.disabled = this.currentSlide === 0;
+        this.nextBtn.disabled = this.currentSlide === this.slides.length - 1;
+    }
+
+    nextSlide() {
+        if (this.currentSlide < this.slides.length - 1) {
+            this.currentSlide++;
+            this.updateCarousel();
+        }
+    }
+
+    prevSlide() {
+        if (this.currentSlide > 0) {
+            this.currentSlide--;
+            this.updateCarousel();
+        }
+    }
+
+    goToSlide(index) {
+        this.currentSlide = index;
+        this.updateCarousel();
+    }
+}
+
+// ===========================
 // Navigation
 // ===========================
 class Navigation {
@@ -458,6 +682,7 @@ class TechTips {
 // ===========================
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
+    const webinarsCarousel = new WebinarsCarousel();
     const flashcardSystem = new FlashcardSystem();
     const navigation = new Navigation();
     const scrollAnimations = new ScrollAnimations();
