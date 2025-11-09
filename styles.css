@@ -150,18 +150,45 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     padding: 120px var(--inner-padding-mobile) 60px;
     position: relative;
     overflow: hidden;
 }
 
+.hero-background-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background-image: url('images/five_year_old_rm.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
+
+.hero-background-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 20%, rgba(255, 255, 255, 0) 100%);
+    z-index: 1;
+}
+
 .hero-content {
     max-width: 1200px;
-    display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 60px;
-    align-items: center;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.hero-text {
+    max-width: 600px;
     width: 100%;
 }
 
@@ -262,92 +289,6 @@ body {
     transform: translateX(5px);
 }
 
-/* Hero Visual */
-.hero-visual {
-    position: relative;
-    height: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.portrait-container {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeInScale 1s ease-out;
-}
-
-@keyframes fadeInScale {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.portrait-image {
-    width: 100%;
-    max-width: 380px;
-    height: auto;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.15),
-        0 0 0 1px rgba(0, 0, 0, 0.05);
-    transition: var(--transition-smooth);
-    border: 3px solid white;
-}
-
-.portrait-image:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow:
-        0 30px 80px rgba(0, 0, 0, 0.2),
-        0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-.portrait-badge {
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    border: 2px solid var(--color-accent);
-    border-radius: 50px;
-    padding: 0.8rem 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    animation: float 3s ease-in-out infinite;
-}
-
-.badge-icon {
-    font-size: 1.5rem;
-}
-
-.badge-text {
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--color-accent);
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateX(-50%) translateY(0px);
-    }
-    50% {
-        transform: translateX(-50%) translateY(-10px);
-    }
-}
 
 .scroll-indicator {
     position: absolute;
@@ -1023,13 +964,12 @@ section {
         --inner-padding-desktop: 60px;
     }
 
-    .hero-content {
-        grid-template-columns: 1fr;
-        gap: 40px;
+    .hero-background-image {
+        width: 45%;
     }
 
-    .hero-visual {
-        height: 300px;
+    .hero-background-image::before {
+        background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.9) 30%, rgba(255, 255, 255, 0) 100%);
     }
 
     .pov-card.featured {
@@ -1067,30 +1007,39 @@ section {
         justify-content: center;
     }
 
-    .hero-visual {
-        height: 400px;
+    .hero {
+        align-items: center;
     }
 
-    .portrait-container {
-        max-width: 300px;
+    .hero-background-image {
+        width: 100%;
+        opacity: 0.15;
+        background-position: center top;
     }
 
-    .portrait-image {
-        max-width: 280px;
-        border-radius: 16px;
+    .hero-background-image::before {
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.9) 50%, rgba(255, 255, 255, 1) 100%);
     }
 
-    .portrait-badge {
-        padding: 0.6rem 1.2rem;
-        bottom: -15px;
+    .hero-text {
+        max-width: 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    .badge-icon {
-        font-size: 1.2rem;
+    .hero-description {
+        max-width: 100%;
     }
 
-    .badge-text {
-        font-size: 0.85rem;
+    .rotating-text-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    .hero-cta {
+        width: 100%;
     }
 
     .projects-grid,
