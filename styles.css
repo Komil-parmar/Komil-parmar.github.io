@@ -175,7 +175,7 @@ body {
     width: 60%;
     height: 100vh;
     background-image: url('images/five_year_old_rm.jpg');
-    background-size: cover;
+    background-size: auto 100%;
     background-position: center center;
     background-repeat: no-repeat;
     z-index: 1;
