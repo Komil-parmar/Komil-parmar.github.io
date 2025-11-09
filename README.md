@@ -92,7 +92,13 @@ Features adaptive layouts, collapsible navigation, and optimized spacing for all
 git clone https://github.com/Komil-parmar/personal-portfolio.git
 ```
 
-2. Open `index.html` in your browser:
+2. **Add your portrait image**:
+   - Place your portrait photo in the `images/` folder
+   - Name it `five_year_old_rm.jpg` (or `.png`, `.jpeg`)
+   - Recommended size: 800x1000px (3:4 aspect ratio)
+   - See `images/README.md` for detailed instructions
+
+3. Open `index.html` in your browser:
 ```bash
 open index.html
 ```
@@ -106,7 +112,10 @@ personal-portfolio/
 ├── index.html          # Main HTML file
 ├── styles.css          # All styles with CSS custom properties
 ├── script.js           # JavaScript for interactivity
-└── README.md          # This file
+├── README.md           # This file
+└── images/             # Image assets folder
+    ├── README.md       # Image guidelines
+    └── five_year_old_rm.jpg  # Your portrait image (add this!)
 ```
 
 ## 🎨 Customization
