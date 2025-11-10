@@ -18,16 +18,16 @@ export default function Community() {
             className="relative"
           >
             <div className="relative aspect-square max-w-md mx-auto">
-              {/* Placeholder for community logo */}
-              <div className="w-full h-full bg-gradient-to-br from-black via-gray-800 to-gray-900 rounded-3xl flex items-center justify-center shadow-2xl border-2 border-gray-200">
-                <div className="text-center p-8">
-                  <div className="text-8xl mb-6">🧠</div>
-                  <h3 className="text-3xl font-bold text-white mb-2 font-[family-name:var(--font-space-grotesk)]">
-                    Meta Learners
-                  </h3>
-                  <p className="text-gray-300 text-lg">Learning to Learn</p>
-                </div>
-              </div>
+              {/* Community logo */}
+              <div
+                className="w-full h-full rounded-3xl shadow-2xl border-2 border-gray-200 bg-white"
+                style={{
+                  backgroundImage: 'url(/images/meta-learners-logo.png)',
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              />
 
               {/* Floating badge */}
               <motion.div
