@@ -21,6 +21,7 @@ export default function Navigation() {
     { href: '#pov', label: 'POV' },
     { href: '#projects', label: 'Projects' },
     { href: '#webinars', label: 'Webinars' },
+    { href: '#community', label: 'Community' },
     { href: '#flashcards', label: 'Learn' },
     { href: '#contact', label: 'Contact' },
   ];

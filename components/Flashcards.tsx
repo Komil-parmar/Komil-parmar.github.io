@@ -33,13 +33,13 @@ export default function Flashcards() {
   };
 
   return (
-    <section id="flashcards" className="py-24 px-6 bg-gradient-to-br from-purple-600 via-indigo-600 to-purple-700 text-white">
+    <section id="flashcards" className="py-24 px-6 bg-gray-50">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold font-[family-name:var(--font-space-grotesk)] mb-4">
             Quick Learn: ML Flashcards
           </h2>
-          <p className="text-purple-100 text-lg">Bite-sized knowledge drops about machine learning</p>
+          <p className="text-gray-600 text-lg">Bite-sized knowledge drops about machine learning</p>
         </div>
 
         {/* Flashcard */}
@@ -53,7 +53,7 @@ export default function Flashcards() {
           >
             {/* Front */}
             <div
-              className="absolute inset-0 bg-white text-black rounded-2xl p-8 shadow-2xl flex flex-col justify-between"
+              className="absolute inset-0 bg-white text-black rounded-2xl p-8 shadow-2xl border-2 flex flex-col justify-between"
               style={{ backfaceVisibility: 'hidden' }}
             >
               <div>
@@ -71,7 +71,7 @@ export default function Flashcards() {
 
             {/* Back */}
             <div
-              className="absolute inset-0 bg-white text-black rounded-2xl p-8 shadow-2xl flex flex-col justify-between"
+              className="absolute inset-0 bg-white text-black rounded-2xl p-8 shadow-2xl border-2 flex flex-col justify-between"
               style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
             >
               <div>
@@ -94,7 +94,7 @@ export default function Flashcards() {
           <button
             onClick={handlePrev}
             disabled={currentIndex === 0}
-            className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="bg-white border-2 text-black px-6 py-3 rounded-lg font-semibold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             <ChevronLeft className="w-5 h-5" />
             Previous
@@ -107,7 +107,7 @@ export default function Flashcards() {
           <button
             onClick={handleNext}
             disabled={currentIndex === filteredCards.length - 1}
-            className="bg-white text-black px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="bg-white border-2 text-black px-6 py-3 rounded-lg font-semibold hover:bg-black hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             Next
             <ChevronRight className="w-5 h-5" />
@@ -127,8 +127,8 @@ export default function Flashcards() {
               onClick={() => handleCategoryChange(cat.value as typeof category)}
               className={`px-6 py-3 rounded-full font-semibold transition-all ${
                 category === cat.value
-                  ? 'bg-white text-purple-600'
-                  : 'bg-white/20 text-white hover:bg-white/30 border-2 border-white/50'
+                  ? 'bg-black text-white'
+                  : 'bg-white border-2 text-black hover:bg-gray-100'
               }`}
             >
               {cat.label}
