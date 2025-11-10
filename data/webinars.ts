@@ -16,19 +16,19 @@ export interface Webinar {
 export const webinarsData: Webinar[] = [
   {
     id: 1,
-    title: "Getting Started with Meta-Learning",
+    title: "Students ML Playground Series S1E1",
     date: "March 2024",
-    description: "An introductory session covering the fundamentals of meta-learning, including few-shot learning techniques and practical implementations. Perfect for beginners looking to understand how AI can learn to learn.",
-    image: "/images/webinar-meta-learning.jpg",
-    attendees: "150+",
-    linkedInUrl: "https://www.linkedin.com/in/komil-parmar-488967243/"
+    description: "An introductory session covering the fundamentals of kaggle and machine-learning, including best practices for competitions showcasing my self hosted kaggle competition perfect for beginners looking to .",
+    image: "/images/first_webinar.png",
+    attendees: "50+",
+    linkedInUrl: "https://www.linkedin.com/posts/komil-parmar-488967243_machinelearning-kaggle-datascience-activity-7360206691495243777-n0Jt?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg"
   },
   {
     id: 2,
-    title: "TensorFlow Deep Dive: Advanced Techniques",
+    title: "A small interaction with 50 of my IITG Juniors",
     date: "February 2024",
-    description: "Exploring advanced TensorFlow features, custom training loops, and optimization strategies. Shared insights from earning the TensorFlow Developer Certification.",
-    image: "/images/webinar-tensorflow.jpg",
+    description: "This was a small but meaningful meetup, mainly to break the ice, clear doubts, and make the juniors feel more comfortable as they step into this degree",
+    image: "/images/juniors_interaction.png",
     attendees: "200+",
     linkedInUrl: "https://www.linkedin.com/in/komil-parmar-488967243/"
   },
