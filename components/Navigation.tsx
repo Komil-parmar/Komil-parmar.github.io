@@ -22,6 +22,7 @@ export default function Navigation() {
     { href: '#projects', label: 'Projects' },
     { href: '#webinars', label: 'Webinars' },
     { href: '#community', label: 'Community' },
+    { href: '#kaggle', label: 'Kaggle' },
     { href: '#flashcards', label: 'Learn' },
     { href: '#contact', label: 'Contact' },
   ];
