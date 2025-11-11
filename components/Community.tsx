@@ -22,8 +22,8 @@ export default function Community() {
               <div
                 className="w-full h-full rounded-3xl shadow-2xl border-2 border-gray-200 bg-white"
                 style={{
-                  backgroundImage: 'url(/images/meta-learners-logo.png)',
-                  backgroundSize: 'contain',
+                  backgroundImage: 'url(/images/meta_learners_logo.png)',
+                  backgroundSize: 'auto 100%',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
                 }}

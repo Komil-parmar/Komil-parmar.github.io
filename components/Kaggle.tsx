@@ -8,8 +8,8 @@ export default function Kaggle() {
     {
       id: 1,
       title: 'Community Competition Host',
-      logo: '/images/kaggle-community-host.png',
-      certificateUrl: '#', // Replace with actual certificate URL
+      logo: '/images/kaggle-community-host.svg',
+      certificateUrl: 'https://www.kaggle.com/certification/badges/komilparmar/81', // Replace with actual certificate URL
       description: 'Hosted "Students ML Playground Series S1E1" for IITG peers—inspired by Kaggle\'s evergreen Playground Series.',
       details: [
         'Conducted multiple interactive webinars covering everything: Kaggle basics, EDA, visualization, model comparison, ensembling, overfitting, and tons of best practices',
@@ -22,8 +22,8 @@ export default function Kaggle() {
     {
       id: 2,
       title: 'Discussions Legacy Expert',
-      logo: '/images/kaggle-discussions-expert.png',
-      certificateUrl: '#', // Replace with actual certificate URL
+      logo: '/images/kaggle-discussions-expert.svg',
+      certificateUrl: 'https://www.kaggle.com/certification/badges/komilparmar/97', // Replace with actual certificate URL
       highestRank: 508,
       description: 'Achieved Expert tier in Discussions track before it was removed (2016-2025).',
       details: [
@@ -39,24 +39,24 @@ export default function Kaggle() {
   const competitions = [
     {
       id: 1,
-      name: 'Competition 1', // Replace with actual competition name
-      rank: 'Top X%', // Replace with actual rank
+      name: 'Predict Calorie Expenditure', // Replace with actual competition name
+      rank: '14/4316', // Replace with actual rank
       image: '/images/competition-1-header.png',
-      leaderboardUrl: '#' // Replace with actual leaderboard URL
+      leaderboardUrl: 'https://www.kaggle.com/competitions/playground-series-s5e5/leaderboard' // Replace with actual leaderboard URL
     },
     {
       id: 2,
-      name: 'Competition 2', // Replace with actual competition name
-      rank: 'Top X%', // Replace with actual rank
+      name: 'MAP - Charting Student Math Misunderstandings', // Replace with actual competition name
+      rank: '487/1857', // Replace with actual rank
       image: '/images/competition-2-header.png',
-      leaderboardUrl: '#' // Replace with actual leaderboard URL
+      leaderboardUrl: 'https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/leaderboard' // Replace with actual leaderboard URL
     },
     {
       id: 3,
-      name: 'Competition 3', // Replace with actual competition name
-      rank: 'Top X%', // Replace with actual rank
+      name: 'NeurIPS - Open Polymer Prediction 2025', // Replace with actual competition name
+      rank: '565/2240', // Replace with actual rank
       image: '/images/competition-3-header.png',
-      leaderboardUrl: '#' // Replace with actual leaderboard URL
+      leaderboardUrl: 'https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/leaderboard' // Replace with actual leaderboard URL
     }
   ];
 
