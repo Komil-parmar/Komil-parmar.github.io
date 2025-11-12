@@ -8,8 +8,9 @@ export default function Hero() {
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-visible pt-20 pb-16 px-6">
       {/* Background Portrait Image */}
       <div
-        className="absolute top-0 right-0 w-[60%] h-screen bg-cover bg-center z-0"
+        className="absolute top-0 w-[60%] h-screen bg-cover bg-center z-0"
         style={{
+          right: '-3%',
           backgroundImage: 'url(/images/five_year_old_rm.jpg)',
           backgroundSize: 'auto 100%',
           backgroundPosition: 'center center',
