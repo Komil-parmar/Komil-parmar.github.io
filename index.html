@@ -1,389 +1,721 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Komil Parmar - ML Enthusiast & Self-Taught Developer</title>
+    <meta name="description" content="20-year-old machine learning enthusiast from Gujarat. TensorFlow certified, Kaggle competitor, and perpetually curious about AI.">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="nav">
+    <nav id="navigation" class="nav">
         <div class="nav-container">
-            <a href="#home" class="logo">KP</a>
+            <a href="#home" class="nav-logo">KP</a>
+            
+            <!-- Desktop Navigation -->
             <div class="nav-links">
-                <a href="#about">My Story</a>
-                <a href="#pov">POV</a>
-                <a href="#projects">Projects</a>
-                <a href="#webinars">Webinars</a>
-                <a href="#flashcards">Learn</a>
-                <a href="#contact">Contact</a>
+                <a href="#about" class="nav-link">My Story</a>
+                <a href="#pov" class="nav-link">POV</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#webinars" class="nav-link">Webinars</a>
+                <a href="#community" class="nav-link">Community</a>
+                <a href="#kaggle" class="nav-link">Kaggle</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </div>
-            <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
+
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
+                <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
             </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <a href="#about" class="mobile-link">My Story</a>
+            <a href="#pov" class="mobile-link">POV</a>
+            <a href="#projects" class="mobile-link">Projects</a>
+            <a href="#webinars" class="mobile-link">Webinars</a>
+            <a href="#community" class="mobile-link">Community</a>
+            <a href="#kaggle" class="mobile-link">Kaggle</a>
+            <a href="#contact" class="mobile-link">Contact</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-background-image"></div>
+    <section id="home" class="hero-section">
+        <div class="hero-bg-image" style="background-image: url('images/five_year_old_rm.jpg')"></div>
+        
         <div class="hero-content">
             <div class="hero-text">
-                <div class="rotating-text-container">
-                    <span class="rotating-emoji">✨</span>
+                <div class="sparkles-icon">
+                    ✨
                 </div>
+
                 <h1 class="hero-title">
                     Hey, I'm Komil.
-                    <span class="subtitle">I build ML models and break things (for learning).</span>
+                    <span class="hero-subtitle">
+                        I build ML models and break things (for learning).
+                    </span>
                 </h1>
+
                 <p class="hero-description">
                     20-year-old machine learning enthusiast from Gujarat who ditched traditional college
                     to learn faster on my own terms. TensorFlow certified, Kaggle competitor, and
                     perpetually curious about what makes AI tick.
                 </p>
-                <div class="hero-cta">
-                    <a href="#about" class="btn btn-primary">Read My Story <span class="arrow">→</span></a>
-                    <a href="#flashcards" class="btn btn-secondary">Quick Learn ⚡</a>
+
+                <div class="hero-buttons">
+                    <a href="#about" class="btn btn-primary">
+                        Read My Story
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="#projects" class="btn btn-secondary">
+                        View Projects
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- Scroll Indicator -->
         <div class="scroll-indicator">
             <span>Scroll to explore</span>
-            <div class="scroll-arrow"></div>
+            <div class="scroll-line"></div>
         </div>
     </section>
 
     <!-- Marquee Section -->
-    <div class="marquee-container">
-        <div class="marquee">
-            <span>Machine Learning ★ TensorFlow ★ PyTorch ★ Meta-Learning ★ Kaggle Competitor ★ Self-Taught Developer ★ </span>
-            <span>Machine Learning ★ TensorFlow ★ PyTorch ★ Meta-Learning ★ Kaggle Competitor ★ Self-Taught Developer ★ </span>
+    <div class="marquee-section">
+        <div class="marquee-content">
+            <span class="marquee-text">Machine Learning ★ TensorFlow ★ PyTorch ★ Meta-Learning ★ Kaggle Competitor ★ Self-Taught Developer ★ </span>
+            <span class="marquee-text">Machine Learning ★ TensorFlow ★ PyTorch ★ Meta-Learning ★ Kaggle Competitor ★ Self-Taught Developer ★ </span>
         </div>
     </div>
 
     <!-- About Section -->
-    <section id="about" class="about">
+    <section id="about" class="about-section">
         <div class="container">
             <div class="section-header">
-                <h2>My Story (The Unconventional Path)</h2>
+                <h2 class="section-title">My Story (The Unconventional Path)</h2>
             </div>
+
             <div class="about-content">
-                <div class="about-text">
-                    <p class="lead">
-                        Look, I'm not going to bore you with the typical "I've been coding since I was 5" story.
-                        My journey's been all over the place—and honestly, that's what makes it interesting.
-                    </p>
+                <p class="lead-text">
+                    Look, I'm not going to bore you with the typical "I've been coding since I was 5" story.
+                    My journey's been all over the place—and honestly, that's what makes it interesting.
+                </p>
 
-                    <h3>How I Got Here</h3>
-                    <p>
-                        Started in class 8 making 3D models (thought I'd be the next Pixar animator),
-                        pivoted to ethical hacking in class 9 (yes, I was that kid), and finally found my
-                        calling in machine learning by class 10. Completed my first AI course while still
-                        in high school, got my <strong>TensorFlow Developer Certification</strong> at 18,
-                        and then made the biggest decision of my life.
-                    </p>
+                <h3 class="content-heading">How I Got Here</h3>
+                <p class="text-content">
+                    Started in class 8 making 3D models (thought I'd be the next Pixar animator),
+                    pivoted to ethical hacking in class 9 (yes, I was that kid), and finally found my
+                    calling in machine learning by class 10. Completed my first AI course while still
+                    in high school, got my <strong>TensorFlow Developer Certification</strong> at 18,
+                    and then made the biggest decision of my life.
+                </p>
 
-                    <div class="highlight-box">
-                        <h3>The College Decision 🎓 ❌</h3>
-                        <p>
-                            Instead of going to college and spending 4 years learning chemistry and physics
-                            (which, let's be real, I don't need for ML), I chose to teach myself. Why?
-                            Because I can learn faster without the fluff. While my peers are memorizing
-                            formulas they'll never use, I'm building models, competing on Kaggle, and
-                            actually doing the work.
-                        </p>
-                        <p class="quote">
-                            "I'm confident I'll catch up faster at home than most college students"
-                        </p>
+                <div class="callout-box">
+                    <h3 class="callout-title">The College Decision 🎓 ❌</h3>
+                    <p class="callout-text">
+                        Instead of going to college and spending 4 years learning chemistry and physics
+                        (which, let's be real, I don't need for ML), I chose to teach myself. Why?
+                        Because I can learn faster without the fluff. While my peers are memorizing
+                        formulas they'll never use, I'm building models, competing on Kaggle, and
+                        actually doing the work.
+                    </p>
+                    <p class="callout-quote">
+                        "I'm confident I'll catch up faster at home than most college students"
+                    </p>
+                </div>
+
+                <h3 class="content-heading">What I'm About</h3>
+                <p class="text-content">
+                    I'm from Vadodara, Gujarat—20 years old and completely obsessed with making
+                    machines learn things. My GitHub is filled with meta-learning experiments
+                    (because teaching AI how to learn is way cooler than just teaching it tasks),
+                    and I've placed in the top 10% on multiple Kaggle competitions.
+                </p>
+
+                <div class="credentials-grid">
+                    <div class="credential-card">
+                        <div class="credential-icon">🎓</div>
+                        <h4 class="credential-title">TensorFlow Developer Certificate</h4>
+                        <p class="credential-desc">Earned in 2022 - DeepMind certified</p>
                     </div>
-
-                    <h3>What I'm About</h3>
-                    <p>
-                        I'm from Vadodara, Gujarat—20 years old and completely obsessed with making
-                        machines learn things. My GitHub is filled with meta-learning experiments
-                        (because teaching AI how to learn is way cooler than just teaching it tasks),
-                        and I've placed in the top 10% on multiple Kaggle competitions.
-                    </p>
-
-                    <div class="credentials">
-                        <div class="cred-item">
-                            <span class="cred-icon">🎓</span>
-                            <div>
-                                <h4>TensorFlow Developer Certificate</h4>
-                                <p>Earned in 2022 - DeepMind certified</p>
-                            </div>
-                        </div>
-                        <div class="cred-item">
-                            <span class="cred-icon">🤖</span>
-                            <div>
-                                <h4>Google IT Automation with Python</h4>
-                                <p>Professional Certificate</p>
-                            </div>
-                        </div>
-                        <div class="cred-item">
-                            <span class="cred-icon">🏅</span>
-                            <div>
-                                <h4>TensorFlow: Advanced Techniques</h4>
-                                <p>DeepMind specialization</p>
-                            </div>
-                        </div>
+                    <div class="credential-card">
+                        <div class="credential-icon">🤖</div>
+                        <h4 class="credential-title">Google IT Automation</h4>
+                        <p class="credential-desc">Professional Certificate</p>
                     </div>
+                    <div class="credential-card">
+                        <div class="credential-icon">🏅</div>
+                        <h4 class="credential-title">TensorFlow: Advanced</h4>
+                        <p class="credential-desc">DeepMind specialization</p>
+                    </div>
+                </div>
 
-                    <h3>My Stack</h3>
-                    <div class="tech-stack">
-                        <div class="tech-category">
-                            <h4>Frameworks</h4>
+                <h3 class="content-heading">My Stack</h3>
+                <div class="stack-section">
+                    <div class="stack-category">
+                        <h4 class="stack-label">Frameworks</h4>
+                        <div class="tech-tags">
                             <span class="tech-tag">TensorFlow</span>
                             <span class="tech-tag">Keras</span>
                             <span class="tech-tag">PyTorch</span>
                             <span class="tech-tag">Scikit-learn</span>
                         </div>
-                        <div class="tech-category">
-                            <h4>Tools</h4>
+                    </div>
+                    <div class="stack-category">
+                        <h4 class="stack-label">Tools</h4>
+                        <div class="tech-tags">
                             <span class="tech-tag">PyCharm</span>
                             <span class="tech-tag">VS Code</span>
                             <span class="tech-tag">GitHub</span>
                             <span class="tech-tag">Jupyter</span>
                         </div>
-                        <div class="tech-category">
-                            <h4>Language</h4>
-                            <span class="tech-tag">Python</span>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- POV/Blog Section -->
-    <section id="pov" class="pov">
-        <div class="container">
+    <!-- POV Section -->
+    <section id="pov" class="pov-section">
+        <div class="container-wide">
             <div class="section-header">
-                <h2>POV: My Takes & Updates</h2>
-                <p>Thoughts, announcements, and hot takes on ML, learning, and life</p>
+                <h2 class="section-title">POV: My Takes & Updates</h2>
+                <p class="section-subtitle">Thoughts, announcements, and hot takes on ML, learning, and life</p>
             </div>
+
             <div class="pov-grid">
-                <article class="pov-card featured">
+                <div class="pov-card featured">
                     <div class="pov-meta">
-                        <span class="pov-category">Announcement</span>
+                        <span class="pov-badge">LinkedIn</span>
                         <span class="pov-date">Recent</span>
                     </div>
-                    <h3>Why I'm Building in Public</h3>
-                    <p>
-                        I've decided to share everything I'm learning, building, and breaking.
-                        Why? Because the best way to learn is to teach, and the best way to
-                        stay accountable is to let everyone watch you work. Follow my journey
-                        as I document every meta-learning experiment, Kaggle competition, and
-                        late-night debugging session.
-                    </p>
-                    <a href="#" class="read-more">Read more <span class="arrow">→</span></a>
-                </article>
+                    <h3 class="pov-title">Lighting another candle never dims your own flame — it only makes the room brighter. ✨</h3>
+                    <p class="pov-excerpt">That's the mindset I carry every time I guide someone, sharing whatever knowledge and experience I've gathered over the years.</p>
+                    <a href="https://www.linkedin.com/posts/komil-parmar-488967243_lighting-another-candle-never-dims-your-own-activity-7401176102838185984-tyCS?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="pov-link" target="_blank" rel="noopener noreferrer">Read on LinkedIn →</a>
+                </div>
 
-                <article class="pov-card">
+                <div class="pov-card">
                     <div class="pov-meta">
-                        <span class="pov-category">Hot Take</span>
+                        <span class="pov-badge">Hot Take</span>
                         <span class="pov-date">This Week</span>
                     </div>
-                    <h3>College Isn't For Everyone (And That's OK)</h3>
-                    <p>
-                        Controversial? Maybe. True? Absolutely. Here's why choosing self-learning
-                        over a CS degree was the best decision I ever made, and why it might not
-                        be right for you.
-                    </p>
-                    <a href="#" class="read-more">Read more <span class="arrow">→</span></a>
-                </article>
+                    <h3 class="pov-title">College Isn't For Everyone (And That's OK)</h3>
+                    <p class="pov-excerpt">Controversial? Maybe. True? Absolutely. Here's why choosing self-learning over a CS degree was the best decision...</p>
+                    <a href="https://github.com/Komil-parmar/Komil-parmar" class="pov-link">Read more →</a>
+                </div>
 
-                <article class="pov-card">
+                <div class="pov-card">
                     <div class="pov-meta">
-                        <span class="pov-category">Tutorial</span>
+                        <span class="pov-badge">Sad Story blog</span>
+                        <span class="pov-date">4 months ago</span>
+                    </div>
+                    <h3 class="pov-title">Prepare yourself for what happens off the stage, before preparing for what happens on it!</h3>
+                    <p class="pov-excerpt">A reflection on the importance of building a strong foundation and dealing with challenges before the spotlight hits.</p>
+                    <a href="https://www.linkedin.com/pulse/lost-before-competition-even-began-komil-parmar-q6khf/?trackingId=n1%2BIKAHip1BV6rCT4ZQXGA%3D%3D" class="pov-link" target="_blank" rel="noopener noreferrer">Read on LinkedIn →</a>
+                </div>
+
+                <div class="pov-card">
+                    <div class="pov-meta">
+                        <span class="pov-badge">Tutorial</span>
                         <span class="pov-date">Coming Soon</span>
                     </div>
-                    <h3>Meta-Learning From Scratch</h3>
-                    <p>
-                        Breaking down my meta-learning repository piece by piece. If you've ever
-                        wanted to understand how to teach AI to learn new tasks with minimal data,
-                        this series is for you.
-                    </p>
-                    <a href="#" class="read-more">Coming soon <span class="arrow">→</span></a>
-                </article>
-
-                <article class="pov-card announcement-card">
-                    <div class="pov-meta">
-                        <span class="pov-category">Webinar</span>
-                        <span class="pov-date">Upcoming</span>
-                    </div>
-                    <h3>📢 Next Up: Webinar & Competitions</h3>
-                    <div class="announcements">
-                        <div class="announcement-item">
-                            <span class="announcement-icon">🎤</span>
-                            <div>
-                                <strong>Hosting:</strong> "Getting Started with Meta-Learning" webinar
-                                <br><small>Stay tuned for dates!</small>
-                            </div>
-                        </div>
-                        <div class="announcement-item">
-                            <span class="announcement-icon">🏆</span>
-                            <div>
-                                <strong>Competing:</strong> Multiple Kaggle competitions
-                                <br><small>Check my profile for live competitions</small>
-                            </div>
-                        </div>
-                    </div>
-                </article>
+                    <h3 class="pov-title">Meta-Learning From Scratch</h3>
+                    <p class="pov-excerpt">Breaking down my meta-learning repository piece by piece. If you've ever wanted to understand how to teach AI...</p>
+                    <a href="#" class="pov-link">Read more →</a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
+    <section id="projects" class="projects-section">
+        <div class="container-wide">
             <div class="section-header">
-                <h2>What I'm Building</h2>
-                <p>Open-source projects and experiments</p>
+                <div class="section-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    Featured Projects
+                </div>
+                <h2 class="section-title">What I've Built</h2>
+                <p class="section-subtitle-large">
+                    From high school hardware hacks to deep learning research—projects that solve
+                    real problems and push my understanding to the limits.
+                </p>
             </div>
-            <div class="projects-grid">
+
+            <div class="projects-list">
+                <!-- Project 1: THOR -->
                 <div class="project-card">
-                    <div class="project-header">
-                        <h3>meta-learning-from-scratch</h3>
-                        <a href="https://github.com/Komil-parmar/meta-learning-from-scratch" target="_blank" class="project-link">
-                            View on GitHub →
-                        </a>
-                    </div>
-                    <p class="project-description">
-                        A modular collection of meta-learning implementations designed for clarity
-                        and experimentation. Built from scratch to understand the fundamentals
-                        before using high-level libraries.
-                    </p>
-                    <div class="project-tags">
-                        <span class="tag">Meta-Learning</span>
-                        <span class="tag">PyTorch</span>
-                        <span class="tag">Research</span>
+                    <div class="project-content">
+                        <div class="project-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                            </svg>
+                        </div>
+                        <h3 class="project-title">THOR: Traffic Hazard Optimization and Rescue</h3>
+                        <p class="project-tagline">CV-Based Intelligent Traffic Reduction System</p>
+                        
+                        <p class="project-description">
+                            An intelligent Traffic Reduction System that automatically takes the best action depending on live traffic using CCTV feeds. Automatically detects emergency vehicles like ambulances and clears their path to hospitals in advance through an interconnected system.
+                        </p>
+
+                        <div class="project-highlights">
+                            <h4 class="highlights-title">Key Highlights:</h4>
+                            <ul class="highlights-list">
+                                <li>Fine-tuned YOLO model on custom toy car dataset</li>
+                                <li>Collected and augmented own data - learned the critical importance of augmentation</li>
+                                <li>Built physical model of roads and traffic circles for live demo</li>
+                                <li>Connected phone (CCTV) to laptop via WiFi for real-time feed processing</li>
+                                <li>Developed UI with live statistics and traffic analytics</li>
+                                <li>Won multiple inter-school and district level competitions</li>
+                            </ul>
+                        </div>
+
+                        <div class="project-tech">
+                            <span class="tech-badge">YOLO</span>
+                            <span class="tech-badge">Computer Vision</span>
+                            <span class="tech-badge">Real-time Processing</span>
+                            <span class="tech-badge">Custom Dataset</span>
+                            <span class="tech-badge">Hardware Integration</span>
+                        </div>
+
+                        <div class="project-achievements">
+                            <span class="achievement">🏆 Multiple inter-school wins</span>
+                            <span class="achievement">🏆 District level winner</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Komil-parmar" class="project-link" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                                </svg>
+                                View on GitHub
+                            </a>
+                        </div>
+
+                        <p class="project-year">Class 11-12</p>
                     </div>
                 </div>
 
-                <div class="project-card coming-soon">
-                    <div class="project-header">
-                        <h3>More projects coming soon...</h3>
+                <!-- Project 2: SHIELD -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <div class="project-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="project-title">S.H.I.E.L.D.: Security and Home Intrusion Eradication & Defense</h3>
+                        <p class="project-tagline">Cost-Friendly High-Tech Home Security Suite</p>
+                        
+                        <p class="project-description">
+                            A suite of cost-friendly, high-tech innovations to protect homes using an invisible barrier system. Features anonymous alert triggers and laser-based intrusion detection.
+                        </p>
+
+                        <div class="project-highlights">
+                            <h4 class="highlights-title">Key Highlights:</h4>
+                            <ul class="highlights-list">
+                                <li>Modified pen with embedded diode - looks exactly like a regular pen</li>
+                                <li>Wearable anonymous alert trigger: blocks light source with fingers for SOS</li>
+                                <li>Smart enough to avoid false triggers from environmental lighting changes</li>
+                                <li>Button to disable trigger within a short period for false alarm prevention</li>
+                                <li>Dual-mode: Wearable SOS device AND home laser-based alert system</li>
+                                <li>Laser-based intrusion detection: place pen anywhere, point laser from other end</li>
+                                <li>Compact and anonymous design - main differentiator</li>
+                            </ul>
+                        </div>
+
+                        <div class="project-tech">
+                            <span class="tech-badge">IoT</span>
+                            <span class="tech-badge">Hardware Hacking</span>
+                            <span class="tech-badge">Embedded Systems</span>
+                            <span class="tech-badge">Circuit Design</span>
+                            <span class="tech-badge">Alert Systems</span>
+                        </div>
+
+                        <div class="project-achievements">
+                            <span class="achievement">🥈 2nd place among 21 schools</span>
+                            <span class="achievement">🛡️ Defence innovation award</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Komil-parmar" class="project-link" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                                </svg>
+                                View on GitHub
+                            </a>
+                        </div>
+
+                        <p class="project-year">High School</p>
                     </div>
-                    <p class="project-description">
-                        Currently working on some exciting ML experiments. Check back soon or
-                        follow me on GitHub to stay updated!
-                    </p>
+                </div>
+
+                <!-- Project 3: Meta-Learning -->
+                <div class="project-card">
+                    <div class="project-content">
+                        <div class="project-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                                <path d="M12 6v6l4 2"/>
+                            </svg>
+                        </div>
+                        <h3 class="project-title">Meta-Learning from Scratch</h3>
+                        <p class="project-tagline">Learning How to Learn - Modular Implementation Research</p>
+                        
+                        <p class="project-description">
+                            A comprehensive, modular collection of meta-learning implementations built entirely from scratch. Designed for clarity, deep understanding, and experimentation before relying on high-level libraries.
+                        </p>
+
+                        <div class="project-highlights">
+                            <h4 class="highlights-title">Key Highlights:</h4>
+                            <ul class="highlights-list">
+                                <li>Built popular meta-learning algorithms from first principles</li>
+                                <li>Modular architecture for easy experimentation and customization</li>
+                                <li>Extensive documentation explaining the "why" behind each design choice</li>
+                                <li>Includes MAML, Prototypical Networks, and more</li>
+                                <li>Focus on understanding fundamentals before using frameworks</li>
+                                <li>Active open-source project with community contributions</li>
+                                <li>Used for teaching and demonstrating meta-learning concepts</li>
+                            </ul>
+                        </div>
+
+                        <div class="project-tech">
+                            <span class="tech-badge">PyTorch</span>
+                            <span class="tech-badge">Meta-Learning</span>
+                            <span class="tech-badge">MAML</span>
+                            <span class="tech-badge">Research</span>
+                            <span class="tech-badge">From Scratch</span>
+                        </div>
+
+                        <div class="project-achievements">
+                            <span class="achievement">⭐ Open source</span>
+                            <span class="achievement">📚 Educational resource</span>
+                        </div>
+
+                        <div class="project-links">
+                            <a href="https://github.com/Komil-parmar/meta-learning-from-scratch" class="project-link" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                                </svg>
+                                View on GitHub
+                            </a>
+                            <a href="https://github.com/Komil-parmar/meta-learning-from-scratch" class="project-link" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                    <line x1="10" y1="14" x2="21" y2="3"/>
+                                </svg>
+                                Live Demo
+                            </a>
+                        </div>
+
+                        <p class="project-year">Ongoing</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Webinars Section -->
-    <section id="webinars" class="webinars">
-        <div class="container">
+    <!-- Webinars Carousel Section -->
+    <section id="webinars" class="webinars-section">
+        <div class="container-wide">
             <div class="section-header">
-                <h2>Webinars & Talks</h2>
-                <p>Sharing knowledge with the community</p>
+                <h2 class="section-title">Webinars & Talks</h2>
+                <p class="section-subtitle">Sharing knowledge with the community</p>
             </div>
-            <div class="carousel-container">
-                <button class="carousel-arrow carousel-arrow-left" id="carousel-prev" aria-label="Previous slide">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
+
+            <div class="carousel-wrapper">
+                <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous slide">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"/>
                     </svg>
                 </button>
 
-                <div class="carousel-wrapper">
-                    <div class="carousel-track" id="carousel-track">
-                        <!-- Slides will be dynamically generated by JavaScript -->
-                    </div>
+                <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next slide">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </button>
+
+                <div class="carousel-container" id="carousel-container">
+                    <!-- Webinar slides will be loaded dynamically -->
                 </div>
-
-                <button class="carousel-arrow carousel-arrow-right" id="carousel-next" aria-label="Next slide">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
             </div>
 
             <div class="carousel-dots" id="carousel-dots">
-                <!-- Dots will be dynamically generated by JavaScript -->
+                <!-- Dots will be loaded dynamically -->
             </div>
         </div>
     </section>
 
-    <!-- Flashcard Section -->
-    <section id="flashcards" class="flashcards">
-        <div class="container">
-            <div class="section-header">
-                <h2>Quick Learn: ML Flashcards</h2>
-                <p>Bite-sized knowledge drops about machine learning</p>
-            </div>
-            <div class="flashcard-container">
-                <div class="flashcard" id="flashcard">
-                    <div class="flashcard-inner">
-                        <div class="flashcard-front">
-                            <div class="flashcard-content">
-                                <span class="flashcard-label">Question</span>
-                                <p class="flashcard-text" id="question-text">Click to start learning!</p>
+    <!-- Community Section -->
+    <section id="community" class="community-section">
+        <div class="container-wide">
+            <div class="community-grid">
+                <div class="community-logo">
+                    <div class="logo-container">
+                        <div class="logo-image" style="background-image: url('images/meta_learners_logo.png')"></div>
+                        <div class="floating-badge">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <div>
+                                <p class="badge-number">100+</p>
+                                <p class="badge-label">Members</p>
                             </div>
-                            <button class="flip-btn">Flip to Answer</button>
-                        </div>
-                        <div class="flashcard-back">
-                            <div class="flashcard-content">
-                                <span class="flashcard-label">Answer</span>
-                                <p class="flashcard-text" id="answer-text">Answer will appear here</p>
-                            </div>
-                            <button class="flip-btn">Back to Question</button>
                         </div>
                     </div>
                 </div>
-                <div class="flashcard-controls">
-                    <button class="control-btn" id="prev-card">← Previous</button>
-                    <span class="card-counter" id="card-counter">1 / 10</span>
-                    <button class="control-btn" id="next-card">Next →</button>
+
+                <div class="community-content">
+                    <div class="community-badge">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 3v3m0 12v3m9-9h-3M6 12H3m15.364-6.364l-2.121 2.121M8.757 15.243l-2.121 2.121m12.728 0l-2.121-2.121M8.757 8.757L6.636 6.636"/>
+                        </svg>
+                        Join Our Community
+                    </div>
+
+                    <h2 class="community-title">Meta Learners: We are Learning to Learn</h2>
+
+                    <p class="community-description">
+                        A small, informal WhatsApp community where we share AI and ML resources,
+                        discuss cutting-edge concepts, and grow together. But here's the twist—we
+                        don't just learn tools, we learn <strong>how to learn</strong>.
+                    </p>
+
+                    <div class="community-features">
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="feature-title">Active Discussions</h3>
+                                <p class="feature-description">
+                                    Timely AI/ML updates, news, competitions, and deep-dive discussions
+                                    on concepts that matter. All the webinars above were conducted by or
+                                    in collaboration with this community.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                    <polyline points="17 6 23 6 23 12"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="feature-title">Learn to Adapt</h3>
+                                <p class="feature-description">
+                                    We focus on meta-learning—learning to learn and adapt to revolutionary
+                                    technologies in tech, rather than just mastering existing tools. Stay
+                                    ahead of the curve, not behind it.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="feature">
+                            <div class="feature-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 6v6l4 2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="feature-title">Small & Intimate</h3>
+                                <p class="feature-description">
+                                    Quality over quantity. We keep the group manageable to ensure meaningful
+                                    conversations and real connections. Everyone's voice matters.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="https://chat.whatsapp.com/your-invite-link" class="btn btn-community" target="_blank" rel="noopener noreferrer">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        Join Meta Learners
+                    </a>
                 </div>
-                <div class="flashcard-categories">
-                    <button class="category-btn active" data-category="all">All Topics</button>
-                    <button class="category-btn" data-category="basics">ML Basics</button>
-                    <button class="category-btn" data-category="deep-learning">Deep Learning</button>
-                    <button class="category-btn" data-category="meta-learning">Meta-Learning</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kaggle Section -->
+    <section id="kaggle" class="kaggle-section">
+        <div class="container-wide">
+            <div class="section-header">
+                <div class="section-badge kaggle-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                    Kaggle Achievements
                 </div>
+                <h2 class="section-title">Competing, Learning, Teaching</h2>
+                <p class="section-subtitle">My journey on Kaggle—from competitions to hosting my own</p>
+            </div>
+
+            <!-- Awards -->
+            <div class="kaggle-awards">
+                <div class="kaggle-award-card">
+                    <div class="award-header">
+                        <div class="award-icon-large">
+                            <img src="images/kaggle-community-host.svg" alt="Community Competition Host Badge" style="width: 80px; height: 80px; background-color: white; padding: 8px; border-radius: 8px;">
+                        </div>
+                        <div>
+                            <h3 class="award-title">Community Competition Host</h3>
+                            <a href="https://www.kaggle.com/certification/badges/komilparmar/81" class="award-link" target="_blank" rel="noopener noreferrer">View Certificate →</a>
+                        </div>
+                    </div>
+                    <p class="award-description">
+                        Hosted "Students ML Playground Series S1E1" for IITG peers—inspired by Kaggle's evergreen Playground Series.
+                    </p>
+                    <ul class="award-details">
+                        <li>Conducted multiple interactive webinars covering everything: Kaggle basics, EDA, visualization, model comparison, ensembling, overfitting, and tons of best practices</li>
+                        <li>Demonstrated how smart EDA can make a simple model outperform complex ones</li>
+                        <li>Live coding sessions, complete notebook walkthroughs, and discussions with top rankers</li>
+                        <li>Teaching style: real-world analogies, interactive, and beginner-friendly</li>
+                    </ul>
+                </div>
+
+                <div class="kaggle-award-card">
+                    <div class="award-header">
+                        <div class="award-icon-large">
+                            <img src="images/kaggle-discussions-expert.svg" alt="Discussions Expert Badge" style="width: 80px; height: 80px; background-color: white; padding: 8px; border-radius: 8px;">
+                        </div>
+                        <div>
+                            <h3 class="award-title">Discussions Legacy Expert</h3>
+                            <p class="award-rank">Highest Rank: #508</p>
+                            <a href="https://www.kaggle.com/certification/badges/komilparmar/97" class="award-link" target="_blank" rel="noopener noreferrer">View Certificate →</a>
+                        </div>
+                    </div>
+                    <p class="award-description">
+                        Achieved Expert tier in Discussions track before it was removed (2016-2025).
+                    </p>
+                    <ul class="award-details">
+                        <li>Demonstrates my passion for experimenting and sharing insights</li>
+                        <li>Active in discussing, learning, and teaching others on Kaggle forums</li>
+                        <li>ML isn't rule-based—there's always something new to discover</li>
+                        <li>Happy to share, review, rectify, and fight for my hypotheses (even the unreasonable ones)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Competitions -->
+            <div class="kaggle-competitions">
+                <h3 class="competitions-title">Competition Rankings</h3>
+                <div class="competitions-grid">
+                    <div class="competition-card">
+                        <div class="competition-image" style="background-image: url('images/competition-1-header.png');"></div>
+                        <div class="competition-content">
+                            <h4 class="competition-name">Predict Calorie Expenditure</h4>
+                            <div class="competition-rank">Rank: <strong>14/4316</strong></div>
+                            <a href="https://www.kaggle.com/competitions/playground-series-s5e5/leaderboard" class="competition-link" target="_blank" rel="noopener noreferrer">
+                                View Leaderboard →
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="competition-card">
+                        <div class="competition-image" style="background-image: url('images/competition-2-header.png');"></div>
+                        <div class="competition-content">
+                            <h4 class="competition-name">MAP - Charting Student Math Misunderstandings</h4>
+                            <div class="competition-rank">Rank: <strong>487/1857</strong></div>
+                            <a href="https://www.kaggle.com/competitions/map-charting-student-math-misunderstandings/leaderboard" class="competition-link" target="_blank" rel="noopener noreferrer">
+                                View Leaderboard →
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="competition-card">
+                        <div class="competition-image" style="background-image: url('images/competition-3-header.png');"></div>
+                        <div class="competition-content">
+                            <h4 class="competition-name">NeurIPS - Open Polymer Prediction 2025</h4>
+                            <div class="competition-rank">Rank: <strong>565/2240</strong></div>
+                            <a href="https://www.kaggle.com/competitions/neurips-open-polymer-prediction-2025/leaderboard" class="competition-link" target="_blank" rel="noopener noreferrer">
+                                View Leaderboard →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+            <!-- Quote Section -->
+            <div class="kaggle-quote">
+                <p class="quote-text">"ML is not a rule-based field. At every point, there's something new to discover that you'll most likely never find in existing resources. I'm happy to share, review, rectify, and fight for my hypotheses—even the unreasonable ones."</p>
             </div>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <section id="contact" class="contact-section">
         <div class="container">
             <div class="contact-content">
-                <h2>Let's Connect</h2>
+                <h2 class="contact-title">Let's Connect</h2>
                 <p class="contact-description">
                     Got a project idea? Want to collaborate? Just want to chat about ML?
                     Hit me up—I'm always down to talk shop.
                 </p>
-                <div class="contact-methods">
+
+                <div class="contact-grid">
                     <a href="mailto:komilparmar57@gmail.com" class="contact-card">
-                        <span class="contact-icon">📧</span>
-                        <div>
-                            <h3>Email</h3>
-                            <p>komilparmar57@gmail.com</p>
-                        </div>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <h3 class="contact-card-title">Email</h3>
+                        <p class="contact-card-value">komilparmar57@gmail.com</p>
                     </a>
-                    <a href="https://github.com/Komil-parmar" target="_blank" class="contact-card">
-                        <span class="contact-icon">💻</span>
-                        <div>
-                            <h3>GitHub</h3>
-                            <p>@Komil-parmar</p>
-                        </div>
+
+                    <a href="https://github.com/Komil-parmar" target="_blank" rel="noopener noreferrer" class="contact-card">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                        </svg>
+                        <h3 class="contact-card-title">GitHub</h3>
+                        <p class="contact-card-value">@Komil-parmar</p>
                     </a>
-                    <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" class="contact-card">
-                        <span class="contact-icon">💼</span>
-                        <div>
-                            <h3>LinkedIn</h3>
-                            <p>Komil Parmar</p>
-                        </div>
+
+                    <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer" class="contact-card">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect x="2" y="9" width="4" height="12"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                        <h3 class="contact-card-title">LinkedIn</h3>
+                        <p class="contact-card-value">Komil Parmar</p>
                     </a>
                 </div>
             </div>
@@ -392,18 +724,19 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>© 2024 Komil Parmar. Built with curiosity and lots of coffee ☕</p>
-                <div class="footer-links">
-                    <a href="https://github.com/Komil-parmar" target="_blank">GitHub</a>
-                    <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank">LinkedIn</a>
-                    <a href="mailto:komilparmar57@gmail.com">Email</a>
-                </div>
+        <div class="footer-container">
+            <p class="footer-text">
+                © 2024 Komil Parmar. Built with curiosity and lots of coffee ☕
+            </p>
+            <div class="footer-links">
+                <a href="https://github.com/Komil-parmar" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+                <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
+                <a href="mailto:komilparmar57@gmail.com" class="footer-link">Email</a>
             </div>
         </div>
     </footer>
 
+    <script src="data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
