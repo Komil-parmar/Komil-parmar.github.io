@@ -17,7 +17,7 @@ export const webinarsData: Webinar[] = [
   {
     id: 1,
     title: "Students ML Playground Series S1E1",
-    date: "March 2024",
+    date: "March 2025",
     description: "An introductory session covering the fundamentals of kaggle and machine-learning, including best practices for competitions showcasing my self hosted kaggle competition perfect for beginners looking to .",
     image: "/images/first_webinar.png",
     attendees: "50+",
@@ -26,7 +26,7 @@ export const webinarsData: Webinar[] = [
   {
     id: 2,
     title: "A small interaction with 50 of my IITG Juniors",
-    date: "February 2024",
+    date: "February 2025",
     description: "This was a small but meaningful meetup, mainly to break the ice, clear doubts, and make the juniors feel more comfortable as they step into this degree",
     image: "/images/juniors_interaction.png",
     attendees: "200+",
@@ -35,7 +35,7 @@ export const webinarsData: Webinar[] = [
   {
     id: 3,
     title: "Self-Learning Journey in ML",
-    date: "January 2024",
+    date: "January 2025",
     description: "My personal journey of choosing self-learning over traditional college. Tips, resources, and strategies for aspiring self-taught ML engineers.",
     image: "/images/webinar-self-learning.jpg",
     attendees: "180+",
@@ -44,7 +44,7 @@ export const webinarsData: Webinar[] = [
   {
     id: 4,
     title: "Kaggle Competition Strategies",
-    date: "December 2023",
+    date: "December 2025",
     description: "Sharing my approach to Kaggle competitions, from data preprocessing to ensemble methods. How I consistently placed in the top 10%.",
     image: "/images/webinar-kaggle.jpg",
     attendees: "220+",
@@ -53,7 +53,7 @@ export const webinarsData: Webinar[] = [
   {
     id: 5,
     title: "Building ML Projects from Scratch",
-    date: "November 2023",
+    date: "November 2025",
     description: "End-to-end walkthrough of building production-ready ML projects. From problem definition to deployment, covering best practices and common pitfalls.",
     image: "/images/webinar-ml-projects.jpg",
     attendees: "190+",

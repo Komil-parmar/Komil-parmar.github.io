@@ -6,7 +6,7 @@ const webinarsData = [
   {
     id: 1,
     title: "Students ML Playground Series S1E1",
-    date: "March 2024",
+    date: "March 2025",
     description: "An introductory session covering the fundamentals of kaggle and machine-learning, including best practices for competitions showcasing my self hosted kaggle competition perfect for beginners looking to get started.",
     image: "images/first_webinar.png",
     attendees: "50+",
@@ -15,7 +15,7 @@ const webinarsData = [
   {
     id: 2,
     title: "A small interaction with 50 of my IITG Juniors",
-    date: "February 2024",
+    date: "February 2025",
     description: "This was a small but meaningful meetup, mainly to break the ice, clear doubts, and make the juniors feel more comfortable as they step into this degree program.",
     image: "images/juniors_interaction.png",
     attendees: "50+",
@@ -24,7 +24,7 @@ const webinarsData = [
   {
     id: 3,
     title: "🚀 2nd Webinar – An Enhanced version of the 1st!",
-    date: "April 2024",
+    date: "April 2025",
     description: "After the first session, I received a flood of positive responses ❤️ along with many requests to conduct it again since most of the people were not aware of it and hence couldn't join last time.",
     image: "images/second_webinar.png",
     attendees: "80+",
@@ -33,7 +33,7 @@ const webinarsData = [
   {
     id: 4,
     title: "3rd Webinar – Deep Dive into Prompt Engineering & LLMs ✨",
-    date: "May 2024",
+    date: "May 2025",
     description: "Why and how prompts make a difference 🧠📊 • Understanding tokenizers in depth • Diving into the working of LLMs • Showing how prompts shift the distribution of words • Context Engineering ✅ vs Prompt Engineering ❌ • Real-world + intuitive examples • History of prompt engineering & evolution of models • Why modern LLMs don't just \"complete sentences\" anymore like the earlier ones",
     image: "images/third_webinar.png",
     attendees: "150+",
@@ -42,7 +42,7 @@ const webinarsData = [
   {
     id: 5,
     title: "Advanced Prompt Engineering & LLM Reasoning 💡",
-    date: "June 2024",
+    date: "June 2025",
     description: "English is the new programming language! Explaining this in detail especially with the concept of Vibe coding we started the session!",
     image: "images/forth_webinar.png",
     attendees: "200+",
