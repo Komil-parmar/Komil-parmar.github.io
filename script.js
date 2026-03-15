@@ -11,6 +11,117 @@ mobileMenuBtn.addEventListener('click', () => {
     mobileMenuBtn.classList.toggle('active');
 });
 
+// ===========================
+// DataCurve Section Animations
+// ===========================
+(function () {
+    var section = document.getElementById('current-role');
+    if (!section) return;
+
+    var counterEl = document.getElementById('dc-counter');
+    var twEl = document.getElementById('dc-typewriter');
+    var reveals = section.querySelectorAll('.dc-reveal');
+
+    // Counter: ₹0 → ₹37,747.38
+    function animateCounter(el, target, duration) {
+        var start = 0;
+        var step = target / (duration / 16);
+        function tick() {
+            start += step;
+            if (start >= target) {
+                el.textContent = '₹' + target.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return;
+            }
+            el.textContent = '₹' + start.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+    }
+
+    // Neural network animation
+    function runNeuralNet() {
+        var svg = document.getElementById('nn-svg');
+        var inputCard = document.getElementById('nn-input-card');
+        var outputCard = document.getElementById('nn-output-card');
+        if (!svg || !inputCard || !outputCard) return;
+
+        var inNodes = svg.querySelectorAll('.nn-n-in');
+        var hidNodes = svg.querySelectorAll('.nn-n-hid');
+        var outNodes = svg.querySelectorAll('.nn-n-out');
+        var linesIH = svg.querySelectorAll('.nn-ih');
+        var linesHO = svg.querySelectorAll('.nn-ho');
+        var linesCI = svg.querySelectorAll('.nn-ci');
+        var linesOC = svg.querySelectorAll('.nn-oc');
+        function clearAll() {
+            inputCard.classList.remove('active');
+            outputCard.classList.remove('active');
+            inNodes.forEach(function (n) { n.classList.remove('active'); });
+            hidNodes.forEach(function (n) { n.classList.remove('active'); });
+            outNodes.forEach(function (n) { n.classList.remove('active'); });
+            linesCI.forEach(function (l) { l.classList.remove('active'); });
+            linesIH.forEach(function (l) { l.classList.remove('active'); });
+            linesHO.forEach(function (l) { l.classList.remove('active'); });
+            linesOC.forEach(function (l) { l.classList.remove('active'); });
+        }
+
+        function cycle() {
+            clearAll();
+            setTimeout(function () { inputCard.classList.add('active'); }, 100);
+            setTimeout(function () { linesCI.forEach(function (l) { l.classList.add('active'); }); }, 300);
+            setTimeout(function () { inNodes.forEach(function (n) { n.classList.add('active'); }); }, 600);
+            setTimeout(function () { linesIH.forEach(function (l) { l.classList.add('active'); }); }, 900);
+            setTimeout(function () { hidNodes.forEach(function (n) { n.classList.add('active'); }); }, 1500);
+            setTimeout(function () { linesHO.forEach(function (l) { l.classList.add('active'); }); }, 1800);
+            setTimeout(function () { outNodes.forEach(function (n) { n.classList.add('active'); }); }, 2400);
+            setTimeout(function () { linesOC.forEach(function (l) { l.classList.add('active'); }); }, 2700);
+            setTimeout(function () { outputCard.classList.add('active'); }, 3000);
+            setTimeout(cycle, 5500);
+        }
+
+        cycle();
+    }
+
+    // Typewriter
+    var lines = [
+        'got_hired = "No application. Just online presence."',
+        'selection = { method: "invite_only", pool: 50, selected: True }',
+        'rank = 12  # quality × quantity. earned, not assigned.',
+        'payout_week_1 = 37747.38  # during exams.',
+    ];
+    var lineIdx = 0, charIdx = 0;
+
+    function typeNext() {
+        if (!twEl) return;
+        if (charIdx < lines[lineIdx].length) {
+            twEl.textContent += lines[lineIdx][charIdx++];
+            setTimeout(typeNext, 32);
+        } else {
+            setTimeout(function () {
+                twEl.textContent = '';
+                charIdx = 0;
+                lineIdx = (lineIdx + 1) % lines.length;
+                typeNext();
+            }, 2800);
+        }
+    }
+
+    // Trigger all on scroll
+    var triggered = false;
+    var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+            if (e.isIntersecting && !triggered) {
+                triggered = true;
+                reveals.forEach(function (el) { el.classList.add('visible'); });
+                if (counterEl) animateCounter(counterEl, 37747.38, 1800);
+                typeNext();
+                runNeuralNet();
+                io.disconnect();
+            }
+        });
+    }, { threshold: 0.15 });
+    io.observe(section);
+})();
+
 // Close mobile menu when clicking on a link
 mobileLinks.forEach(link => {
     link.addEventListener('click', () => {
