@@ -7,7 +7,7 @@ const webinarsData = [
     id: 1,
     title: "Students ML Playground Series S1E1",
     date: "March 2025",
-    description: "An introductory session covering the fundamentals of kaggle and machine-learning, including best practices for competitions showcasing my self hosted kaggle competition perfect for beginners looking to get started.",
+    description: "My first ever webinar! An introductory session covering the basics of Kaggle and machine learning, along with best practices for competitions. Also showcased the Kaggle competition I self hosted for students. Perfect for beginners looking to get started.",
     image: "images/first_webinar.png",
     attendees: "50+",
     linkedInUrl: "https://www.linkedin.com/posts/komil-parmar-488967243_machinelearning-kaggle-datascience-activity-7360206691495243777-n0Jt?utm_source=share&utm_medium=member_desktop"
