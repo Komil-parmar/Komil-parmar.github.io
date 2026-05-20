@@ -955,6 +955,11 @@ ul { list-style: none; }
     color: rgba(255,255,255,0.35);
 }
 
+/* Medal-strip labels stay bright (not faded like the other stat labels) */
+.dc-stats--medals .dc-stat-lbl {
+    color: rgba(255,255,255,0.8);
+}
+
 /* Story */
 .dc-story {
     max-width: 640px;
@@ -965,6 +970,7 @@ ul { list-style: none; }
     font-size: 1rem;
     color: rgba(255,255,255,0.65);
     line-height: 1.8;
+    margin: 0 0 1.1rem;
 }
 
 .dc-link {
@@ -2618,22 +2624,16 @@ section.fade-in {
    text contrast and readability are never affected.
    =========================== */
 
-/* --- 1. Dot-grid texture on the light content sections --- */
-.about-section,
-.pov-section,
-.projects-section,
-.webinars-section,
-.teaching-section,
-.community-section,
-.kaggle-section {
-    background-image: radial-gradient(circle, rgba(10, 10, 10, 0.045) 1px, transparent 1.6px);
-    background-size: 26px 26px;
-}
-
-/* Dot-grid on the dark contact section (faint white dots) */
-.contact-section {
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1.6px);
-    background-size: 26px 26px;
+/* --- 1. Per-section dot-field canvas ---
+   Each content section gets a <canvas> (injected by script.js) sitting
+   behind the content. It draws the dot grid revealed by slow-orbiting
+   points and by the cursor. All the logic lives in the dot-field module
+   in script.js. */
+.dot-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
 }
 
 /* --- 2. Giant faint section watermarks --- */
@@ -2679,40 +2679,6 @@ section[data-watermark] > .container-wide {
     pointer-events: none;
     opacity: 0.55;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxODAnIGhlaWdodD0nMTgwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44JyBudW1PY3RhdmVzPSczJyBzdGl0Y2hUaWxlcz0nc3RpdGNoJy8+PGZlQ29sb3JNYXRyaXggdHlwZT0nc2F0dXJhdGUnIHZhbHVlcz0nMCcvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbHRlcj0ndXJsKCNuKScgb3BhY2l0eT0nMC4yMicvPjwvc3ZnPg==");
-}
-
-/* --- 4. Cursor-follow spotlight (soft grayscale halo) --- */
-.cursor-spotlight {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 600px;
-    height: 600px;
-    margin: -300px 0 0 -300px;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9997;
-    mix-blend-mode: multiply;
-    background: radial-gradient(circle closest-side,
-        rgba(221, 221, 221, 1) 0%,
-        rgba(240, 240, 240, 1) 45%,
-        rgba(255, 255, 255, 1) 78%);
-    opacity: 0;
-    transition: opacity 0.45s ease;
-    will-change: transform;
-}
-
-.cursor-spotlight.is-visible {
-    opacity: 1;
-}
-
-/* No mouse on touch devices, and respect reduced-motion preferences */
-@media (hover: none), (pointer: coarse) {
-    .cursor-spotlight { display: none; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .cursor-spotlight { display: none; }
 }
 
 /* On small screens, dial the watermark down a touch so it never crowds text */
