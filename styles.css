@@ -262,6 +262,17 @@ ul { list-style: none; }
     background: var(--gray-100);
 }
 
+.nav-link.active {
+    color: var(--white);
+    font-weight: 600;
+    background: var(--black);
+}
+
+.nav-link.active:hover {
+    color: var(--white);
+    background: var(--gray-800);
+}
+
 .mobile-menu-btn {
     display: flex;
     align-items: center;
@@ -304,6 +315,17 @@ ul { list-style: none; }
 .mobile-link:hover {
     color: var(--black);
     background: var(--gray-50);
+}
+
+.mobile-link.active {
+    color: var(--white);
+    font-weight: 600;
+    background: var(--black);
+}
+
+.mobile-link.active:hover {
+    color: var(--white);
+    background: var(--gray-800);
 }
 
 @media (min-width: 768px) {
@@ -2587,4 +2609,117 @@ section.fade-in {
 
 .kaggle-quote-wrap .kaggle-quote {
     margin-top: 0;
+}
+
+/* ===========================
+   Ambient Background Decoration
+   (dot-grid + film grain + section watermarks + cursor spotlight)
+   All layers stay behind content and at very low opacity so
+   text contrast and readability are never affected.
+   =========================== */
+
+/* --- 1. Dot-grid texture on the light content sections --- */
+.about-section,
+.pov-section,
+.projects-section,
+.webinars-section,
+.teaching-section,
+.community-section,
+.kaggle-section {
+    background-image: radial-gradient(circle, rgba(10, 10, 10, 0.045) 1px, transparent 1.6px);
+    background-size: 26px 26px;
+}
+
+/* Dot-grid on the dark contact section (faint white dots) */
+.contact-section {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1.6px);
+    background-size: 26px 26px;
+}
+
+/* --- 2. Giant faint section watermarks --- */
+section[data-watermark] {
+    position: relative;
+    overflow: hidden;
+}
+
+section[data-watermark]::before {
+    content: attr(data-watermark);
+    position: absolute;
+    top: 0.04em;
+    right: 2rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(3.5rem, 13vw, 11rem);
+    line-height: 0.92;
+    letter-spacing: -0.05em;
+    color: rgba(10, 10, 10, 0.062);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+}
+
+/* Lighter watermark on the dark contact section */
+.contact-section[data-watermark]::before {
+    color: rgba(255, 255, 255, 0.08);
+}
+
+/* Keep all section content above the watermark layer */
+section[data-watermark] > .container,
+section[data-watermark] > .container-wide {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- 3. Film-grain overlay (subtle, fixed, on top, click-through) --- */
+.grain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxODAnIGhlaWdodD0nMTgwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44JyBudW1PY3RhdmVzPSczJyBzdGl0Y2hUaWxlcz0nc3RpdGNoJy8+PGZlQ29sb3JNYXRyaXggdHlwZT0nc2F0dXJhdGUnIHZhbHVlcz0nMCcvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbHRlcj0ndXJsKCNuKScgb3BhY2l0eT0nMC4yMicvPjwvc3ZnPg==");
+}
+
+/* --- 4. Cursor-follow spotlight (soft grayscale halo) --- */
+.cursor-spotlight {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    margin: -300px 0 0 -300px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9997;
+    mix-blend-mode: multiply;
+    background: radial-gradient(circle closest-side,
+        rgba(221, 221, 221, 1) 0%,
+        rgba(240, 240, 240, 1) 45%,
+        rgba(255, 255, 255, 1) 78%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    will-change: transform;
+}
+
+.cursor-spotlight.is-visible {
+    opacity: 1;
+}
+
+/* No mouse on touch devices, and respect reduced-motion preferences */
+@media (hover: none), (pointer: coarse) {
+    .cursor-spotlight { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cursor-spotlight { display: none; }
+}
+
+/* On small screens, dial the watermark down a touch so it never crowds text */
+@media (max-width: 600px) {
+    section[data-watermark]::before {
+        font-size: clamp(3rem, 22vw, 7rem);
+        right: 1.25rem;
+        color: rgba(10, 10, 10, 0.055);
+    }
 }

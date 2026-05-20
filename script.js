@@ -140,6 +140,78 @@ window.addEventListener('scroll', () => {
 });
 
 // ===========================
+// Scroll Spy - highlight the nav link of the section currently in view
+// ===========================
+(function () {
+    // All nav links (desktop + mobile) that point to an on-page section
+    const allLinks = document.querySelectorAll('.nav-link[href^="#"], .mobile-link[href^="#"]');
+
+    // Map: section id -> list of links pointing to it (desktop + mobile share an id)
+    const linkMap = {};
+    allLinks.forEach(link => {
+        const id = link.getAttribute('href').slice(1);
+        if (!id) return;
+        (linkMap[id] = linkMap[id] || []).push(link);
+    });
+
+    // Sections in document order, taken from the desktop nav so the order is reliable
+    const sections = [];
+    document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+        const sec = document.getElementById(link.getAttribute('href').slice(1));
+        if (sec) sections.push(sec);
+    });
+    if (!sections.length) return;
+
+    const NAV_OFFSET = 120; // a line a little below the fixed navbar
+
+    function setActive(id) {
+        allLinks.forEach(l => l.classList.remove('active'));
+        if (id && linkMap[id]) {
+            linkMap[id].forEach(l => l.classList.add('active'));
+        }
+    }
+
+    function updateActiveLink() {
+        let currentId = null;
+
+        // The current section is the LAST one whose top has scrolled past the offset line.
+        // Sections without a nav link (hero, DataCurve, teaching) are simply skipped,
+        // so e.g. while scrolling through "teaching", "Webinars" stays lit.
+        for (let i = 0; i < sections.length; i++) {
+            if (sections[i].getBoundingClientRect().top <= NAV_OFFSET) {
+                currentId = sections[i].id;
+            } else {
+                break;
+            }
+        }
+
+        // If we're at the very bottom of the page, force the last linked section
+        // (Contact is short and may never cross the offset line on tall screens).
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+            currentId = sections[sections.length - 1].id;
+        }
+
+        setActive(currentId);
+    }
+
+    // Throttle scroll handling with requestAnimationFrame
+    let ticking = false;
+    function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            updateActiveLink();
+            ticking = false;
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updateActiveLink);
+    window.addEventListener('load', updateActiveLink);
+    updateActiveLink();
+})();
+
+// ===========================
 // Webinars Carousel
 // ===========================
 let currentSlide = 0;
@@ -287,3 +359,47 @@ document.querySelectorAll('section').forEach(section => {
 window.addEventListener('load', () => {
     document.body.classList.add('loaded');
 });
+
+// ===========================
+// Cursor-follow spotlight (soft grayscale halo trailing the mouse)
+// ===========================
+(function () {
+    const spot = document.getElementById('cursor-spotlight');
+    if (!spot) return;
+
+    // Only enable on devices with a real pointer, and respect reduced-motion
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!hasFinePointer || reduceMotion) return;
+
+    // target = where the mouse is; cur = where the blob currently is (it eases toward target)
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let curX = targetX;
+    let curY = targetY;
+    let visible = false;
+
+    window.addEventListener('mousemove', (e) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        if (!visible) {
+            visible = true;
+            spot.classList.add('is-visible');
+        }
+    }, { passive: true });
+
+    // Hide the blob when the cursor leaves the window
+    document.addEventListener('mouseleave', () => {
+        visible = false;
+        spot.classList.remove('is-visible');
+    });
+
+    // Animation loop: lerp (ease) the blob toward the cursor for a smooth trailing feel
+    function tick() {
+        curX += (targetX - curX) * 0.12;
+        curY += (targetY - curY) * 0.12;
+        spot.style.transform = 'translate(' + curX + 'px, ' + curY + 'px)';
+        requestAnimationFrame(tick);
+    }
+    tick();
+})();
