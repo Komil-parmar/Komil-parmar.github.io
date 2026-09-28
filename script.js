@@ -1,679 +1,549 @@
-// ===========================
-// Mobile Navigation
-// ===========================
-const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-const mobileMenu = document.getElementById('mobile-menu');
-const mobileLinks = document.querySelectorAll('.mobile-link');
-const navigation = document.getElementById('navigation');
+/* =========================================================
+   Komil Parmar · Portfolio v3 · "Graphite Diffusion"
+   Vanilla JS, no dependencies.
+   ========================================================= */
+(() => {
+    'use strict';
 
-mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('active');
-    mobileMenuBtn.classList.toggle('active');
-});
-
-// ===========================
-// DataCurve Section Animations
-// ===========================
-(function () {
-    var section = document.getElementById('current-role');
-    if (!section) return;
-
-    var counterEl = document.getElementById('dc-counter');
-    var twEl = document.getElementById('dc-typewriter');
-    var reveals = section.querySelectorAll('.dc-reveal');
-
-    // Counter: ₹0 → ₹37,747.38
-    function animateCounter(el, target, duration) {
-        var start = 0;
-        var step = target / (duration / 16);
-        function tick() {
-            start += step;
-            if (start >= target) {
-                el.textContent = '₹' + target.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                return;
-            }
-            el.textContent = '₹' + start.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-    }
-
-    // Neural network animation
-    function runNeuralNet() {
-        var svg = document.getElementById('nn-svg');
-        var inputCard = document.getElementById('nn-input-card');
-        var outputCard = document.getElementById('nn-output-card');
-        if (!svg || !inputCard || !outputCard) return;
-
-        var inNodes = svg.querySelectorAll('.nn-n-in');
-        var hidNodes = svg.querySelectorAll('.nn-n-hid');
-        var outNodes = svg.querySelectorAll('.nn-n-out');
-        var linesIH = svg.querySelectorAll('.nn-ih');
-        var linesHO = svg.querySelectorAll('.nn-ho');
-        var linesCI = svg.querySelectorAll('.nn-ci');
-        var linesOC = svg.querySelectorAll('.nn-oc');
-        function clearAll() {
-            inputCard.classList.remove('active');
-            outputCard.classList.remove('active');
-            inNodes.forEach(function (n) { n.classList.remove('active'); });
-            hidNodes.forEach(function (n) { n.classList.remove('active'); });
-            outNodes.forEach(function (n) { n.classList.remove('active'); });
-            linesCI.forEach(function (l) { l.classList.remove('active'); });
-            linesIH.forEach(function (l) { l.classList.remove('active'); });
-            linesHO.forEach(function (l) { l.classList.remove('active'); });
-            linesOC.forEach(function (l) { l.classList.remove('active'); });
-        }
-
-        function cycle() {
-            clearAll();
-            setTimeout(function () { inputCard.classList.add('active'); }, 100);
-            setTimeout(function () { linesCI.forEach(function (l) { l.classList.add('active'); }); }, 300);
-            setTimeout(function () { inNodes.forEach(function (n) { n.classList.add('active'); }); }, 600);
-            setTimeout(function () { linesIH.forEach(function (l) { l.classList.add('active'); }); }, 900);
-            setTimeout(function () { hidNodes.forEach(function (n) { n.classList.add('active'); }); }, 1500);
-            setTimeout(function () { linesHO.forEach(function (l) { l.classList.add('active'); }); }, 1800);
-            setTimeout(function () { outNodes.forEach(function (n) { n.classList.add('active'); }); }, 2400);
-            setTimeout(function () { linesOC.forEach(function (l) { l.classList.add('active'); }); }, 2700);
-            setTimeout(function () { outputCard.classList.add('active'); }, 3000);
-            setTimeout(cycle, 5500);
-        }
-
-        cycle();
-    }
-
-    // Typewriter
-    var lines = [
-        'got_hired = "No application. Just online presence."',
-        'selection = { method: "invite_only", pool: 50, selected: True }',
-        'rank = 12  # quality × quantity. earned, not assigned.',
-        'payout_week_1 = 37747.38  # during exams.',
-    ];
-    var lineIdx = 0, charIdx = 0;
-
-    function typeNext() {
-        if (!twEl) return;
-        if (charIdx < lines[lineIdx].length) {
-            twEl.textContent += lines[lineIdx][charIdx++];
-            setTimeout(typeNext, 32);
-        } else {
-            setTimeout(function () {
-                twEl.textContent = '';
-                charIdx = 0;
-                lineIdx = (lineIdx + 1) % lines.length;
-                typeNext();
-            }, 2800);
-        }
-    }
-
-    // Trigger all on scroll
-    var triggered = false;
-    var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-            if (e.isIntersecting && !triggered) {
-                triggered = true;
-                reveals.forEach(function (el) { el.classList.add('visible'); });
-                if (counterEl) animateCounter(counterEl, 37747.38, 1800);
-                typeNext();
-                runNeuralNet();
-                io.disconnect();
-            }
-        });
-    }, { threshold: 0.15 });
-    io.observe(section);
-})();
-
-// Close mobile menu when clicking on a link
-mobileLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        mobileMenuBtn.classList.remove('active');
-    });
-});
-
-// Add scroll effect to navigation
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-        navigation.classList.add('scrolled');
-    } else {
-        navigation.classList.remove('scrolled');
-    }
-});
-
-// ===========================
-// Scroll Spy - highlight the nav link of the section currently in view
-// ===========================
-(function () {
-    // All nav links (desktop + mobile) that point to an on-page section
-    const allLinks = document.querySelectorAll('.nav-link[href^="#"], .mobile-link[href^="#"]');
-
-    // Map: section id -> list of links pointing to it (desktop + mobile share an id)
-    const linkMap = {};
-    allLinks.forEach(link => {
-        const id = link.getAttribute('href').slice(1);
-        if (!id) return;
-        (linkMap[id] = linkMap[id] || []).push(link);
-    });
-
-    // Sections in document order, taken from the desktop nav so the order is reliable
-    const sections = [];
-    document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
-        const sec = document.getElementById(link.getAttribute('href').slice(1));
-        if (sec) sections.push(sec);
-    });
-    if (!sections.length) return;
-
-    const NAV_OFFSET = 120; // a line a little below the fixed navbar
-
-    function setActive(id) {
-        allLinks.forEach(l => l.classList.remove('active'));
-        if (id && linkMap[id]) {
-            linkMap[id].forEach(l => l.classList.add('active'));
-        }
-    }
-
-    function updateActiveLink() {
-        let currentId = null;
-
-        // The current section is the LAST one whose top has scrolled past the offset line.
-        // Sections without a nav link (hero, DataCurve, teaching) are simply skipped,
-        // so e.g. while scrolling through "teaching", "Webinars" stays lit.
-        for (let i = 0; i < sections.length; i++) {
-            if (sections[i].getBoundingClientRect().top <= NAV_OFFSET) {
-                currentId = sections[i].id;
-            } else {
-                break;
-            }
-        }
-
-        // If we're at the very bottom of the page, force the last linked section
-        // (Contact is short and may never cross the offset line on tall screens).
-        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
-            currentId = sections[sections.length - 1].id;
-        }
-
-        setActive(currentId);
-    }
-
-    // Throttle scroll handling with requestAnimationFrame
-    let ticking = false;
-    function onScroll() {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-            updateActiveLink();
-            ticking = false;
-        });
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', updateActiveLink);
-    window.addEventListener('load', updateActiveLink);
-    updateActiveLink();
-})();
-
-// ===========================
-// Webinars Carousel
-// ===========================
-let currentSlide = 0;
-const carouselContainer = document.getElementById('carousel-container');
-const carouselPrev = document.getElementById('carousel-prev');
-const carouselNext = document.getElementById('carousel-next');
-const carouselDots = document.getElementById('carousel-dots');
-
-function renderWebinars() {
-    // Render slides
-    carouselContainer.innerHTML = webinarsData.map((webinar, index) => `
-        <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-index="${index}">
-            <div class="webinar-card">
-                <div class="webinar-image" style="background-image: url('${webinar.image}')"></div>
-                <div class="webinar-content">
-                    <div class="webinar-meta">
-                        <div class="webinar-meta-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="16" y1="2" x2="16" y2="6"/>
-                                <line x1="8" y1="2" x2="8" y2="6"/>
-                                <line x1="3" y1="10" x2="21" y2="10"/>
-                            </svg>
-                            ${webinar.date}
-                        </div>
-                        <div class="webinar-meta-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                            </svg>
-                            ${webinar.attendees} attendees
-                        </div>
-                    </div>
-                    <h3 class="webinar-title">${webinar.title}</h3>
-                    <p class="webinar-description">${webinar.description}</p>
-                    <a href="${webinar.linkedInUrl}" class="webinar-link" target="_blank" rel="noopener noreferrer">
-                        View Post on LinkedIn →
-                    </a>
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    // Render dots
-    carouselDots.innerHTML = webinarsData.map((_, index) => `
-        <button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}" aria-label="Go to slide ${index + 1}"></button>
-    `).join('');
-
-    // Add dot click handlers
-    document.querySelectorAll('.carousel-dot').forEach(dot => {
-        dot.addEventListener('click', () => {
-            const index = parseInt(dot.dataset.index);
-            goToSlide(index);
-        });
-    });
-}
-
-function goToSlide(index) {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.carousel-dot');
-    
-    // Remove active class from all
-    slides.forEach(slide => slide.classList.remove('active'));
-    dots.forEach(dot => dot.classList.remove('active'));
-    
-    // Add active class to current
-    slides[index].classList.add('active');
-    dots[index].classList.add('active');
-    
-    currentSlide = index;
-    
-    // Update button states
-    carouselPrev.disabled = currentSlide === 0;
-    carouselNext.disabled = currentSlide === webinarsData.length - 1;
-}
-
-carouselPrev.addEventListener('click', () => {
-    if (currentSlide > 0) {
-        goToSlide(currentSlide - 1);
-    }
-});
-
-carouselNext.addEventListener('click', () => {
-    if (currentSlide < webinarsData.length - 1) {
-        goToSlide(currentSlide + 1);
-    }
-});
-
-// Initialize carousel
-renderWebinars();
-
-// Handle window resize
-let resizeTimer;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-        goToSlide(currentSlide);
-    }, 250);
-});
-
-// ===========================
-// Smooth Scrolling
-// ===========================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            const offset = 80; // Account for fixed nav
-            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-            window.scrollTo({
-                top: targetPosition,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
-// ===========================
-// Scroll Animations (Fade in on scroll)
-// ===========================
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in');
-        }
-    });
-}, observerOptions);
-
-// Observe sections for fade-in animation
-document.querySelectorAll('section').forEach(section => {
-    observer.observe(section);
-});
-
-// ===========================
-// Load animations on page load
-// ===========================
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
-
-// ===========================
-// Dot-field: each content section has a <canvas> behind its content.
-// A uniform dot grid is revealed by slow Lissajous-orbiting points and by
-// a cursor reveal-point. Dots are damped under text and images. One
-// 30fps loop drives only the on-screen sections.
-// ===========================
-(function () {
-    const SECTION_SELECTOR = '.about-section, .pov-section, .projects-section,' +
-        ' .webinars-section, .teaching-section, .community-section,' +
-        ' .kaggle-section, .contact-section';
-    const sections = Array.prototype.slice.call(document.querySelectorAll(SECTION_SELECTOR));
-    if (!sections.length) return;
-
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    const GRID = 26;                            // dot spacing (css px)
-    const DOT_R = 1.5;                          // dot radius (css px)
-    const DPR = Math.min(window.devicePixelRatio || 1, 1.5);
-    const FRAME_MS = 1000 / 30;                 // 30fps cap
-    const TEXT_DAMP = 0.06;                     // opacity multiplier inside text/image
-    const DAMP_EDGE = 14;                       // soft ramp around damp boxes (px)
-    const BASE_R = 150;                         // base reveal radius
+    /* ---------- page load ---------- */
+    requestAnimationFrame(() => document.body.classList.add('is-loaded'));
 
-    function clamp01(t) { return t < 0 ? 0 : t > 1 ? 1 : t; }
-    function smooth(t) { t = clamp01(t); return t * t * (3 - 2 * t); }
+    /* ---------- nav: hide on scroll, active section, mobile menu ---------- */
+    const nav = $('#nav');
+    const bar = $('#scroll-progress-bar');
+    const burger = $('#nav-burger');
+    const mobileMenu = $('#mobile-menu');
+    let lastY = window.scrollY;
 
-    // deterministic per-section RNG (mulberry32) so the layout is stable per load
-    function makeRng(seed) {
-        let s = seed >>> 0;
-        return function () {
-            s = s + 0x6D2B79F5 | 0;
-            let t = Math.imul(s ^ s >>> 15, 1 | s);
-            t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    const onScroll = () => {
+        const y = window.scrollY;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+        const menuOpen = burger.getAttribute('aria-expanded') === 'true';
+        if (!menuOpen) nav.classList.toggle('is-hidden', y > lastY && y > 400);
+        lastY = y;
+        updateClimb();
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const setMenu = (open) => {
+        burger.setAttribute('aria-expanded', String(open));
+        burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        mobileMenu.classList.toggle('is-open', open);
+        mobileMenu.setAttribute('aria-hidden', String(!open));
+        document.body.style.overflow = open ? 'hidden' : '';
+    };
+    burger.addEventListener('click', () => setMenu(burger.getAttribute('aria-expanded') !== 'true'));
+    $$('#mobile-menu a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+    const navLinks = $$('.nav-link');
+    const sectionObs = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            navLinks.forEach(l => l.classList.toggle('is-active', l.getAttribute('href') === '#' + en.target.id));
+        });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    $$('main section[id]').forEach(s => sectionObs.observe(s));
+
+    /* ---------- reveal + counters ---------- */
+    const fmt = n => n.toLocaleString('en-IN');
+    const countUp = (el) => {
+        const target = parseFloat(el.dataset.count);
+        if (reduceMotion || target <= 1) { el.textContent = fmt(target); return; }
+        const dur = 1400 + Math.min(target, 1000) * 0.6;
+        const t0 = performance.now();
+        const tick = (now) => {
+            const p = clamp((now - t0) / dur, 0, 1);
+            const e = 1 - Math.pow(1 - p, 4);
+            el.textContent = fmt(Math.round(target * e));
+            if (p < 1) requestAnimationFrame(tick);
         };
+        requestAnimationFrame(tick);
+    };
+
+    const revealObs = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            en.target.classList.add('in');
+            revealObs.unobserve(en.target);
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    $$('.reveal').forEach(el => revealObs.observe(el));
+
+    const countObs = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            countUp(en.target);
+            countObs.unobserve(en.target);
+        });
+    }, { threshold: 0.6 });
+    $$('[data-count]').forEach(el => { el.textContent = '0'; countObs.observe(el); });
+
+    /* section labels "denoise" from random glyphs */
+    const GLYPHS = '░▒▓#%*+=-:·01<>/\\';
+    const scramble = (node) => {
+        const final = node.textContent;
+        if (reduceMotion) return;
+        const t0 = performance.now(), dur = 900;
+        const tick = (now) => {
+            const p = clamp((now - t0) / dur, 0, 1);
+            let out = '';
+            for (let i = 0; i < final.length; i++) {
+                const ch = final[i];
+                const settle = (i / final.length) * 0.7 + 0.3;
+                out += (ch === ' ' || p >= settle) ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0];
+            }
+            node.textContent = out;
+            if (p < 1) requestAnimationFrame(tick); else node.textContent = final;
+        };
+        requestAnimationFrame(tick);
+    };
+    const labelObs = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+            if (!en.isIntersecting) return;
+            labelObs.unobserve(en.target);
+            Array.from(en.target.childNodes).filter(n => n.nodeType === 3 && n.textContent.trim()).forEach(scramble);
+        });
+    }, { threshold: 1 });
+    $$('.sec-index').forEach(el => labelObs.observe(el));
+
+    /* rupee counter */
+    const payout = $('#payout-counter');
+    if (payout) {
+        const target = +payout.dataset.rupees;
+        payout.textContent = '₹0';
+        new IntersectionObserver((entries, o) => {
+            if (!entries[0].isIntersecting) return;
+            o.disconnect();
+            if (reduceMotion) { payout.textContent = '₹' + fmt(target); return; }
+            const t0 = performance.now(), dur = 2200;
+            const tick = now => {
+                const p = clamp((now - t0) / dur, 0, 1);
+                const e = 1 - Math.pow(1 - p, 3);
+                payout.textContent = '₹' + fmt(Math.round(target * e));
+                if (p < 1) requestAnimationFrame(tick); else payout.textContent = '₹' + fmt(target);
+            };
+            requestAnimationFrame(tick);
+        }, { threshold: 0.6 }).observe(payout);
     }
 
-    // one state object per section (canvas created now, sized lazily)
-    const items = sections.map(function (sec, idx) {
-        const canvas = document.createElement('canvas');
-        canvas.className = 'dot-canvas';
-        canvas.setAttribute('aria-hidden', 'true');
-        sec.insertBefore(canvas, sec.firstChild);
-        return {
-            sec: sec,
-            canvas: canvas,
-            ctx: canvas.getContext('2d'),
-            dark: sec.classList.contains('contact-section'),
-            w: 0, h: 0, cols: 0, rows: 0,
-            acc: null, stamp: null,
-            points: [],
-            damp: [],
-            seed: (idx + 1) * 1013904223
+    /* ---------- climb timeline (scroll-linked) ---------- */
+    const climb = $('#climb');
+    const climbFill = $('#climb-fill');
+    const climbSteps = $$('.climb-step');
+    function updateClimb() {
+        if (!climb) return;
+        const r = climb.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const p = reduceMotion ? 1 : clamp((vh * 0.88 - r.top) / (vh * 0.55), 0, 1);
+        climbFill.style.setProperty('--progress', p.toFixed(4));
+        const n = climbSteps.length;
+        climbSteps.forEach((s, i) => s.classList.toggle('is-lit', p >= (i / (n - 1)) * 0.985 - 0.001));
+    }
+    updateClimb();
+
+    /* ---------- card spotlight + sketch tilt + magnetic buttons ---------- */
+    if (finePointer) {
+        $$('.card').forEach(card => {
+            card.addEventListener('pointermove', e => {
+                const r = card.getBoundingClientRect();
+                card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+                card.style.setProperty('--my', `${e.clientY - r.top}px`);
+            });
+        });
+
+        const sketch = $('#sketch-card');
+        if (sketch && !reduceMotion) {
+            sketch.addEventListener('pointermove', e => {
+                const r = sketch.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                sketch.style.setProperty('--ry', `${x * 7}deg`);
+                sketch.style.setProperty('--rx', `${-y * 7}deg`);
+            });
+            sketch.addEventListener('pointerleave', () => {
+                sketch.style.setProperty('--ry', '0deg');
+                sketch.style.setProperty('--rx', '0deg');
+            });
+        }
+
+        if (!reduceMotion) {
+            $$('.magnetic').forEach(btn => {
+                btn.addEventListener('pointermove', e => {
+                    const r = btn.getBoundingClientRect();
+                    const x = e.clientX - r.left - r.width / 2;
+                    const y = e.clientY - r.top - r.height / 2;
+                    btn.style.transform = `translate(${x * 0.18}px, ${y * 0.28}px)`;
+                });
+                btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+            });
+        }
+    }
+
+    /* ---------- leaderboard bars ---------- */
+    const lb = $('.lb');
+    if (lb) new IntersectionObserver((en, o) => { if (en[0].isIntersecting) { lb.classList.add('in'); o.disconnect(); } }, { threshold: 0.2 }).observe(lb);
+
+    /* ---------- writing: floating preview ---------- */
+    const preview = $('#post-preview');
+    if (preview && finePointer) {
+        const img = preview.querySelector('img');
+        let px = 0, py = 0, tx = 0, ty = 0, raf = null, on = false;
+        const loop = () => {
+            px += (tx - px) * 0.18; py += (ty - py) * 0.18;
+            preview.style.left = px + 'px'; preview.style.top = py + 'px';
+            raf = on || Math.abs(tx - px) > 0.5 ? requestAnimationFrame(loop) : null;
         };
+        $$('.post[data-img]').forEach(p => {
+            p.addEventListener('pointerenter', e => {
+                img.src = p.dataset.img;
+                tx = e.clientX + 170; ty = e.clientY;
+                if (!on) { px = tx; py = ty; }
+                on = true; preview.classList.add('is-on');
+                if (!raf) raf = requestAnimationFrame(loop);
+            });
+            p.addEventListener('pointermove', e => { tx = e.clientX + 170; ty = e.clientY; });
+            p.addEventListener('pointerleave', () => { on = false; preview.classList.remove('is-on'); });
+        });
+    }
+
+    /* ---------- webinars rail ---------- */
+    const rail = $('#webinar-rail');
+    if (rail && typeof webinarsData !== 'undefined') {
+        const toDate = s => new Date(s.replace(/(\w+) (\d{4})/, '$1 1, $2'));
+        const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const items = [...webinarsData].sort((a, b) => toDate(b.date) - toDate(a.date));
+        rail.innerHTML = items.map(w => `
+            <article class="card webinar">
+                <div class="webinar-img">
+                    <img src="${esc(w.image)}" alt="${esc(w.title)}" loading="lazy">
+                    <span class="webinar-att">${esc(w.attendees)} attendees</span>
+                </div>
+                <div class="webinar-body">
+                    <span class="mono">${esc(w.date)}</span>
+                    <h4>${esc(w.title)}</h4>
+                    <p>${esc(w.description)}</p>
+                    <a href="${esc(w.linkedInUrl)}" target="_blank" rel="noopener noreferrer" class="link-arrow">On LinkedIn <span>↗</span></a>
+                </div>
+            </article>`).join('');
+        const step = () => (rail.querySelector('.webinar')?.getBoundingClientRect().width || 340) + 16;
+        $('#rail-prev').addEventListener('click', () => rail.scrollBy({ left: -step(), behavior: 'smooth' }));
+        $('#rail-next').addEventListener('click', () => rail.scrollBy({ left: step(), behavior: 'smooth' }));
+        if (finePointer) $$('.webinar', rail).forEach(card => card.addEventListener('pointermove', e => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--my', `${e.clientY - r.top}px`);
+        }));
+    }
+
+    /* ---------- copy email ---------- */
+    const toast = $('#toast');
+    let toastT;
+    const showToast = (msg) => {
+        toast.textContent = msg; toast.classList.add('is-on');
+        clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('is-on'), 2200);
+    };
+    $('#copy-email')?.addEventListener('click', async (e) => {
+        const email = e.currentTarget.dataset.email;
+        try { await navigator.clipboard.writeText(email); showToast('Email copied. Talk soon!'); }
+        catch { showToast(email); }
     });
 
-    // slow-orbiting reveal-points, kept clear of the section's top/bottom seam
-    function buildPoints(it) {
-        const rand = makeRng(it.seed);
-        const count = Math.max(3, Math.min(9, Math.round(it.h / 280)));
-        it.points = [];
-        for (let i = 0; i < count; i++) {
-            const r = BASE_R * (0.8 + rand() * 0.5);
-            const margin = r + 8;                       // >= reveal radius: cluster never crosses the seam
-            const ax = (26 + rand() * 52) * 4;          // x orbit radius (4x: clearly visible travel)
-            let ay = (20 + rand() * 40) * 4;            // y orbit radius (4x)
-            // clamp the y-orbit so the orbiting centre still can't reach the top/bottom seam
-            const ayMax = Math.max(0, it.h / 2 - margin);
-            if (ay > ayMax) ay = ayMax;
-            let loY = margin + ay;
-            let hiY = it.h - margin - ay;
-            if (hiY < loY) { loY = hiY = it.h / 2; }
-            it.points.push({
-                hx: ax + rand() * Math.max(1, it.w - 2 * ax),
-                hy: loY + rand() * (hiY - loY),
-                ax: ax, ay: ay, r: r,
-                peak: 0.78 + rand() * 0.22,
-                wx: (2 * Math.PI) / (16 + rand() * 22),  // angular speed (slow loop)
-                wy: (2 * Math.PI) / (19 + rand() * 26),
-                phx: rand() * Math.PI * 2,
-                phy: rand() * Math.PI * 2
-            });
-        }
-    }
+    /* ---------- local time ---------- */
+    const lt = $('#local-time');
+    const tickTime = () => {
+        try {
+            lt.textContent = new Intl.DateTimeFormat('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }).format(new Date()) + ' IST';
+        } catch { lt.textContent = 'IST'; }
+    };
+    if (lt) { tickTime(); setInterval(tickTime, 30000); }
 
-    // measure text + image boxes (section-local) so dots can be damped there
-    function measureDamp(it) {
-        it.damp = [];
-        const secRect = it.sec.getBoundingClientRect();
-        const els = it.sec.querySelectorAll(
-            'h1,h2,h3,h4,h5,h6,p,li,img,' +
-            '.competition-image,.webinar-image,.logo-image,' +
-            '.kaggle-feature-shot,.kaggle-medal-shot,.award-icon-large');
-        for (let i = 0; i < els.length; i++) {
-            const r = els[i].getBoundingClientRect();
-            if (r.width < 4 || r.height < 4) continue;
-            // (elRect - secRect) is transform-invariant: correct even mid fade-in
-            const x = r.left - secRect.left;
-            const y = r.top - secRect.top;
-            it.damp.push({ x: x, y: y, x2: x + r.width, y2: y + r.height });
-        }
-    }
+    /* =========================================================
+       DIFFUSION PORTRAIT
+       The sketch is sampled into a point cloud. Each point follows
+       x_t = cos(n·π/2)·x0 + sin(n·π/2)·ε  (cosine schedule), and the
+       noise level n is annealed 1 → 0. Hovering adds noise locally
+       ("forward process"); it then denoises itself back.
+       ========================================================= */
+    const canvas = $('#diffusion');
+    if (canvas) initDiffusion(canvas);
 
-    // size the canvas, allocate buffers, (re)build points + damp boxes
-    function layout(it) {
-        if (!it.ctx) return;
-        const w = it.sec.offsetWidth;
-        const h = it.sec.offsetHeight;
-        if (!w || !h) return;
-        it.w = w; it.h = h;
-        it.canvas.width = Math.round(w * DPR);
-        it.canvas.height = Math.round(h * DPR);
-        it.canvas.style.width = w + 'px';
-        it.canvas.style.height = h + 'px';
-        it.ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-        it.cols = Math.floor(w / GRID) + 2;
-        it.rows = Math.floor(h / GRID) + 2;
-        it.acc = new Float32Array(it.cols * it.rows);
-        it.stamp = new Int32Array(it.cols * it.rows);
-        buildPoints(it);
-        measureDamp(it);
-    }
+    function initDiffusion(cv) {
+        const ctx = cv.getContext('2d');
+        const tEl = $('#diff-t'), barEl = $('#diff-bar'), statusEl = $('#diff-status');
+        const INK = [42, 41, 39];
+        const img = new Image();
+        img.decoding = 'async';
+        img.src = 'images/five_year_old_rm.jpg';
 
-    // damping factor at a section-local point (1 = full, TEXT_DAMP = inside a box)
-    function dampAt(it, x, y) {
-        let f = 1;
-        const d = it.damp;
-        for (let i = 0; i < d.length; i++) {
-            const b = d[i];
-            const dx = x < b.x ? b.x - x : x > b.x2 ? x - b.x2 : 0;
-            if (dx >= DAMP_EDGE) continue;
-            const dy = y < b.y ? b.y - y : y > b.y2 ? y - b.y2 : 0;
-            if (dy >= DAMP_EDGE) continue;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            const local = TEXT_DAMP + (1 - TEXT_DAMP) * (dist / DAMP_EDGE);
-            if (local < f) {
-                f = local;
-                if (f <= TEXT_DAMP + 0.002) return f;
+        let W, H, DPR, BW, BH, inkCanvas, pCanvas, pctx, pImage, buf8, buf32, ink32;
+        let N = 0, TX, TY, TONE, NX, NY, RT, OFF;
+        let wounds = [];
+        let sched = 1, running = false, raf = null, introStart = 0, ready = false, fallback = false;
+        const INTRO = 3400;
+
+        const gauss = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+
+        function build() {
+            const rect = cv.getBoundingClientRect();
+            W = Math.max(200, Math.round(rect.width));
+            H = Math.round(W * 1280 / 1033);
+            DPR = Math.min(window.devicePixelRatio || 1, 2);
+            BW = Math.round(W * DPR); BH = Math.round(H * DPR);
+            cv.width = BW; cv.height = BH;
+
+            // ink layer: darkness → alpha, so the sketch sits on the card's paper
+            inkCanvas = document.createElement('canvas');
+            inkCanvas.width = BW; inkCanvas.height = BH;
+            const ictx = inkCanvas.getContext('2d', { willReadFrequently: true });
+            ictx.drawImage(img, 0, 0, BW, BH);
+            let data;
+            try { data = ictx.getImageData(0, 0, BW, BH); }
+            catch (err) { fallback = true; return; }   // file:// taint → plain image
+            const d = data.data;
+            const dark = new Float32Array(BW * BH);
+            for (let i = 0, p = 0; i < d.length; i += 4, p++) {
+                const lum = (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114) / 255;
+                const k = clamp((1 - lum - 0.035) / 0.965, 0, 1);
+                dark[p] = k;
+                d[i] = INK[0]; d[i + 1] = INK[1]; d[i + 2] = INK[2]; d[i + 3] = k * 255;
             }
-        }
-        return f;
-    }
+            ictx.putImageData(data, 0, 0);
 
-    // cursor tracking (viewport coords)
-    let curTX = -99999, curTY = -99999;   // raw target
-    let curX = -99999, curY = -99999;     // eased
-    let cursorWanted = 0;                  // 1 while the pointer is in the window
-    let cursorStrength = 0;                // eased 0..1
-
-    if (hasFinePointer && !reduceMotion) {
-        window.addEventListener('mousemove', function (e) {
-            curTX = e.clientX; curTY = e.clientY;
-            cursorWanted = 1;
-        }, { passive: true });
-        document.addEventListener('mouseleave', function () { cursorWanted = 0; });
-    }
-
-    let frameId = 0;
-
-    // draw a single section
-    function draw(it, time) {
-        if (!it.acc || !it.ctx) return;
-        const ctx = it.ctx;
-        ctx.clearRect(0, 0, it.w, it.h);
-
-        // current positions of the orbiting reveal-points
-        const pts = [];
-        for (let i = 0; i < it.points.length; i++) {
-            const p = it.points[i];
-            pts.push({
-                x: p.hx + p.ax * Math.sin(p.wx * time + p.phx),
-                y: p.hy + p.ay * Math.sin(p.wy * time + p.phy),
-                r: p.r, peak: p.peak
-            });
-        }
-        // cursor reveal-point, if the pointer is over this section
-        if (cursorStrength > 0.015) {
-            const sr = it.sec.getBoundingClientRect();
-            const cx = curX - sr.left, cy = curY - sr.top;
-            if (cx > -BASE_R && cx < it.w + BASE_R && cy > -BASE_R && cy < it.h + BASE_R) {
-                pts.push({ x: cx, y: cy, r: 152, peak: cursorStrength });
-            }
-        }
-        if (!pts.length) return;
-
-        frameId++;
-        const acc = it.acc, stamp = it.stamp, cols = it.cols, rows = it.rows;
-        const lit = [];
-
-        // for each reveal-point, only walk its local grid window
-        for (let pi = 0; pi < pts.length; pi++) {
-            const p = pts[pi];
-            const r = p.r, peak = p.peak;
-            let ix0 = Math.floor((p.x - r) / GRID); if (ix0 < 0) ix0 = 0;
-            let ix1 = Math.ceil((p.x + r) / GRID); if (ix1 > cols - 1) ix1 = cols - 1;
-            let iy0 = Math.floor((p.y - r) / GRID); if (iy0 < 0) iy0 = 0;
-            let iy1 = Math.ceil((p.y + r) / GRID); if (iy1 > rows - 1) iy1 = rows - 1;
-            for (let ix = ix0; ix <= ix1; ix++) {
-                const gx = ix * GRID;
-                for (let iy = iy0; iy <= iy1; iy++) {
-                    const gy = iy * GRID;
-                    const dx = gx - p.x, dy = gy - p.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist >= r) continue;
-                    const o = smooth(1 - dist / r) * peak;
-                    const idx = iy * cols + ix;
-                    if (stamp[idx] !== frameId) {
-                        stamp[idx] = frameId;
-                        acc[idx] = o;
-                        lit.push(idx);
-                    } else if (o > acc[idx]) {
-                        acc[idx] = o;
-                    }
+            // sample point cloud
+            const step = W < 340 ? 2.6 : 3;
+            const cols = Math.floor(W / step), rows = Math.floor(H / step);
+            const tmp = [];
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const x = (c + 0.5) * step, y = (r + 0.5) * step;
+                    const k = dark[Math.floor(y * DPR) * BW + Math.floor(x * DPR)];
+                    if (k > 0.07) tmp.push(x, y, k);
                 }
             }
-        }
-
-        // draw the lit dots, damped under text/images
-        const rgb = it.dark ? '255,255,255' : '15,15,15';
-        const cap = it.dark ? 0.55 : 1;
-        for (let k = 0; k < lit.length; k++) {
-            const idx = lit[k];
-            let o = acc[idx];
-            if (o < 0.04) continue;
-            const ix = idx % cols;
-            const iy = (idx - ix) / cols;
-            const gx = ix * GRID, gy = iy * GRID;
-            o *= dampAt(it, gx, gy);
-            if (o < 0.03) continue;
-            if (o > cap) o = cap;
-            ctx.fillStyle = 'rgba(' + rgb + ',' + o.toFixed(3) + ')';
-            ctx.beginPath();
-            ctx.arc(gx, gy, DOT_R, 0, 6.283185307);
-            ctx.fill();
-        }
-    }
-
-    // main loop: 30fps, only the on-screen sections
-    const visible = [];
-    let running = false;
-    let lastDraw = 0;
-
-    function loop(now) {
-        if (!visible.length || document.hidden) { running = false; return; }
-        requestAnimationFrame(loop);
-        if (now - lastDraw < FRAME_MS) return;
-        lastDraw = now;
-
-        if (curTX > -90000) {
-            if (curX < -90000) { curX = curTX; curY = curTY; }
-            curX += (curTX - curX) * 0.22;
-            curY += (curTY - curY) * 0.22;
-        }
-        cursorStrength += (cursorWanted - cursorStrength) * 0.12;
-
-        const time = now / 1000;
-        for (let i = 0; i < visible.length; i++) draw(visible[i], time);
-    }
-
-    function ensureRunning() {
-        if (!running && visible.length && !document.hidden && !reduceMotion) {
-            running = true;
-            lastDraw = 0;
-            requestAnimationFrame(loop);
-        }
-    }
-
-    // visibility gating: a section animates only while on (or near) screen
-    const io = new IntersectionObserver(function (entries) {
-        for (let i = 0; i < entries.length; i++) {
-            const it = entries[i].target.__dot;
-            if (!it) continue;
-            const at = visible.indexOf(it);
-            if (entries[i].isIntersecting) {
-                if (!it.acc) layout(it);
-                if (at === -1) visible.push(it);
-            } else if (at !== -1) {
-                visible.splice(at, 1);
+            N = tmp.length / 3;
+            TX = new Float32Array(N); TY = new Float32Array(N); TONE = new Float32Array(N);
+            NX = new Float32Array(N); NY = new Float32Array(N); RT = new Float32Array(N); OFF = new Float32Array(N);
+            for (let i = 0; i < N; i++) {
+                TX[i] = tmp[i * 3]; TY[i] = tmp[i * 3 + 1]; TONE[i] = tmp[i * 3 + 2];
+                NX[i] = gauss(); NY[i] = gauss();
+                RT[i] = 0.15 + Math.random() * 0.55;
+                OFF[i] = Math.random();
             }
-        }
-        if (reduceMotion) {
-            for (let i = 0; i < visible.length; i++) draw(visible[i], 0);
-        } else {
-            ensureRunning();
-        }
-    }, { rootMargin: '140px 0px 140px 0px' });
 
-    document.addEventListener('visibilitychange', function () {
-        if (!document.hidden) ensureRunning();
-    });
+            pCanvas = document.createElement('canvas');
+            pCanvas.width = BW; pCanvas.height = BH;
+            pctx = pCanvas.getContext('2d');
+            pImage = pctx.createImageData(BW, BH);
+            buf8 = pImage.data;
+            buf32 = new Uint32Array(buf8.buffer);
+            ink32 = (0 << 24) | (INK[2] << 16) | (INK[1] << 8) | INK[0];
+            ready = true;
+        }
 
-    // re-measure laid-out sections (called after images / carousel settle, and on resize)
-    function relayout() {
-        for (let i = 0; i < items.length; i++) {
-            if (items[i].acc) layout(items[i]);
+        function drawFallback() {
+            ctx.clearRect(0, 0, cv.width, cv.height);
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.drawImage(img, 0, 0, cv.width, cv.height);
+            ctx.globalCompositeOperation = 'source-over';
+            tEl.textContent = '0';
+            barEl.style.transform = 'scaleX(1)';
+            statusEl.textContent = 'x₀ · graphite on paper';
         }
-        if (reduceMotion) {
-            for (let i = 0; i < visible.length; i++) draw(visible[i], 0);
+
+        function frame(now) {
+            raf = null;
+            if (!ready) return;
+
+            // global schedule (intro)
+            if (sched > 0) {
+                const p = clamp((now - introStart) / INTRO, 0, 1);
+                const e = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;  // easeInOutCubic
+                sched = 1 - e;
+            }
+            // decay wounds (reverse process)
+            for (let w of wounds) w.s *= 0.962;
+            wounds = wounds.filter(w => w.s > 0.012);
+
+            const imgA = Math.pow(clamp(1 - sched / 0.22, 0, 1), 1.6);
+            const S = W * 0.42;             // noise scale
+            const cx = W / 2, cy = H * 0.52;
+            const size = Math.max(1, Math.round(3 * DPR * 0.7));
+
+            buf32.fill(ink32);
+            const nW = wounds.length;
+            let drawn = 0;
+            for (let i = 0; i < N; i++) {
+                const tx = TX[i], ty = TY[i];
+                let w = 0;
+                for (let j = 0; j < nW; j++) {
+                    const W0 = wounds[j];
+                    const dx = tx - W0.x, dy = ty - W0.y;
+                    const d2 = (dx * dx + dy * dy) / (W0.r * W0.r);
+                    if (d2 < 1) { const f = (1 - d2); const v = W0.s * f * f; if (v > w) w = v; }
+                }
+                const gs = clamp(sched * 1.18 - 0.18 * OFF[i], 0, 1);
+                const n = gs > w ? gs : w * 0.75;
+                const vis = (1 - imgA) + imgA * clamp(w * 1.6, 0, 1);
+                if (vis < 0.01) continue;
+
+                const ang = n * 1.5707963;
+                const a = Math.cos(ang), b = Math.sin(ang);
+                const jit = n * 1.4;
+                const x = cx + a * (tx - cx) + b * NX[i] * S + (Math.random() - 0.5) * jit;
+                const y = cy + a * (ty - cy) + b * NY[i] * S * 1.1 + (Math.random() - 0.5) * jit;
+                const tone = TONE[i] + (RT[i] - TONE[i]) * n;
+                const alpha = tone * vis * 0.95;
+                if (alpha < 0.02) continue;
+
+                const px = (x * DPR) | 0, py = (y * DPR) | 0;
+                if (px < 0 || py < 0 || px + size >= BW || py + size >= BH) continue;
+                const a255 = alpha * 255;
+                for (let yy = 0; yy < size; yy++) {
+                    let idx = ((py + yy) * BW + px) * 4 + 3;
+                    for (let xx = 0; xx < size; xx++, idx += 4) {
+                        const v = buf8[idx] + a255;
+                        buf8[idx] = v > 255 ? 255 : v;
+                    }
+                }
+                drawn++;
+            }
+            pctx.putImageData(pImage, 0, 0);
+
+            ctx.clearRect(0, 0, BW, BH);
+            if (imgA > 0) {
+                ctx.globalAlpha = imgA;
+                ctx.drawImage(inkCanvas, 0, 0);
+                ctx.globalAlpha = 1;
+                if (nW) {
+                    ctx.globalCompositeOperation = 'destination-out';
+                    for (const w of wounds) {
+                        const g = ctx.createRadialGradient(w.x * DPR, w.y * DPR, 0, w.x * DPR, w.y * DPR, w.r * DPR);
+                        g.addColorStop(0, `rgba(0,0,0,${clamp(w.s * 1.6, 0, 1)})`);
+                        g.addColorStop(0.45, `rgba(0,0,0,${clamp(w.s * 1.6 * 0.6, 0, 1)})`);
+                        g.addColorStop(1, 'rgba(0,0,0,0)');
+                        ctx.fillStyle = g;
+                        ctx.fillRect((w.x - w.r) * DPR, (w.y - w.r) * DPR, w.r * 2 * DPR, w.r * 2 * DPR);
+                    }
+                    ctx.globalCompositeOperation = 'source-over';
+                }
+            }
+            ctx.drawImage(pCanvas, 0, 0);
+
+            // HUD
+            const tNow = Math.round(Math.max(sched, wounds.reduce((m, w) => Math.max(m, w.s * 0.6), 0)) * 1000);
+            tEl.textContent = tNow;
+            barEl.style.transform = `scaleX(${(1 - sched).toFixed(3)})`;
+            if (sched > 0) statusEl.textContent = `sampling · step ${1000 - Math.round(sched * 1000)}/1000`;
+            else if (nW) statusEl.textContent = 'noise added · denoising…';
+            else statusEl.textContent = finePointer ? 'x₀ · hover to add noise' : 'x₀ · tap to add noise';
+
+            if (sched > 0 || nW) raf = requestAnimationFrame(frame);
+            else running = false;
         }
+
+        const kick = () => { if (!raf && ready) { running = true; raf = requestAnimationFrame(frame); } };
+
+        function start(skipIntro) {
+            if (fallback) { drawFallback(); return; }
+            sched = skipIntro ? 0 : 1;
+            introStart = performance.now();
+            kick();
+        }
+
+        let lastWound = 0;
+        const addWound = (e, strength = 1) => {
+            if (!ready) return;
+            const now = performance.now();
+            if (now - lastWound < 28) return;
+            lastWound = now;
+            const r = cv.getBoundingClientRect();
+            const x = (e.clientX - r.left) * (W / r.width);
+            const y = (e.clientY - r.top) * (H / r.height);
+            wounds.push({ x, y, r: W * 0.13, s: strength });
+            if (wounds.length > 14) wounds.shift();
+            kick();
+        };
+        cv.addEventListener('pointermove', e => addWound(e, 0.9));
+        cv.addEventListener('pointerdown', e => { lastWound = 0; addWound(e, 1); });
+        $('#diff-resample').addEventListener('click', () => { wounds = []; start(false); });
+
+        const boot = () => {
+            build();
+            // start when the card is actually visible
+            const io = new IntersectionObserver((en, o) => {
+                if (!en[0].isIntersecting) return;
+                o.disconnect();
+                setTimeout(() => start(reduceMotion), reduceMotion ? 0 : 350);
+            }, { threshold: 0.25 });
+            io.observe(cv);
+        };
+        if (img.complete && img.naturalWidth) boot(); else img.addEventListener('load', boot);
+
+        let rT;
+        window.addEventListener('resize', () => {
+            clearTimeout(rT);
+            rT = setTimeout(() => {
+                const w = Math.round(cv.getBoundingClientRect().width);
+                if (!img.naturalWidth || Math.abs(w - W) < 2) return;
+                ready = false; build();
+                if (fallback) drawFallback(); else { sched = 0; kick(); }
+            }, 200);
+        });
     }
 
-    items.forEach(function (it) {
-        it.sec.__dot = it;
-        io.observe(it.sec);
-    });
+    /* =========================================================
+       CONTACT: drifting graphite dust
+       ========================================================= */
+    const nc = $('#contact-noise');
+    if (nc && !reduceMotion) {
+        const c = nc.getContext('2d');
+        let w, h, dpr, pts = [], visible = false, raf2 = null;
+        const size = () => {
+            const r = nc.getBoundingClientRect();
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            w = r.width; h = r.height;
+            nc.width = w * dpr; nc.height = h * dpr;
+            c.setTransform(dpr, 0, 0, dpr, 0, 0);
+            const count = Math.round(clamp(w * h / 9000, 60, 220));
+            pts = Array.from({ length: count }, () => ({
+                x: Math.random() * w, y: Math.random() * h,
+                r: Math.random() * 1.4 + 0.3,
+                s: Math.random() * 0.35 + 0.08,
+                p: Math.random() * Math.PI * 2,
+                a: Math.random() * 0.5 + 0.15,
+                blue: Math.random() < 0.18
+            }));
+        };
+        const loop = (t) => {
+            c.clearRect(0, 0, w, h);
+            for (const p of pts) {
+                p.y -= p.s;
+                p.x += Math.sin(t * 0.0004 + p.p) * 0.25;
+                if (p.y < -4) { p.y = h + 4; p.x = Math.random() * w; }
+                c.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(t * 0.001 + p.p));
+                c.fillStyle = p.blue ? '#8490ff' : '#ecebe6';
+                c.beginPath(); c.arc(p.x, p.y, p.r, 0, Math.PI * 2); c.fill();
+            }
+            c.globalAlpha = 1;
+            raf2 = visible ? requestAnimationFrame(loop) : null;
+        };
+        size();
+        new IntersectionObserver(en => {
+            visible = en[0].isIntersecting;
+            if (visible && !raf2) raf2 = requestAnimationFrame(loop);
+        }).observe(nc);
+        window.addEventListener('resize', () => { clearTimeout(nc._t); nc._t = setTimeout(size, 200); });
+    }
 
-    let resizeTmr;
-    window.addEventListener('resize', function () {
-        clearTimeout(resizeTmr);
-        resizeTmr = setTimeout(relayout, 200);
-    });
-    window.addEventListener('load', function () {
-        relayout();
-        ensureRunning();
-    });
+    /* ---------- hello, fellow dev ---------- */
+    console.log('%cKomil Parmar', 'font: 600 28px Geist, system-ui; color: #ecebe6; background: #0b0b0c; padding: 8px 14px; border-radius: 8px;');
+    console.log('%cYou opened the console, so you are my kind of person. The hero is a tiny diffusion sampler written in vanilla JS (cosine schedule, ~13k particles). Say hi: komilparmar57@gmail.com', 'font: 13px ui-monospace, monospace; color: #8490ff;');
 })();

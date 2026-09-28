@@ -1,1197 +1,786 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Komil Parmar - ML Engineer & Kaggle Expert</title>
-    <meta name="description" content="ML Engineer, Kaggle Competitions Expert, and TensorFlow Developer Certificate holder. Top-0.6% Kaggle ranking, 3× Kaggle Silver Medalist, DataCurve ML Evals Engineer.">
+    <title>Komil Parmar · ML Engineer · #1 on Project Eris</title>
+    <meta name="description" content="Self-taught ML engineer. Rank #1 of 1200+ solvers and Principal Reviewer on Project Eris (DataCurve.ai). Kaggle Competitions Expert, global rank #867, 4 silver and 2 bronze medals.">
+    <meta name="theme-color" content="#0b0b0c">
+    <meta property="og:title" content="Komil Parmar · ML Engineer">
+    <meta property="og:description" content="Rank #1 on Project Eris · Principal Reviewer at DataCurve.ai · Kaggle Competitions Expert #867.">
+    <meta property="og:image" content="images/five_year_old_rm.jpg">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
-    <!-- Ambient background layers -->
-    <div class="grain-overlay" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
 
-    <!-- Navigation -->
-    <nav id="navigation" class="nav">
-        <div class="nav-container">
-            <a href="#home" class="nav-logo">KP</a>
-            
-            <!-- Desktop Navigation -->
-            <div class="nav-links">
-                <a href="#about" class="nav-link">About</a>
-                <a href="#pov" class="nav-link">Writing</a>
-                <a href="#projects" class="nav-link">Projects</a>
-                <a href="#webinars" class="nav-link">Webinars</a>
-                <a href="#community" class="nav-link">Community</a>
-                <a href="#kaggle" class="nav-link">Kaggle</a>
-                <a href="#contact" class="nav-link">Contact</a>
-            </div>
+    <!-- ============ NAV ============ -->
+    <header class="nav" id="nav">
+        <a href="#top" class="nav-logo" aria-label="Komil Parmar, back to top">
+            <span class="nav-logo-mark">KP</span>
+            <span class="nav-logo-name">Komil Parmar</span>
+        </a>
+        <nav class="nav-links" aria-label="Primary">
+            <a href="#eris" class="nav-link">Now</a>
+            <a href="#kaggle" class="nav-link">Kaggle</a>
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#writing" class="nav-link">Writing</a>
+            <a href="#teaching" class="nav-link">Teaching</a>
+            <a href="#origin" class="nav-link">Origin</a>
+        </nav>
+        <a href="#contact" class="nav-cta">
+            <span class="live-dot"></span>
+            <span>Hire me</span>
+        </a>
+        <button class="nav-burger" id="nav-burger" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span>
+        </button>
+    </header>
+    <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+        <a href="#eris">Now</a>
+        <a href="#kaggle">Kaggle</a>
+        <a href="#work">Work</a>
+        <a href="#writing">Writing</a>
+        <a href="#teaching">Teaching</a>
+        <a href="#origin">Origin</a>
+        <a href="#contact">Contact</a>
+    </div>
 
-            <!-- Mobile Menu Button -->
-            <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
-                <svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-                <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-        </div>
+    <main id="top">
 
-        <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobile-menu">
-            <a href="#about" class="mobile-link">About</a>
-            <a href="#pov" class="mobile-link">Writing</a>
-            <a href="#projects" class="mobile-link">Projects</a>
-            <a href="#webinars" class="mobile-link">Webinars</a>
-            <a href="#community" class="mobile-link">Community</a>
-            <a href="#kaggle" class="mobile-link">Kaggle</a>
-            <a href="#contact" class="mobile-link">Contact</a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero-section">
-        <div class="hero-bg-image" style="background-image: url('images/five_year_old_rm.jpg')"></div>
-
-        <!-- Sketch credit - hover to reveal -->
-        <div class="sketch-credit">
-            <img src="images/nikita_signature.png" alt="Nikita's signature" class="sketch-credit-sig">
-            <div class="sketch-credit-tooltip">
-                <span class="sketch-credit-tooltip-title">Original Sketch</span>
-                This portrait was drawn by hand by my elder sister <strong>Nikita</strong>. Real pencil sketch, not AI generated.
-            </div>
-        </div>
-        
-        <div class="hero-content">
-            <div class="hero-text">
-
-                <div class="hero-eyebrow">
-                    <span class="hero-eyebrow-dot"></span>
-                    Open to opportunities
-                </div>
-
-                <h1 class="hero-title">
-                    Komil Parmar.
-                    <span class="hero-subtitle">
-                        ML Engineer. Kaggle Expert.<br>Competition-proven.
-                    </span>
-                </h1>
-
-                <p class="hero-description">
-                    Self-taught ML engineer from Gujarat. TensorFlow Developer Certified at 18,
-                    Kaggle Competitions Expert ranked <strong>#1150 of 202k+</strong>,
-                    3x Kaggle Silver Medalist, and currently working as ML Evals Engineer at DataCurve.ai.
-                    I learn by doing (lots and lots of competitions and projects), and I share most of what I figure out along the way.
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+        <div class="hero-grid">
+            <div class="hero-copy">
+                <p class="eyebrow hero-eyebrow">
+                    <span class="live-dot"></span>
+                    Open to ML engineering &amp; research roles
                 </p>
 
-                <div class="hero-buttons">
-                    <a href="#about" class="btn btn-primary">
-                        My Background
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
+                <h1 class="hero-title" aria-label="Komil Parmar">
+                    <span class="hero-line"><span class="hero-word">Komil</span></span>
+                    <span class="hero-line"><span class="hero-word serif-i">Parmar.</span></span>
+                </h1>
+
+                <p class="hero-lead">
+                    Self-taught ML engineer. <mark>Rank&nbsp;#1</mark> of 1200+ solvers on Project&nbsp;Eris,
+                    Principal&nbsp;Reviewer at DataCurve.ai, and a Kaggle Competitions Expert ranked
+                    <mark>#867</mark> in the world.
+                </p>
+                <p class="hero-sub">
+                    I learn by doing (lots and lots of competitions), and I share most of what I figure out along the way.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="mailto:komilparmar57@gmail.com" class="btn btn-primary magnetic">
+                        Start a conversation
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                     </a>
-                    <a href="#projects" class="btn btn-secondary">
-                        View Projects
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
+                    <a href="#eris" class="btn btn-ghost">
+                        See the proof
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 13l7 7 7-7"/></svg>
                     </a>
                 </div>
+            </div>
 
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <span class="hero-stat-number">#1150</span>
-                        <span class="hero-stat-label">Kaggle Global Rank</span>
+            <div class="hero-visual">
+                <figure class="sketch-card" id="sketch-card">
+                    <div class="sketch-hud sketch-hud-top">
+                        <span class="mono">x<sub>t</sub> → x<sub>0</sub></span>
+                        <span class="mono">t = <b id="diff-t">1000</b></span>
                     </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-number">3×</span>
-                        <span class="hero-stat-label">Kaggle Silver Medals</span>
+                    <canvas id="diffusion" aria-label="Pencil sketch of Komil at age five, drawn by his sister Nikita, forming out of noise like a diffusion model" role="img"></canvas>
+                    <div class="sketch-hud sketch-hud-bottom">
+                        <div class="diff-progress"><span id="diff-bar"></span></div>
+                        <div class="sketch-hud-row">
+                            <span class="mono" id="diff-status">sampling · 1000 steps</span>
+                            <button class="mono resample" id="diff-resample" type="button" aria-label="Replay the denoising animation">↻ resample</button>
+                        </div>
                     </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-number">200+</span>
-                        <span class="hero-stat-label">Webinar Attendees</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-number">#4</span>
-                        <span class="hero-stat-label">DataCurve Rank</span>
-                    </div>
-                </div>
-
+                </figure>
+                <figcaption class="sketch-caption">
+                    <img src="images/nikita_signature_ink.png" alt="Nikita's signature" class="sketch-sig">
+                    <span>Me at five. Hand-drawn in pencil by my elder sister Nikita (real graphite, not AI). <em>Hover it to add noise.</em></span>
+                </figcaption>
             </div>
         </div>
 
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator">
-            <span>Scroll to explore</span>
-            <div class="scroll-line"></div>
-        </div>
-    </section>
-
-    <!-- DataCurve Section -->
-    <section class="dc" id="current-role">
-        <!-- Background effects -->
-        <div class="dc-bg">
-            <div class="dc-grid"></div>
-            <div class="dc-glow dc-glow-1"></div>
-            <div class="dc-glow dc-glow-2"></div>
-            <div class="dc-glow dc-glow-3"></div>
-        </div>
-
-        <div class="dc-inner">
-            <!-- Badge -->
-            <div class="dc-reveal">
-                <div class="dc-badge">
-                    <span class="dc-dot"></span>
-                    Currently Working Here
-                </div>
+        <div class="hero-stats" role="list">
+            <div class="hero-stat" role="listitem">
+                <span class="hero-stat-num">#<span data-count="1">1</span></span>
+                <span class="hero-stat-label">Project Eris leaderboard<br><i>of 1200+ solvers</i></span>
             </div>
-
-            <!-- Headline -->
-            <h2 class="dc-headline dc-reveal" style="--delay: 0.1s">
-                From Zero Applications.<br>
-                <span class="dc-gradient-text">To First Lakh in a Week.</span>
-            </h2>
-
-            <!-- Role Hero -->
-            <div class="dc-role-hero dc-reveal" style="--delay: 0.15s">
-                <div class="dc-role-tags">
-                    <span class="dc-role-tag">Part-Time</span>
-                    <span class="dc-role-tag">Remote · 100% Work from Home</span>
-                    <span class="dc-role-tag">Promoted to Reviewer</span>
-                    <span class="dc-pill">
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        Invite-Only · 50 Selected Globally
-                    </span>
-                    <span class="dc-pill" style="border-color:rgba(74,222,128,0.3);color:rgba(74,222,128,0.9);">
-                        <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;flex-shrink:0;"></span>
-                        Open to ML &amp; Research Internships / Jobs
-                    </span>
-                </div>
-                <div class="dc-role-title-wrap">
-                    <h3 class="dc-role-big">ML Evals Engineer</h3>
-                    <div class="dc-role-scanline"></div>
-                </div>
-                <div class="dc-role-at">
-                    <span class="dc-role-at-word">at</span>
-                    <div class="dc-logo-wrap">
-                        <img src="images/datacurve-logo.png" alt="DataCurve.ai" class="dc-logo-image">
-                    </div>
-                    <a href="https://datacurve.ai/" target="_blank" rel="noopener noreferrer" class="dc-role-company">DataCurve.ai</a>
-                </div>
+            <div class="hero-stat" role="listitem">
+                <span class="hero-stat-num" data-count="198">198</span>
+                <span class="hero-stat-label">Eris medals<br><i>79 gold · 64 silver · 55 bronze</i></span>
             </div>
-
-            <!-- Neural Network Flow -->
-            <div class="dc-nn dc-reveal" style="--delay: 0.35s">
-                <div class="nn-card nn-input-card" id="nn-input-card">
-                    <span class="nn-lbl">First Payout - Week 1</span>
-                    <span class="nn-val" id="dc-counter">₹0</span>
-                    <span class="nn-sub">During exams. Part-time.</span>
-                </div>
-                <div class="nn-net">
-                    <svg class="nn-svg" viewBox="-30 0 260 160" id="nn-svg">
-                        <!-- Card-to-input lines -->
-                        <line class="nn-line nn-ci" x1="-30" y1="80" x2="10" y2="30"/>
-                        <line class="nn-line nn-ci" x1="-30" y1="80" x2="10" y2="80"/>
-                        <line class="nn-line nn-ci" x1="-30" y1="80" x2="10" y2="130"/>
-                        <!-- Input-to-hidden lines -->
-                        <line class="nn-line nn-ih" x1="10" y1="30" x2="100" y2="20"/>
-                        <line class="nn-line nn-ih" x1="10" y1="30" x2="100" y2="60"/>
-                        <line class="nn-line nn-ih" x1="10" y1="30" x2="100" y2="100"/>
-                        <line class="nn-line nn-ih" x1="10" y1="30" x2="100" y2="140"/>
-                        <line class="nn-line nn-ih" x1="10" y1="80" x2="100" y2="20"/>
-                        <line class="nn-line nn-ih" x1="10" y1="80" x2="100" y2="60"/>
-                        <line class="nn-line nn-ih" x1="10" y1="80" x2="100" y2="100"/>
-                        <line class="nn-line nn-ih" x1="10" y1="80" x2="100" y2="140"/>
-                        <line class="nn-line nn-ih" x1="10" y1="130" x2="100" y2="20"/>
-                        <line class="nn-line nn-ih" x1="10" y1="130" x2="100" y2="60"/>
-                        <line class="nn-line nn-ih" x1="10" y1="130" x2="100" y2="100"/>
-                        <line class="nn-line nn-ih" x1="10" y1="130" x2="100" y2="140"/>
-                        <line class="nn-line nn-ho" x1="100" y1="20" x2="190" y2="30"/>
-                        <line class="nn-line nn-ho" x1="100" y1="20" x2="190" y2="80"/>
-                        <line class="nn-line nn-ho" x1="100" y1="20" x2="190" y2="130"/>
-                        <line class="nn-line nn-ho" x1="100" y1="60" x2="190" y2="30"/>
-                        <line class="nn-line nn-ho" x1="100" y1="60" x2="190" y2="80"/>
-                        <line class="nn-line nn-ho" x1="100" y1="60" x2="190" y2="130"/>
-                        <line class="nn-line nn-ho" x1="100" y1="100" x2="190" y2="30"/>
-                        <line class="nn-line nn-ho" x1="100" y1="100" x2="190" y2="80"/>
-                        <line class="nn-line nn-ho" x1="100" y1="100" x2="190" y2="130"/>
-                        <line class="nn-line nn-ho" x1="100" y1="140" x2="190" y2="30"/>
-                        <line class="nn-line nn-ho" x1="100" y1="140" x2="190" y2="80"/>
-                        <line class="nn-line nn-ho" x1="100" y1="140" x2="190" y2="130"/>
-                        <circle class="nn-node nn-n-in" cx="10" cy="30" r="6"/>
-                        <circle class="nn-node nn-n-in" cx="10" cy="80" r="6"/>
-                        <circle class="nn-node nn-n-in" cx="10" cy="130" r="6"/>
-                        <circle class="nn-node nn-n-hid" cx="100" cy="20" r="6"/>
-                        <circle class="nn-node nn-n-hid" cx="100" cy="60" r="6"/>
-                        <circle class="nn-node nn-n-hid" cx="100" cy="100" r="6"/>
-                        <circle class="nn-node nn-n-hid" cx="100" cy="140" r="6"/>
-                        <circle class="nn-node nn-n-out" cx="190" cy="30" r="6"/>
-                        <circle class="nn-node nn-n-out" cx="190" cy="80" r="6"/>
-                        <circle class="nn-node nn-n-out" cx="190" cy="130" r="6"/>
-                        <!-- Output-to-card lines -->
-                        <line class="nn-line nn-oc" x1="190" y1="30" x2="230" y2="80"/>
-                        <line class="nn-line nn-oc" x1="190" y1="80" x2="230" y2="80"/>
-                        <line class="nn-line nn-oc" x1="190" y1="130" x2="230" y2="80"/>
-                    </svg>
-                    <div class="nn-mobile-flow">
-                        <div class="nn-mobile-beam"></div>
-                    </div>
-                </div>
-                <div class="nn-card nn-output-card" id="nn-output-card">
-                    <span class="nn-lbl">Crossed</span>
-                    <span class="nn-val nn-val-green">₹1,00,000</span>
-                    <span class="nn-sub">In less than 7 days.</span>
-                </div>
+            <div class="hero-stat" role="listitem">
+                <span class="hero-stat-num">#<span data-count="867">867</span></span>
+                <span class="hero-stat-label">Kaggle global rank<br><i>of 217,535 Kagglers</i></span>
             </div>
-
-            <!-- Stats strip -->
-            <div class="dc-stats dc-reveal" style="--delay: 0.5s">
-                <div class="dc-stat">
-                    <span class="dc-stat-val">#4<span class="dc-stat-dim">/50</span></span>
-                    <span class="dc-stat-lbl">Internal Rank</span>
-                </div>
-                <div class="dc-stat-sep"></div>
-                <div class="dc-stat">
-                    <span class="dc-stat-val">0</span>
-                    <span class="dc-stat-lbl">Applications Sent</span>
-                </div>
-                <div class="dc-stat-sep"></div>
-                <div class="dc-stat">
-                    <span class="dc-stat-val">50</span>
-                    <span class="dc-stat-lbl">Selected Globally</span>
-                </div>
-                <div class="dc-stat-sep"></div>
-                <div class="dc-stat">
-                    <span class="dc-stat-val">Week 1</span>
-                    <span class="dc-stat-lbl">During Exams</span>
-                </div>
-            </div>
-
-            <!-- Project Eris medals -->
-            <div class="dc-stats dc-stats--medals dc-reveal" style="--delay: 0.55s">
-                <div class="dc-stat">
-                    <span class="dc-stat-val">14🥇</span>
-                    <span class="dc-stat-lbl">Gold Medals</span>
-                </div>
-                <div class="dc-stat-sep"></div>
-                <div class="dc-stat">
-                    <span class="dc-stat-val">13🥈</span>
-                    <span class="dc-stat-lbl">Silver Medals</span>
-                </div>
-                <div class="dc-stat-sep"></div>
-                <div class="dc-stat">
-                    <span class="dc-stat-val">10🥉</span>
-                    <span class="dc-stat-lbl">Bronze Medals</span>
-                </div>
-            </div>
-
-            <!-- Story -->
-            <div class="dc-story dc-reveal" style="--delay: 0.6s">
-                <p>I didn't apply for anything. A core team member from DataCurve reached out after seeing my LinkedIn profile. All 50 in the program were manually selected, and majority of them have strong Kaggle profiles. That's what I call 'Online Presence' actually building over time.</p>
-
-                <p>I also recently got promoted to a Reviewer. Being a reviewer, my job is to do quality checks on the challenges we make and the solutions our solvers submit, along with many more things. Basically, our duty is to ensure the quality of the data that is used for training some of the most powerful LLMs. There are 10 of us reviewers, and together we take care of the data quality coming from over 500+ solvers.</p>
-
-                <p>But once a solver, always a solver. Being a reviewer doesn't mean we can't solve challenges, we do it all the time (rank 1 on the leaderboard is a Reviewer too, like me). I still put immense effort into solving the critical ones, just because I love the process of researching, experimenting and solving. Its not an easy job though. Our AI is so powerful that in most challenges you will only find 5-6 people ranking above it, so getting past our own AI itself has become a great achievement.</p>
-
-                <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer" class="dc-link">
-                    Read the full story on LinkedIn
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
-            </div>
-
-            <!-- Terminal -->
-            <div class="dc-term dc-reveal" style="--delay: 0.7s">
-                <div class="dc-term-top">
-                    <span class="dc-term-dot" style="background:#ff5f57"></span>
-                    <span class="dc-term-dot" style="background:#febc2e"></span>
-                    <span class="dc-term-dot" style="background:#28c840"></span>
-                    <span class="dc-term-title">datacurve_stats.py</span>
-                </div>
-                <div class="dc-term-body">
-                    <span class="dc-term-prompt">❯</span>
-                    <span class="dc-term-text" id="dc-typewriter"></span>
-                    <span class="dc-term-cursor">▋</span>
-                </div>
+            <div class="hero-stat" role="listitem">
+                <span class="hero-stat-num"><span data-count="4">4</span><small>S</small> <span data-count="2">2</span><small>B</small></span>
+                <span class="hero-stat-label">Kaggle medals<br><i>4 silver · 2 bronze</i></span>
             </div>
         </div>
     </section>
 
-    <!-- Marquee Section -->
-    <div class="marquee-section">
-        <div class="marquee-content">
-            <span class="marquee-text">Machine Learning ★ TensorFlow ★ PyTorch ★ Meta-Learning ★ Kaggle Competitor ★ Self-Taught Developer ★ </span>
-            <span class="marquee-text">Machine Learning ★ TensorFlow ★ PyTorch ★ Meta-Learning ★ Kaggle Competitor ★ Self-Taught Developer ★ </span>
-            <span class="marquee-text">Machine Learning ★ TensorFlow ★ PyTorch ★ Meta-Learning ★ Kaggle Competitor ★ Self-Taught Developer ★ </span>
+    <!-- ============ TICKER ============ -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+            <span>Rank #1 · Project Eris</span><span class="t-sep">✦</span>
+            <span>Principal Reviewer · DataCurve.ai</span><span class="t-sep">✦</span>
+            <span>Kaggle #867</span><span class="t-sep">✦</span>
+            <span>4 Silver · 2 Bronze</span><span class="t-sep">✦</span>
+            <span>TensorFlow Developer Certified at 18</span><span class="t-sep">✦</span>
+            <span>0 applications sent</span><span class="t-sep">✦</span>
+            <span>Rank #1 · Project Eris</span><span class="t-sep">✦</span>
+            <span>Principal Reviewer · DataCurve.ai</span><span class="t-sep">✦</span>
+            <span>Kaggle #867</span><span class="t-sep">✦</span>
+            <span>4 Silver · 2 Bronze</span><span class="t-sep">✦</span>
+            <span>TensorFlow Developer Certified at 18</span><span class="t-sep">✦</span>
+            <span>0 applications sent</span><span class="t-sep">✦</span>
         </div>
     </div>
 
-    <!-- About Section -->
-    <section id="about" class="about-section" data-watermark="ABOUT">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-label">Background</div>
-                <h2 class="section-title">The Unconventional Path</h2>
-            </div>
+    <!-- ============ 01 · ERIS ============ -->
+    <section class="section" id="eris">
+        <div class="wrap">
+            <header class="sec-head reveal">
+                <p class="sec-index"><span>01</span> Now · Project Eris by DataCurve.ai</p>
+                <h2 class="sec-title">The top solver<br>on the platform. <span class="serif-i dim">Till date.</span></h2>
+            </header>
 
-            <div class="about-content">
-                <p class="lead-text">
-                    I didn't follow the traditional college route. Right after class 12, I made what was probably the toughest decision of my life so far. Instead of spending four years in a lecture hall, I chose to go deep on the things that actually matter for ML. That decision led to a TensorFlow Developer Certificate at 18, a Kaggle Expert ranking, three Kaggle Silver Medals, and a role at DataCurve.ai (without sending a single application).
-                </p>
-
-                <h3 class="content-heading">How I Got Here</h3>
-                <p class="text-content">
-                    Started in class 8 experimenting with 3D modelling, pivoted to hardware security projects in class 9, and finally found machine learning by class 10. Completed my first AI course in high school, earned the <strong>TensorFlow Developer Certificate</strong> at 18, and then took the decision that changed everything.
-                </p>
-
-                <div class="callout-box">
-                    <h3 class="callout-title">Choosing Depth Over the Degree</h3>
-                    <p class="callout-text">
-                        Rather than spending four years in a curriculum built for a different era, I chose to learn by doing. Competing on Kaggle, building open source projects, hosting webinars, and taking on real work. Lots and lots of failures along the way, but a few things did work out: a global Kaggle ranking, three Kaggle Silver Medals, and an invite-only engineering role. All of this before most students finish their second year.
+            <div class="eris-grid">
+                <!-- Rank card -->
+                <article class="card rank-card reveal">
+                    <div class="rank-top">
+                        <img src="images/datacurve-logo.png" alt="DataCurve.ai logo" class="rank-logo">
+                        <span class="chip chip-live"><span class="live-dot"></span> Current role</span>
+                    </div>
+                    <div class="rank-num" aria-label="Rank number 1">
+                        <span class="rank-hash">#</span><span class="rank-one">1</span>
+                    </div>
+                    <p class="rank-caption">All-time leaderboard, out of 1200+ solvers.</p>
+                    <div class="rank-role">
+                        <span class="mono dim">Role</span>
+                        <strong>Principal Reviewer</strong>
+                    </div>
+                    <p class="rank-note">
+                        Invite-only program. A core team member reached out after seeing my LinkedIn profile, I didn't apply for anything.
                     </p>
-                    <p class="callout-quote">
-                        "Depth of learning matters more than the institution granting the degree."
-                    </p>
-                </div>
+                    <a href="https://datacurve.ai/" target="_blank" rel="noopener noreferrer" class="link-arrow">datacurve.ai <span>↗</span></a>
+                </article>
 
-                <h3 class="content-heading">What Drives Me</h3>
-                <p class="text-content">
-                    Based in Vadodara, Gujarat. I am drawn towards the parts of ML that are still being figured out. Meta-learning, generalisation under distribution shift, and understanding why models work, not just that they work. My open source meta-learning repository reflects that. Its built from first principles, documented for understanding, not just for use.
-                </p>
-
-                <div class="credentials-grid">
-                    <div class="credential-card">
-                        <div class="credential-icon">◈</div>
-                        <h4 class="credential-title">TensorFlow Developer Certificate</h4>
-                        <p class="credential-desc">Google. Earned at age 18.</p>
+                <!-- Medal tally -->
+                <article class="card tally-card reveal" style="--d:.08s">
+                    <div class="tally-head">
+                        <p class="mono dim">Medal tally · Project Eris</p>
+                        <p class="tally-total"><span data-count="198">198</span> <span class="dim">medals</span></p>
                     </div>
-                    <div class="credential-card">
-                        <div class="credential-icon">◈</div>
-                        <h4 class="credential-title">Google IT Automation</h4>
-                        <p class="credential-desc">Google. Professional Certificate.</p>
+                    <div class="tally-bar" aria-hidden="true">
+                        <span class="tb-gold" style="--w:39.9%"></span>
+                        <span class="tb-silver" style="--w:32.3%"></span>
+                        <span class="tb-bronze" style="--w:27.8%"></span>
                     </div>
-                    <div class="credential-card">
-                        <div class="credential-icon">◈</div>
-                        <h4 class="credential-title">TensorFlow: Advanced Techniques</h4>
-                        <p class="credential-desc">DeepLearning.AI Specialisation</p>
-                    </div>
-                </div>
-
-                <h3 class="content-heading">My Stack</h3>
-                <div class="stack-section">
-                    <div class="stack-category">
-                        <h4 class="stack-label">Frameworks</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">TensorFlow</span>
-                            <span class="tech-tag">Keras</span>
-                            <span class="tech-tag">PyTorch</span>
-                            <span class="tech-tag">Scikit-learn</span>
-                        </div>
-                    </div>
-                    <div class="stack-category">
-                        <h4 class="stack-label">Tools</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">PyCharm</span>
-                            <span class="tech-tag">VS Code</span>
-                            <span class="tech-tag">GitHub</span>
-                            <span class="tech-tag">Jupyter</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- POV Section -->
-    <section id="pov" class="pov-section" data-watermark="WRITING">
-        <div class="container-wide">
-            <div class="section-header">
-                <div class="section-label">Perspectives</div>
-                <h2 class="section-title">Writing & Takes</h2>
-                <p class="section-subtitle">Thoughts on ML, self-directed learning, and the road less taken.</p>
-            </div>
-
-            <div class="pov-grid">
-
-                <!-- Featured: full-width black banner -->
-                <a href="https://www.linkedin.com/pulse/introducing-starc-science-text-abstraction-reasoning-corpus-parmar-0wnsc/" class="pov-card featured has-thumb" target="_blank" rel="noopener noreferrer">
-                    <div class="pov-thumb">
-                        <img src="images/STARC-GOT-thumb.jpg" alt="STARC: Science Text Abstraction and Reasoning Corpus" loading="lazy" />
-                    </div>
-                    <div class="pov-body">
-                        <div class="pov-meta">
-                            <span class="pov-badge">LinkedIn Article · New</span>
-                            <span class="pov-date">April 2026</span>
-                        </div>
-                        <h3 class="pov-title">Introducing STARC: a benchmark that asks whether frontier models can actually reason, or just recognize.</h3>
-                        <p class="pov-hook">Three sophomores, no lab, no budget, one week. We built a rule-induction benchmark for the Kaggle <em>Measuring AGI</em> competition by Google DeepMind. By testing models with and without domain hints, STARC pinpoints where exactly the reasoning breaks. Is it at domain discovery, or at the logical inference itself? Writeup, benchmark, and dataset all linked inside.</p>
-                    </div>
-                    <div class="pov-cta">
-                        Read Article
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </div>
-                </a>
-
-                <!-- Article 01 -->
-                <a href="https://www.linkedin.com/posts/komil-parmar-488967243_lighting-another-candle-never-dims-your-own-activity-7401176102838185984-tyCS?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="pov-card has-thumb" target="_blank" rel="noopener noreferrer">
-                    <span class="pov-number">01</span>
-                    <div class="pov-thumb">
-                        <img src="images/Career-Fair-thumb.jpg" alt="Career Fair - sharing knowledge with juniors" loading="lazy" />
-                    </div>
-                    <div class="pov-body">
-                        <div class="pov-meta">
-                            <span class="pov-badge">LinkedIn</span>
-                            <span class="pov-date">Recent</span>
-                        </div>
-                        <h3 class="pov-title">Lighting another candle never dims your own flame. It only makes the room brighter. ✨</h3>
-                        <p class="pov-hook">Why teaching others has actually been the fastest way for me to understand ML more deeply myself.</p>
-                    </div>
-                    <div class="pov-cta">
-                        Read
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </div>
-                </a>
-
-                <!-- Article 02 -->
-                <a href="https://github.com/Komil-parmar/Komil-parmar" class="pov-card" target="_blank" rel="noopener noreferrer">
-                    <span class="pov-number">02</span>
-                    <div class="pov-body">
-                        <div class="pov-meta">
-                            <span class="pov-badge">Opinion</span>
-                            <span class="pov-date">Ongoing</span>
-                        </div>
-                        <h3 class="pov-title">I skipped a CS degree and got an invite-only role without applying. Here's the real reason it worked.</h3>
-                        <p class="pov-hook">It wasn't luck. It was a specific, consistent way of building in public that made the right people notice. Took years, not weeks.</p>
-                    </div>
-                    <div class="pov-cta">
-                        Read
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </div>
-                </a>
-
-                <!-- Article 03 - Coming Soon -->
-                <div class="pov-card coming-soon">
-                    <span class="pov-number">03</span>
-                    <div class="pov-body">
-                        <div class="pov-meta">
-                            <span class="pov-badge">Deep Dive</span>
-                            <span class="pov-date">Coming Soon</span>
-                        </div>
-                        <h3 class="pov-title">Why I built my meta-learning library from scratch before touching any framework.</h3>
-                        <p class="pov-hook">A walkthrough of MAML, Prototypical Networks, and the design decisions that only make sense when you build from first principles.</p>
-                    </div>
-                    <div class="pov-cta" style="color:var(--gray-300);">
-                        Soon
-                    </div>
-                </div>
-
-                <!-- Article 04 -->
-                <a href="https://www.linkedin.com/pulse/lost-before-competition-even-began-komil-parmar-q6khf/?trackingId=n1%2BIKAHip1BV6rCT4ZQXGA%3D%3D" class="pov-card has-thumb" target="_blank" rel="noopener noreferrer">
-                    <span class="pov-number">04</span>
-                    <div class="pov-thumb">
-                        <img src="images/EPOCH-NAUTS-thumb.jpg" alt="Epoch-Nauts - lessons from a competition" loading="lazy" />
-                    </div>
-                    <div class="pov-body">
-                        <div class="pov-meta">
-                            <span class="pov-badge">LinkedIn Article</span>
-                            <span class="pov-date">4 months ago</span>
-                        </div>
-                        <h3 class="pov-title">I lost a competition before it even began. And it taught me everything about preparation.</h3>
-                        <p class="pov-hook">What happens when the problem isn't skill, but everything that surrounds the moment you need to perform. Honestly the toughest decision I have ever made.</p>
-                    </div>
-                    <div class="pov-cta">
-                        Read
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                    </div>
-                </a>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects-section" data-watermark="PROJECTS">
-        <div class="container-wide">
-            <div class="section-header">
-                <div class="section-label">Work</div>
-                <h2 class="section-title">Selected Projects</h2>
-                <p class="section-subtitle-large">
-                    From competition-winning hardware prototypes back in high school to deep learning research now. All built to actually solve real problems and to understand the things deeply (and not just for show).
-                </p>
-            </div>
-
-            <div class="projects-list">
-                <!-- Project 1: THOR -->
-                <div class="project-card">
-                    <div class="project-content">
-                        <div class="project-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                            </svg>
-                        </div>
-                        <h3 class="project-title">THOR: Traffic Hazard Optimization and Rescue</h3>
-                        <p class="project-tagline">CV-Based Intelligent Traffic Reduction System</p>
-                        
-                        <p class="project-description">
-                            An intelligent Traffic Reduction System that automatically takes the best action depending on live traffic using CCTV feeds. Automatically detects emergency vehicles like ambulances and clears their path to hospitals in advance through an interconnected system.
-                        </p>
-
-                        <div class="project-highlights">
-                            <h4 class="highlights-title">Key Highlights:</h4>
-                            <ul class="highlights-list">
-                                <li>Fine-tuned YOLO model on custom toy car dataset</li>
-                                <li>Collected and augmented own data - learned the critical importance of augmentation</li>
-                                <li>Built physical model of roads and traffic circles for live demo</li>
-                                <li>Connected phone (CCTV) to laptop via WiFi for real-time feed processing</li>
-                                <li>Developed UI with live statistics and traffic analytics</li>
-                                <li>Won multiple inter-school and district level competitions</li>
-                            </ul>
-                        </div>
-
-                        <div class="project-tech">
-                            <span class="tech-badge">YOLO</span>
-                            <span class="tech-badge">Computer Vision</span>
-                            <span class="tech-badge">Real-time Processing</span>
-                            <span class="tech-badge">Custom Dataset</span>
-                            <span class="tech-badge">Hardware Integration</span>
-                        </div>
-
-                        <div class="project-achievements">
-                            <span class="achievement">🏆 Multiple inter-school wins</span>
-                            <span class="achievement">🏆 District level winner</span>
-                        </div>
-
-                        <div class="project-links">
-                            <a href="https://github.com/Komil-parmar" class="project-link" target="_blank" rel="noopener noreferrer">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                View on GitHub
-                            </a>
-                        </div>
-
-                        <p class="project-year">Class 11-12</p>
-                    </div>
-                </div>
-
-                <!-- Project 2: SHIELD -->
-                <div class="project-card">
-                    <div class="project-content">
-                        <div class="project-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                            </svg>
-                        </div>
-                        <h3 class="project-title">S.H.I.E.L.D.: Security and Home Intrusion Eradication & Defense</h3>
-                        <p class="project-tagline">Cost-Friendly High-Tech Home Security Suite</p>
-                        
-                        <p class="project-description">
-                            A suite of cost-friendly, high-tech innovations to protect homes using an invisible barrier system. Features anonymous alert triggers and laser-based intrusion detection.
-                        </p>
-
-                        <div class="project-highlights">
-                            <h4 class="highlights-title">Key Highlights:</h4>
-                            <ul class="highlights-list">
-                                <li>Modified pen with embedded diode - looks exactly like a regular pen</li>
-                                <li>Wearable anonymous alert trigger: blocks light source with fingers for SOS</li>
-                                <li>Smart enough to avoid false triggers from environmental lighting changes</li>
-                                <li>Button to disable trigger within a short period for false alarm prevention</li>
-                                <li>Dual-mode: Wearable SOS device AND home laser-based alert system</li>
-                                <li>Laser-based intrusion detection: place pen anywhere, point laser from other end</li>
-                                <li>Compact and anonymous design - main differentiator</li>
-                            </ul>
-                        </div>
-
-                        <div class="project-tech">
-                            <span class="tech-badge">IoT</span>
-                            <span class="tech-badge">Hardware Hacking</span>
-                            <span class="tech-badge">Embedded Systems</span>
-                            <span class="tech-badge">Circuit Design</span>
-                            <span class="tech-badge">Alert Systems</span>
-                        </div>
-
-                        <div class="project-achievements">
-                            <span class="achievement">🥈 2nd place among 21 schools</span>
-                            <span class="achievement">🛡️ Defence innovation award</span>
-                        </div>
-
-                        <div class="project-links">
-                            <a href="https://github.com/Komil-parmar" class="project-link" target="_blank" rel="noopener noreferrer">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                View on GitHub
-                            </a>
-                        </div>
-
-                        <p class="project-year">High School</p>
-                    </div>
-                </div>
-
-                <!-- Project 3: Meta-Learning -->
-                <div class="project-card">
-                    <div class="project-content">
-                        <div class="project-icon">
-                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
-                                <path d="M12 6v6l4 2"/>
-                            </svg>
-                        </div>
-                        <h3 class="project-title">Meta-Learning from Scratch</h3>
-                        <p class="project-tagline">Learning How to Learn - Modular Implementation Research</p>
-
-                        <p class="project-description">
-                            A modular collection of meta-learning algorithms, all built from scratch. Designed for clarity, deep understanding, and easy experimentation before relying on any high-level libraries. (Because trust me, you'll thank yourself later when the framework version changes.)
-                        </p>
-
-                        <div class="project-highlights">
-                            <h4 class="highlights-title">Key Highlights:</h4>
-                            <ul class="highlights-list">
-                                <li>Built popular meta-learning algorithms from first principles</li>
-                                <li>Modular architecture for easy experimentation and customization</li>
-                                <li>Extensive documentation explaining the "why" behind each design choice</li>
-                                <li>Includes MAML, Prototypical Networks, and more</li>
-                                <li>Focus on understanding fundamentals before using frameworks</li>
-                                <li>Active open-source project with community contributions</li>
-                                <li>Used for teaching and demonstrating meta-learning concepts</li>
-                            </ul>
-                        </div>
-
-                        <div class="project-tech">
-                            <span class="tech-badge">PyTorch</span>
-                            <span class="tech-badge">Meta-Learning</span>
-                            <span class="tech-badge">MAML</span>
-                            <span class="tech-badge">Research</span>
-                            <span class="tech-badge">From Scratch</span>
-                        </div>
-
-                        <div class="project-achievements">
-                            <span class="achievement">⭐ Open source</span>
-                            <span class="achievement">📚 Educational resource</span>
-                        </div>
-
-                        <div class="project-links">
-                            <a href="https://github.com/Komil-parmar/meta-learning-from-scratch" class="project-link" target="_blank" rel="noopener noreferrer">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                View on GitHub
-                            </a>
-                            <a href="https://github.com/Komil-parmar/meta-learning-from-scratch" class="project-link" target="_blank" rel="noopener noreferrer">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                                    <polyline points="15 3 21 3 21 9"/>
-                                    <line x1="10" y1="14" x2="21" y2="3"/>
-                                </svg>
-                                Live Demo
-                            </a>
-                        </div>
-
-                        <p class="project-year">Ongoing</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Webinars Carousel Section -->
-    <section id="webinars" class="webinars-section" data-watermark="WEBINARS">
-        <div class="container-wide">
-            <div class="section-header">
-                <div class="section-label">Teaching</div>
-                <h2 class="section-title">Webinars & Talks</h2>
-                <p class="section-subtitle">10+ sessions with 200+ total attendees. Covering Kaggle, ML, EDA, LLMs, competition strategies, and lots more.</p>
-            </div>
-
-            <div class="carousel-wrapper">
-                <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Previous slide">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="15 18 9 12 15 6"/>
-                    </svg>
-                </button>
-
-                <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Next slide">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"/>
-                    </svg>
-                </button>
-
-                <div class="carousel-container" id="carousel-container">
-                    <!-- Webinar slides will be loaded dynamically -->
-                </div>
-            </div>
-
-            <div class="carousel-dots" id="carousel-dots">
-                <!-- Dots will be loaded dynamically -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Teaching & Mentoring Section -->
-    <section id="teaching" class="teaching-section" data-watermark="MENTORING">
-        <div class="container-wide">
-
-            <div class="section-header">
-                <div class="section-label">Mentoring</div>
-                <h2 class="section-title">"Lighting another candle never dims your own."</h2>
-                <p class="section-subtitle">A belief I've carried since class 10, and one I act on at every opportunity.</p>
-            </div>
-
-            <!-- Philosophy intro -->
-            <div class="teaching-philosophy">
-                <p class="teaching-philosophy-text">
-                    Sharing knowledge has never felt like giving something away to me. Every time I teach, explain, or mentor someone, I end up understanding the topic more deeply myself. That realisation locked in a habit. If I know something that could help someone, I share it. No gatekeeping, no hesitation.
-                    I have held on to this since high school and it has shaped everything. From how I interact in the Kaggle community, to how I show up for juniors who are just starting out.
-                </p>
-                <a href="https://www.linkedin.com/posts/komil-parmar-488967243_lighting-another-candle-never-dims-your-own-activity-7401176102838185984-tyCS?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="teaching-philosophy-link" target="_blank" rel="noopener noreferrer">
-                    Read the post that captures this →
-                </a>
-            </div>
-
-            <!-- Mentoring cards grid -->
-            <div class="teaching-grid">
-
-                <!-- Card 1: School mentoring -->
-                <div class="teaching-card">
-                    <div class="teaching-card-tag">Since Class 10</div>
-                    <h3 class="teaching-card-title">Tejas Vidyalaya - Mentoring Juniors</h3>
-                    <p class="teaching-card-body">
-                        Throughout high school at Tejas Vidyalaya, I consistently mentored juniors. Helping them with their projects, guiding them through competition prep, and being a go-to person whenever someone needed direction. It wasn't formal at all. It was just something I did because I could. My teachers acknowledged me for being among the most active and competitive students in the school's recent history. But what I am equally proud of is always bringing others along on that journey.
-                    </p>
-                </div>
-
-                <!-- Card 2: SIH Grand Finale -->
-                <div class="teaching-card teaching-card--featured">
-                    <div class="teaching-card-tag teaching-card-tag--highlight">Milestone</div>
-                    <h3 class="teaching-card-title">Smart India Hackathon - Grand Finale</h3>
-                    <p class="teaching-card-body">
-                        I mentored a team from their very first group meeting all the way through to the SIH Grand Finale (one of India's largest national-level hackathons). This wasn't a single session. It meant being present across multiple stages. Helping them frame their problem statement, sharpen their approach, prepare their pitch, and stay focused under pressure. Watching them make it to the finale was one of the most rewarding experiences I have had as a mentor. Their team leader acknowledged the journey publicly later, which is the best kind of feedback honestly.
-                    </p>
-                    <div class="teaching-card-links">
-                        <a href="https://www.linkedin.com/posts/komil-parmar-488967243_oes-oesiitg-iitg-activity-7405323172046311424-LL5l?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="teaching-link" target="_blank" rel="noopener noreferrer">
-                            My post on the journey →
-                        </a>
-                        <a href="https://www.linkedin.com/posts/aaryan-gotad-b82aa5327_oes-oesiitg-iitg-activity-7405316261947011072-8a9u?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="teaching-link" target="_blank" rel="noopener noreferrer">
-                            Team leader's acknowledgment →
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Card 3: 10+ Webinars -->
-                <div class="teaching-card teaching-card--featured">
-                    <div class="teaching-card-tag teaching-card-tag--highlight">10+ Sessions · 200+ Attendees</div>
-                    <h3 class="teaching-card-title">Webinars for Students - ML from the Ground Up</h3>
-                    <p class="teaching-card-body">
-                        Over 10 sessions attended by college students. Juniors, batchmates, seniors, and connections from other institutions too. These were not theoretical lectures at all. They were practical, experience-driven sessions built around what actually works, drawn from my own competition and project experience. Topics covered: Kaggle onboarding and competition strategy, EDA and visualization, model selection and ensembling, covariance shift and calibration, LLMs and prompt engineering, resources for every level, and a proven self-directed learning path. The goal was always the same. Give people a clear, real-world starting point that no college syllabus provides.
-                    </p>
-                </div>
-
-                <!-- Card 4: Students ML Playground Series -->
-                <div class="teaching-card">
-                    <div class="teaching-card-tag">Kaggle · Community Competition Host</div>
-                    <h3 class="teaching-card-title">Students ML Playground Series S1E1</h3>
-                    <p class="teaching-card-body">
-                        I hosted a Kaggle competition specifically designed for students. Inspired by Kaggle's own Playground Series, but created to lower the barrier for those who aren't ready to compete in the main arena yet. Many students hesitate to enter open competitions because the field feels too wide and the environment too unfamiliar. This competition gave them a safe, structured space to participate among peers at a similar level.
-                        Throughout the competition, I conducted multiple webinars covering everything from the absolute basics all the way to advanced concepts like ensembling, covariance shift, and calibration. The series concluded with a closing ceremony where all participants shared their experiences, learnings, and solutions. It was open to non-participants too, making it a learning event even for those on the sidelines.
-                        This competition earned me the <strong>Community Competition Host</strong> title and certificate from Kaggle.
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section id="community" class="community-section" data-watermark="COMMUNITY">
-        <div class="container-wide">
-            <div class="community-grid">
-                <div class="community-logo">
-                    <div class="logo-container">
-                        <div class="logo-image" style="background-image: url('images/meta_learners_logo.png')"></div>
-                        <div class="floating-badge">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                                <circle cx="9" cy="7" r="4"/>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                            </svg>
-                            <div>
-                                <p class="badge-number">100+</p>
-                                <p class="badge-label">Members</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="community-content">
-                    <div class="community-badge">Community</div>
-
-                    <h2 class="community-title">Meta Learners: Learning How to Learn</h2>
-
-                    <p class="community-description">
-                        A small, informal WhatsApp community where we share AI and ML resources,
-                        discuss cutting-edge concepts, and grow together. But here's the twist. We
-                        don't just learn tools, we learn <strong>how to learn</strong>.
-                    </p>
-
-                    <div class="community-features">
-                        <div class="feature">
-                            <div class="feature-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="feature-title">Active Discussions</h3>
-                                <p class="feature-description">
-                                    Timely AI/ML updates, news, competitions, and deep-dive discussions
-                                    on concepts that matter. All the webinars above were conducted by or
-                                    in collaboration with this community.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="feature">
-                            <div class="feature-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                                    <polyline points="17 6 23 6 23 12"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="feature-title">Learn to Adapt</h3>
-                                <p class="feature-description">
-                                    We focus on meta-learning. Learning to learn and adapt to revolutionary
-                                    technologies in tech, rather than just mastering existing tools. Stay
-                                    ahead of the curve, not behind it.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="feature">
-                            <div class="feature-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <path d="M12 6v6l4 2"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="feature-title">Small & Intimate</h3>
-                                <p class="feature-description">
-                                    Quality over quantity. We keep the group manageable to ensure meaningful
-                                    conversations and real connections. Everyone's voice matters.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p class="community-join-text">
-                        If you want to join this simple and informal community, reach out to me on LinkedIn!
-                    </p>
-
-                    <br>
-
-                    <a href="https://www.linkedin.com/in/komil-parmar-488967243/" class="btn btn-community" target="_blank" rel="noopener noreferrer">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                            <rect x="2" y="9" width="4" height="12"/>
-                            <circle cx="4" cy="4" r="2"/>
-                        </svg>
-                        Connect on LinkedIn
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Kaggle Section -->
-    <section id="kaggle" class="kaggle-section" data-watermark="KAGGLE">
-        <div class="container-wide">
-            <div class="section-header">
-                <div class="section-badge kaggle-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    Kaggle Achievements
-                </div>
-                <div class="section-label">Kaggle</div>
-                <h2 class="section-title">Competing, Teaching, Building</h2>
-                <p class="section-subtitle">Competitions Expert, top 0.6% globally. I compete, host, and teach.</p>
-            </div>
-
-            <!-- Awards -->
-            <div class="kaggle-awards">
-                <div class="kaggle-award-card">
-                    <div class="award-header">
-                        <div class="award-icon-large">
-                            <img src="images/kaggle-community-host.svg" alt="Community Competition Host Badge" style="width: 80px; height: 80px; background-color: white; padding: 8px; border-radius: 8px;">
-                        </div>
-                        <div>
-                            <h3 class="award-title">Community Competition Host</h3>
-                            <a href="https://www.kaggle.com/certification/badges/komilparmar/81" class="award-link" target="_blank" rel="noopener noreferrer">View Certificate →</a>
-                        </div>
-                    </div>
-                    <p class="award-description">
-                        Hosted "Students ML Playground Series S1E1" for my IITG peers. Inspired by Kaggle's own evergreen Playground Series.
-                    </p>
-                    <ul class="award-details">
-                        <li>Conducted multiple interactive webinars covering everything: Kaggle basics, EDA, visualization, model comparison, ensembling, overfitting, and tons of best practices</li>
-                        <li>Demonstrated how smart EDA can make a simple model outperform complex ones</li>
-                        <li>Live coding sessions, complete notebook walkthroughs, and discussions with top rankers</li>
-                        <li>Teaching style: real-world analogies, interactive, and beginner-friendly</li>
+                    <ul class="tally-list">
+                        <li class="tally-row gold">
+                            <span class="coin coin-gold" aria-hidden="true"></span>
+                            <span class="tally-name">Gold</span>
+                            <span class="tally-meter"><span style="--w:100%"></span></span>
+                            <span class="tally-val" data-count="79">79</span>
+                        </li>
+                        <li class="tally-row silver">
+                            <span class="coin coin-silver" aria-hidden="true"></span>
+                            <span class="tally-name">Silver</span>
+                            <span class="tally-meter"><span style="--w:81%"></span></span>
+                            <span class="tally-val" data-count="64">64</span>
+                        </li>
+                        <li class="tally-row bronze">
+                            <span class="coin coin-bronze" aria-hidden="true"></span>
+                            <span class="tally-name">Bronze</span>
+                            <span class="tally-meter"><span style="--w:69.6%"></span></span>
+                            <span class="tally-val" data-count="55">55</span>
+                        </li>
                     </ul>
-                </div>
-
-                <div class="kaggle-award-card">
-                    <div class="award-header">
-                        <div class="award-icon-large">
-                            <img src="images/kaggle-discussions-expert.svg" alt="Discussions Expert Badge" style="width: 80px; height: 80px; background-color: white; padding: 8px; border-radius: 8px;">
-                        </div>
-                        <div>
-                            <h3 class="award-title">Discussions Legacy Expert</h3>
-                            <p class="award-rank">Highest Rank: #508</p>
-                            <a href="https://www.kaggle.com/certification/badges/komilparmar/97" class="award-link" target="_blank" rel="noopener noreferrer">View Certificate →</a>
-                        </div>
-                    </div>
-                    <p class="award-description">
-                        Achieved Expert tier in Discussions track before it was removed (2016-2025).
-                    </p>
-                    <ul class="award-details">
-                        <li>Shows my passion for experimenting and sharing insights along the way</li>
-                        <li>Active in discussing, learning, and teaching others on Kaggle forums</li>
-                        <li>ML isn't a rule-based field. There's always something new to discover</li>
-                        <li>Happy to share, review, rectify, and fight for my hypotheses (even the unreasonable ones)</li>
-                    </ul>
-                </div>
+                    <blockquote class="tally-quote">
+                        "Our AI is so powerful that in most challenges you will only find 5-6 people ranking above it. So getting past our own AI itself has become a great achievement."
+                    </blockquote>
+                </article>
             </div>
 
-            <div class="kaggle-feature-card">
-                <div class="kaggle-feature-copy">
-                    <div class="kaggle-expert-label">
-                        <span class="kaggle-expert-dot"></span>
-                        Kaggle Expert Tier - Purple Badge
-                    </div>
-                    <h3 class="kaggle-feature-title">Competitions Expert</h3>
-                    <p class="kaggle-feature-rank">Global Rank: <strong>#1150 / 202,000+</strong> &nbsp;·&nbsp; Top 0.6%</p>
-                    <p class="kaggle-feature-description">
-                        Expert is an earned tier. It can't be bought or gifted. It means consistent leaderboard performance across multiple competitions. This is the proof layer beneath every other Kaggle achievement shown here.
-                    </p>
-                    <ul class="kaggle-feature-points">
-                        <li>Placed in the top tier across large-scale global competitions</li>
-                        <li>Competitive experience spanning computer vision, tabular, and NLP tracks</li>
-                        <li>Sharpened instincts in validation strategy, feature engineering, and ensemble design</li>
-                    </ul>
+            <!-- Timeline -->
+            <div class="climb reveal" id="climb">
+                <div class="climb-head">
+                    <h3 class="climb-title">The climb</h3>
+                    <p class="mono dim">Feb 2026 → today · 7 months</p>
                 </div>
-                <div class="kaggle-feature-shot-wrap">
-                    <img src="images/competitions-expert-profile.png" alt="Kaggle profile showing Competitions Expert status" class="kaggle-feature-shot">
-                </div>
+                <div class="climb-track" aria-hidden="true"><span class="climb-fill" id="climb-fill"></span></div>
+                <ol class="climb-steps">
+                    <li class="climb-step">
+                        <span class="climb-node"></span>
+                        <p class="climb-date mono">Feb 2026</p>
+                        <h4 class="climb-role">Freelancer</h4>
+                        <p class="climb-text">Joined as a solver with zero applications sent. Crossed <b>₹1,00,000</b> in my first week (during exams, part-time).</p>
+                    </li>
+                    <li class="climb-step">
+                        <span class="climb-node"></span>
+                        <p class="climb-date mono">Apr 2026</p>
+                        <h4 class="climb-role">Reviewer</h4>
+                        <p class="climb-text">Promoted to one of 10 reviewers. Quality checks on the challenges we make and the solutions our solvers submit.</p>
+                    </li>
+                    <li class="climb-step">
+                        <span class="climb-node"></span>
+                        <p class="climb-date mono">Aug 2026</p>
+                        <h4 class="climb-role">Principal Reviewer</h4>
+                        <p class="climb-text">Promoted again. Responsible for the quality of data that trains some of the most powerful LLMs.</p>
+                    </li>
+                    <li class="climb-step is-now">
+                        <span class="climb-node"><span class="live-dot"></span></span>
+                        <p class="climb-date mono">Till date</p>
+                        <h4 class="climb-role">Rank #1</h4>
+                        <p class="climb-text">Once a solver, always a solver. Still solving the critical ones myself, and now the top-ranked solver on the platform.</p>
+                    </li>
+                </ol>
             </div>
 
-            <div class="kaggle-medals">
-                <div class="kaggle-medals-header">
-                    <h3 class="competitions-title medals-title">Kaggle Competition Certificates</h3>
-                    <p class="kaggle-medals-subtitle">Official Silver Medal certificates. Verified leaderboard achievements across 3 competitions.</p>
+            <!-- Payout story -->
+            <div class="payout reveal">
+                <div class="payout-cell">
+                    <p class="mono dim">Applications sent</p>
+                    <p class="payout-num">0</p>
                 </div>
-                <div class="kaggle-medals-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
-                    <div class="kaggle-medal-card">
-                        <div class="kaggle-medal-meta">
-                            <span class="kaggle-medal-pill">Silver Medal</span>
-                            <h4 class="competition-name">CSIRO - Image2Biomass Prediction</h4>
-                            <p class="competition-rank">Rank: <strong>37 / 13,776</strong></p>
-                        </div>
-                        <a href="images/Silver-CSIRO-Image2Biomass-Prediction.png" class="kaggle-medal-shot-wrap" target="_blank" rel="noopener noreferrer">
-                            <img src="images/Silver-CSIRO-Image2Biomass-Prediction.png" alt="Silver Medal - CSIRO Image2Biomass" class="kaggle-medal-shot">
-                        </a>
-                    </div>
-
-                    <div class="kaggle-medal-card">
-                        <div class="kaggle-medal-meta">
-                            <span class="kaggle-medal-pill">Silver Medal</span>
-                            <h4 class="competition-name">Vesuvius Challenge - Surface Detection</h4>
-                            <p class="competition-rank">Rank: <strong>48 / 7,759</strong></p>
-                        </div>
-                        <a href="images/Silver-Vesuvius-Challenge-Surface-Detection.png" class="kaggle-medal-shot-wrap" target="_blank" rel="noopener noreferrer">
-                            <img src="images/Silver-Vesuvius-Challenge-Surface-Detection.png" alt="Silver Medal - Vesuvius Challenge" class="kaggle-medal-shot">
-                        </a>
-                    </div>
-
-                    <div class="kaggle-medal-card">
-                        <div class="kaggle-medal-meta">
-                            <span class="kaggle-medal-pill">Silver Medal</span>
-                            <h4 class="competition-name">Deep Past - Translate Akkadian to English</h4>
-                            <p class="competition-rank">NLP · Ancient Language Translation</p>
-                        </div>
-                        <a href="images/Silver-Deep-Past-Challenge-Translate-Akkadian-to-English.png" class="kaggle-medal-shot-wrap" target="_blank" rel="noopener noreferrer">
-                            <img src="images/Silver-Deep-Past-Challenge-Translate-Akkadian-to-English.png" alt="Silver Medal - Deep Past Akkadian Translation" class="kaggle-medal-shot">
-                        </a>
-                    </div>
+                <div class="payout-flow" aria-hidden="true">
+                    <svg viewBox="0 0 200 40" preserveAspectRatio="none"><path d="M0 20 H200" class="pf-line"/><path d="M0 20 H200" class="pf-pulse"/></svg>
                 </div>
-            </div>
-
-            <!-- Competitions -->
-            <div class="kaggle-competitions">
-                <h3 class="competitions-title">Competition Rankings</h3>
-                <div class="competitions-grid">
-
-                    <!-- 1. CSIRO - Silver Medal -->
-                    <div class="competition-card">
-                        <div class="competition-image" style="background-image: url('images/competition-2-header.png');"></div>
-                        <div class="competition-content">
-                            <h4 class="competition-name">CSIRO - Image2Biomass Prediction</h4>
-                            <div class="competition-rank">Rank: <strong>37 / 13,776</strong> &nbsp;·&nbsp; 🥈 Silver Medal</div>
-                            <p class="competition-note">Self prompt-tuning with DINOv3: visual prompt tuning, task tokens, orthogonality loss, and aggressive multi-crop bottlenecking to favor generalization over validation-heavy tuning on a tiny 357-image dataset.</p>
-                            <div class="competition-links-row">
-                                <a href="https://www.kaggle.com/competitions/csiro-biomass/leaderboard" class="competition-link" target="_blank" rel="noopener noreferrer">
-                                    View Leaderboard →
-                                </a>
-                                <a href="https://www.kaggle.com/competitions/csiro-biomass/writeups/41st-place-solution-self-prompt-tuning-with-di" class="competition-link competition-link-secondary" target="_blank" rel="noopener noreferrer">
-                                    Read Solution Writeup →
-                                </a>
-                                <a href="https://www.linkedin.com/posts/komil-parmar-488967243_kaggle-csiro-image2biomass-activity-7422522374035750912-AMCn?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="competition-link competition-link-secondary" target="_blank" rel="noopener noreferrer">
-                                    Read Full Story →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2. Vesuvius - Silver Medal -->
-                    <div class="competition-card">
-                        <div class="competition-image" style="background-image: url('images/competition-3-header.png');"></div>
-                        <div class="competition-content">
-                            <h4 class="competition-name">Vesuvius Challenge - Surface Detection</h4>
-                            <div class="competition-rank">Rank: <strong>48 / 7,759</strong> &nbsp;·&nbsp; 🥈 Silver Medal</div>
-                            <p class="competition-note">Task: trace microscopic sheet surfaces inside a full 3D CT scan of a carbonized 79 AD scroll, so it could be virtually unrolled and read. Team of 5 students. Architecture wasn't the answer at all, training stability was. Loss weighting, deep supervision, and obsessive checkpoint control with nnU-Net. Public 47 → Private 48 while most teams dropped ~20 ranks. $200k prize pool. Top 10 got paid. We didn't, but we held our rank (which itself was a big win for us as students competing against full-time researchers).</p>
-                            <div class="competition-links-row">
-                                <a href="https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/leaderboard" class="competition-link" target="_blank" rel="noopener noreferrer">
-                                    View Leaderboard →
-                                </a>
-                                <a href="https://www.linkedin.com/posts/komil-parmar-488967243_kaggle-vesuviuschallenge-deeplearning-activity-7433338088308916224-SVao?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="competition-link competition-link-secondary" target="_blank" rel="noopener noreferrer">
-                                    Read Full Story →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 3. Deep Past Akkadian - Silver Medal -->
-                    <div class="competition-card">
-                        <div class="competition-image" style="background-image: url('images/competition-4-akkadian.png');"></div>
-                        <div class="competition-content">
-                            <h4 class="competition-name">Deep Past - Translate Akkadian to English</h4>
-                            <div class="competition-rank">Rank: <strong>104 / 10,740</strong> &nbsp;·&nbsp; 🥈 Silver Medal</div>
-                            <p class="competition-note">Joined with just 2 weeks left. The competition was almost entirely a Data Engineering challenge. Extracting ancient text from PDFs, OCR pipelines, cuneiform dictionaries, and multilingual corpora. Ensembled 8 diverse models using MBR decoding (4 candidates each, chrF++ alignment), pushing from 30-34 to <strong>36.3 geo mean</strong> on the private LB. Time was the constraint, ensembling was the save.</p>
-                            <div class="competition-links-row">
-                                <a href="https://www.kaggle.com/competitions/deep-past-challenge-translate-akkadian-to-english/leaderboard" class="competition-link" target="_blank" rel="noopener noreferrer">
-                                    View Leaderboard →
-                                </a>
-                                <a href="https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/writeups/one-shot-silver" class="competition-link competition-link-secondary" target="_blank" rel="noopener noreferrer">
-                                    Read Solution Writeup →
-                                </a>
-                                <a href="https://www.linkedin.com/posts/komil-parmar-488967243_deeppast-kaggle-competitions-share-7442096492070395904-tQrD?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="competition-link competition-link-secondary" target="_blank" rel="noopener noreferrer">
-                                    Read Full Story →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 4. Playground Series - Practice (no prize) -->
-                    <div class="competition-card competition-card--practice">
-                        <div class="competition-image" style="background-image: url('images/competition-1-header.png');"></div>
-                        <div class="competition-content">
-                            <span class="competition-practice-label">Practice · No Prize</span>
-                            <h4 class="competition-name">Predict Calorie Expenditure</h4>
-                            <div class="competition-rank">Rank: <strong>14 / 4,316</strong></div>
-                            <p class="competition-note">Right after class 12, I made the decision to skip the traditional college route and take full control of my learning. This competition reinforced that it was the right call. No medals here (Playground Series is skill-building only), but the real prize was connecting with the community, learning new ML concepts from peers, and publishing my very first Kaggle notebook. Discipline and real-world practice honestly beats the traditional paths.</p>
-                            <div class="competition-links-row">
-                                <a href="https://www.kaggle.com/competitions/playground-series-s5e5/leaderboard" class="competition-link" target="_blank" rel="noopener noreferrer">
-                                    View Leaderboard →
-                                </a>
-                                <a href="https://www.linkedin.com/posts/komil-parmar-488967243_kaggle-machinelearning-datascience-activity-7334958544405868545-h8rL?utm_source=share&utm_medium=member_desktop&rcm=ACoAADx58-gB_ayvN_mw1PCLTEAzgWAxUMYOvGg" class="competition-link competition-link-secondary" target="_blank" rel="noopener noreferrer">
-                                    Read Full Story →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
+                <div class="payout-cell">
+                    <p class="mono dim">First payout · week 1</p>
+                    <p class="payout-num accent" id="payout-counter" data-rupees="100000">₹1,00,000</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quote Section -->
-    <section class="quote-section">
-        <div class="kaggle-quote-wrap">
-            <div class="kaggle-quote">
-                <p class="quote-text">"ML is not a rule-based field. At every point, there's something new to discover that you'll most likely never find in existing resources. I'm happy to share, review, rectify, and fight for my hypotheses. Even the unreasonable ones."</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact-section" data-watermark="CONTACT">
-        <div class="container">
-            <div class="contact-content">
-                <h2 class="contact-title">Let's Connect</h2>
-                <p class="contact-description">
-                    Open to ML engineering roles, research collaborations, and consulting work. If you are working on something interesting, please reach out. I would love to hear about it.
+                <p class="payout-text">
+                    All 50 people in the first cohort were manually selected, and most of them had strong Kaggle profiles.
+                    That's what I call online presence actually building over time.
+                    <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer" class="link-arrow">Full story on LinkedIn <span>↗</span></a>
                 </p>
+            </div>
+        </div>
+    </section>
 
-                <div class="contact-grid">
-                    <a href="mailto:komilparmar57@gmail.com" class="contact-card">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                            <polyline points="22,6 12,13 2,6"/>
-                        </svg>
-                        <h3 class="contact-card-title">Email</h3>
-                        <p class="contact-card-value">komilparmar57@gmail.com</p>
-                    </a>
+    <!-- ============ 02 · KAGGLE ============ -->
+    <section class="section" id="kaggle">
+        <div class="wrap">
+            <header class="sec-head reveal">
+                <p class="sec-index"><span>02</span> Kaggle · Competitions Expert</p>
+                <h2 class="sec-title">#867 in the world.<br><span class="serif-i dim">Earned on the leaderboard.</span></h2>
+            </header>
 
-                    <a href="https://github.com/Komil-parmar" target="_blank" rel="noopener noreferrer" class="contact-card">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                        </svg>
-                        <h3 class="contact-card-title">GitHub</h3>
-                        <p class="contact-card-value">@Komil-parmar</p>
-                    </a>
+            <div class="kg-top">
+                <div class="kg-stats reveal">
+                    <div class="kg-stat">
+                        <span class="kg-stat-num">#<span data-count="867">867</span></span>
+                        <span class="kg-stat-label">Global rank, out of 217,535 Kagglers</span>
+                    </div>
+                    <div class="kg-stat">
+                        <span class="kg-stat-num">0.4<small>%</small></span>
+                        <span class="kg-stat-label">Top of Kagglers worldwide</span>
+                    </div>
+                    <div class="kg-stat">
+                        <span class="kg-stat-num" data-count="4">4</span>
+                        <span class="kg-stat-label">Silver medals</span>
+                    </div>
+                    <div class="kg-stat">
+                        <span class="kg-stat-num" data-count="2">2</span>
+                        <span class="kg-stat-label">Bronze medals</span>
+                    </div>
+                </div>
 
-                    <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer" class="contact-card">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                            <rect x="2" y="9" width="4" height="12"/>
-                            <circle cx="4" cy="4" r="2"/>
+                <div class="shelf reveal" style="--d:.1s" aria-label="Kaggle medals: 4 silver, 2 bronze">
+                    <div class="shelf-row">
+                    <div class="medal m-silver"><span>S</span></div>
+                    <div class="medal m-silver"><span>S</span></div>
+                    <div class="medal m-silver"><span>S</span></div>
+                    <div class="medal m-silver"><span>S</span></div>
+                    <div class="medal m-bronze"><span>B</span></div>
+                    <div class="medal m-bronze"><span>B</span></div>
+                    </div>
+                    <p class="shelf-cap mono">4 silver · 2 bronze · and counting</p>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="lb reveal">
+                <div class="lb-head mono">
+                    <span>Competition</span>
+                    <span class="lb-h-pos">Finish</span>
+                    <span class="lb-h-pct">Percentile</span>
+                    <span class="lb-h-medal">Medal</span>
+                </div>
+
+                <details class="lb-row" open>
+                    <summary>
+                        <span class="lb-name">
+                            <img src="images/ptcg-thumb.jpg" alt="" class="lb-thumb" loading="lazy">
+                            <span><b>The Pokémon Company · PTCG AI Battle Challenge</b><i>Simulation · game-playing AI agents</i></span>
+                        </span>
+                        <span class="lb-pos mono lb-pos-na">Silver</span>
+                        <span class="lb-pct"><span class="mono">simulation leaderboard</span></span>
+                        <span class="lb-medal"><span class="coin coin-silver"></span></span>
+                        <span class="lb-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="lb-body">
+                        <p>A simulation competition by The Pokémon Company: build an AI that battles in the Pokémon Trading Card Game against everyone else's agents. My writeup: <b>"I Replaced GPUs With Tokens: Silver in a Game I Can't Play"</b>.</p>
+                        <div class="lb-links">
+                            <a href="https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/writeups/new-writeup-1789132416498" target="_blank" rel="noopener noreferrer" class="link-arrow">Solution writeup <span>↗</span></a>
+                            <a href="https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/leaderboard" target="_blank" rel="noopener noreferrer" class="link-arrow">Leaderboard <span>↗</span></a>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="lb-row">
+                    <summary>
+                        <span class="lb-name">
+                            <img src="images/competition-2-header.png" alt="" class="lb-thumb" loading="lazy">
+                            <span><b>CSIRO · Image2Biomass Prediction</b><i>Computer vision · DINOv3</i></span>
+                        </span>
+                        <span class="lb-pos mono"><b>37</b> / 13,776</span>
+                        <span class="lb-pct"><span class="pct-bar"><span style="--p:.9973"></span></span><span class="mono">top 0.27%</span></span>
+                        <span class="lb-medal"><span class="coin coin-silver"></span></span>
+                        <span class="lb-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="lb-body">
+                        <p>Self prompt-tuning with DINOv3: visual prompt tuning, task tokens, orthogonality loss, and aggressive multi-crop bottlenecking to favor generalization over validation-heavy tuning on a tiny 357-image dataset.</p>
+                        <div class="lb-links">
+                            <a href="solution-csiro-biomass.html" class="link-arrow">Solution writeup <span>→</span></a>
+                            <a href="https://www.kaggle.com/competitions/csiro-biomass/leaderboard" target="_blank" rel="noopener noreferrer" class="link-arrow">Leaderboard <span>↗</span></a>
+                            <a href="https://www.linkedin.com/posts/komil-parmar-488967243_kaggle-csiro-image2biomass-activity-7422522374035750912-AMCn" target="_blank" rel="noopener noreferrer" class="link-arrow">Story <span>↗</span></a>
+                            <a href="images/Silver-CSIRO-Image2Biomass-Prediction.png" target="_blank" rel="noopener noreferrer" class="link-arrow">Certificate <span>↗</span></a>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="lb-row">
+                    <summary>
+                        <span class="lb-name">
+                            <img src="images/competition-3-header.png" alt="" class="lb-thumb" loading="lazy">
+                            <span><b>Vesuvius Challenge · Surface Detection</b><i>3D segmentation · nnU-Net · team of 5</i></span>
+                        </span>
+                        <span class="lb-pos mono"><b>48</b> / 7,759</span>
+                        <span class="lb-pct"><span class="pct-bar"><span style="--p:.9938"></span></span><span class="mono">top 0.62%</span></span>
+                        <span class="lb-medal"><span class="coin coin-silver"></span></span>
+                        <span class="lb-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="lb-body">
+                        <p>Trace microscopic sheet surfaces inside a full 3D CT scan of a carbonized 79 AD scroll, so it can be virtually unrolled and read. Architecture wasn't the answer at all, training stability was: loss weighting, deep supervision, and obsessive checkpoint control with nnU-Net. Public 47 → Private 48 while most teams dropped ~20 ranks ($200k prize pool, students against full-time researchers).</p>
+                        <div class="lb-links">
+                            <a href="https://www.kaggle.com/competitions/vesuvius-challenge-surface-detection/leaderboard" target="_blank" rel="noopener noreferrer" class="link-arrow">Leaderboard <span>↗</span></a>
+                            <a href="https://www.linkedin.com/posts/komil-parmar-488967243_kaggle-vesuviuschallenge-deeplearning-activity-7433338088308916224-SVao" target="_blank" rel="noopener noreferrer" class="link-arrow">Story <span>↗</span></a>
+                            <a href="images/Silver-Vesuvius-Challenge-Surface-Detection.png" target="_blank" rel="noopener noreferrer" class="link-arrow">Certificate <span>↗</span></a>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="lb-row">
+                    <summary>
+                        <span class="lb-name">
+                            <img src="images/competition-4-akkadian.png" alt="" class="lb-thumb" loading="lazy">
+                            <span><b>Deep Past · Translate Akkadian to English</b><i>NLP · MBR ensembling · joined with 2 weeks left</i></span>
+                        </span>
+                        <span class="lb-pos mono"><b>104</b> / 10,740</span>
+                        <span class="lb-pct"><span class="pct-bar"><span style="--p:.9903"></span></span><span class="mono">top 0.97%</span></span>
+                        <span class="lb-medal"><span class="coin coin-silver"></span></span>
+                        <span class="lb-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="lb-body">
+                        <p>Almost entirely a data engineering challenge: extracting ancient text from PDFs, OCR pipelines, cuneiform dictionaries and multilingual corpora. Ensembled 8 diverse models with MBR decoding (4 candidates each, chrF++ alignment), pushing from 30-34 to <b>36.3 geo mean</b> on the private LB. Time was the constraint, ensembling was the save.</p>
+                        <div class="lb-links">
+                            <a href="https://www.kaggle.com/competitions/deep-past-initiative-machine-translation/writeups/one-shot-silver" target="_blank" rel="noopener noreferrer" class="link-arrow">Solution writeup <span>↗</span></a>
+                            <a href="https://www.kaggle.com/competitions/deep-past-challenge-translate-akkadian-to-english/leaderboard" target="_blank" rel="noopener noreferrer" class="link-arrow">Leaderboard <span>↗</span></a>
+                            <a href="https://www.linkedin.com/posts/komil-parmar-488967243_deeppast-kaggle-competitions-share-7442096492070395904-tQrD" target="_blank" rel="noopener noreferrer" class="link-arrow">Story <span>↗</span></a>
+                            <a href="images/Silver-Deep-Past-Challenge-Translate-Akkadian-to-English.png" target="_blank" rel="noopener noreferrer" class="link-arrow">Certificate <span>↗</span></a>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="lb-row">
+                    <summary>
+                        <span class="lb-name">
+                            <span class="lb-thumb lb-thumb-gen" aria-hidden="true">⛏</span>
+                            <span><b>ROGII · Wellbore Geology Prediction</b><i>Geoscience · geosteering</i></span>
+                        </span>
+                        <span class="lb-pos mono lb-pos-na">Bronze</span>
+                        <span class="lb-pct"><span class="mono">medal zone</span></span>
+                        <span class="lb-medal"><span class="coin coin-bronze"></span></span>
+                        <span class="lb-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="lb-body">
+                        <p>Predicting the geology along a drilled wellbore (geosteering) from well-log data.</p>
+                        <div class="lb-links">
+                            <a href="https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction" target="_blank" rel="noopener noreferrer" class="link-arrow">Competition <span>↗</span></a>
+                            <a href="https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction/leaderboard" target="_blank" rel="noopener noreferrer" class="link-arrow">Leaderboard <span>↗</span></a>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="lb-row">
+                    <summary>
+                        <span class="lb-name">
+                            <span class="lb-thumb lb-thumb-gen" aria-hidden="true">⚠</span>
+                            <span><b>AI Agent Security · Multi-Step Tool Attacks</b><i>AI security · tool-using LLM agents</i></span>
+                        </span>
+                        <span class="lb-pos mono lb-pos-na">Bronze</span>
+                        <span class="lb-pct"><span class="mono">medal zone</span></span>
+                        <span class="lb-medal"><span class="coin coin-bronze"></span></span>
+                        <span class="lb-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="lb-body">
+                        <p>Security of tool-using AI agents against multi-step attacks, the kind of problem that matters more every month as agents get real tools.</p>
+                        <div class="lb-links">
+                            <a href="https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks" target="_blank" rel="noopener noreferrer" class="link-arrow">Competition <span>↗</span></a>
+                            <a href="https://www.kaggle.com/competitions/ai-agent-security-multi-step-tool-attacks/leaderboard" target="_blank" rel="noopener noreferrer" class="link-arrow">Leaderboard <span>↗</span></a>
+                        </div>
+                    </div>
+                </details>
+
+                <details class="lb-row">
+                    <summary>
+                        <span class="lb-name">
+                            <img src="images/competition-1-header.png" alt="" class="lb-thumb" loading="lazy">
+                            <span><b>Playground S5E5 · Predict Calorie Expenditure</b><i>Tabular · practice, no medals awarded</i></span>
+                        </span>
+                        <span class="lb-pos mono"><b>14</b> / 4,316</span>
+                        <span class="lb-pct"><span class="pct-bar"><span style="--p:.9968"></span></span><span class="mono">top 0.32%</span></span>
+                        <span class="lb-medal"><span class="chip chip-quiet">practice</span></span>
+                        <span class="lb-toggle" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="lb-body">
+                        <p>Right after class 12, I made the decision to skip the traditional college route and take full control of my learning. This competition reinforced that it was the right call. No medals here (Playground Series is skill-building only), but the real prize was the community, and publishing my very first Kaggle notebook.</p>
+                        <div class="lb-links">
+                            <a href="https://www.kaggle.com/competitions/playground-series-s5e5/leaderboard" target="_blank" rel="noopener noreferrer" class="link-arrow">Leaderboard <span>↗</span></a>
+                            <a href="https://www.linkedin.com/posts/komil-parmar-488967243_kaggle-machinelearning-datascience-activity-7334958544405868545-h8rL" target="_blank" rel="noopener noreferrer" class="link-arrow">Story <span>↗</span></a>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Badges -->
+            <div class="badges">
+                <a class="card badge-card reveal" href="https://www.kaggle.com/certification/badges/komilparmar/81" target="_blank" rel="noopener noreferrer">
+                    <img src="images/kaggle-community-host.svg" alt="Kaggle Community Competition Host badge" loading="lazy">
+                    <div>
+                        <h4>Community Competition Host</h4>
+                        <p>Hosted "Students ML Playground Series S1E1" for my IITG peers, with webinars from Kaggle basics all the way to ensembling and calibration.</p>
+                        <span class="link-arrow">Certificate <span>↗</span></span>
+                    </div>
+                </a>
+                <a class="card badge-card reveal" style="--d:.08s" href="https://www.kaggle.com/certification/badges/komilparmar/97" target="_blank" rel="noopener noreferrer">
+                    <img src="images/kaggle-discussions-expert.svg" alt="Kaggle Discussions Expert badge" loading="lazy">
+                    <div>
+                        <h4>Discussions Legacy Expert <span class="mono dim">· peak #508</span></h4>
+                        <p>Reached Expert in the Discussions track before Kaggle retired it (most probably one of the last ones). Happy to share, review, and fight for my hypotheses, even the unreasonable ones.</p>
+                        <span class="link-arrow">Certificate <span>↗</span></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 03 · WORK ============ -->
+    <section class="section" id="work">
+        <div class="wrap">
+            <header class="sec-head reveal">
+                <p class="sec-index"><span>03</span> Work · Research &amp; builds</p>
+                <h2 class="sec-title">Built to understand things deeply.<br><span class="serif-i dim">Not just for show.</span></h2>
+            </header>
+
+            <div class="bento">
+                <!-- STARC -->
+                <a class="card tile tile-starc reveal" href="https://www.linkedin.com/pulse/introducing-starc-science-text-abstraction-reasoning-corpus-parmar-0wnsc/" target="_blank" rel="noopener noreferrer">
+                    <div class="tile-media"><img src="images/STARC-GOT-thumb.jpg" alt="STARC benchmark cover art" loading="lazy"></div>
+                    <div class="tile-body">
+                        <p class="tile-kicker mono">Research · Benchmark · Apr 2026</p>
+                        <h3 class="tile-title">STARC: Science Text Abstraction &amp; Reasoning Corpus</h3>
+                        <p class="tile-text">Can frontier models actually reason, or just recognize? A rule-induction benchmark for the Kaggle <em>Measuring AGI</em> competition by Google DeepMind. By testing models with and without domain hints, STARC pinpoints where the reasoning breaks: at domain discovery, or at the logical inference itself. Three sophomores, no lab, no budget, one week.</p>
+                        <div class="tags"><span>Benchmark design</span><span>LLM evals</span><span>Reasoning</span></div>
+                        <span class="link-arrow">Read the article <span>↗</span></span>
+                    </div>
+                </a>
+
+                <!-- Meta-learning -->
+                <a class="card tile tile-meta reveal" style="--d:.06s" href="https://github.com/Komil-parmar/meta-learning-from-scratch" target="_blank" rel="noopener noreferrer">
+                    <div class="maml-viz" aria-hidden="true">
+                        <svg viewBox="0 0 320 170" id="maml-svg">
+                            <defs>
+                                <radialGradient id="basin" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="currentColor" stop-opacity=".16"/>
+                                    <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            <circle cx="60" cy="40" r="34" fill="url(#basin)"/>
+                            <circle cx="262" cy="52" r="34" fill="url(#basin)"/>
+                            <circle cx="236" cy="136" r="34" fill="url(#basin)"/>
+                            <circle cx="70" cy="138" r="34" fill="url(#basin)"/>
+                            <g class="maml-paths">
+                                <path d="M160 88 C130 70, 90 56, 60 40"/>
+                                <path d="M160 88 C200 70, 238 60, 262 52"/>
+                                <path d="M160 88 C190 110, 214 126, 236 136"/>
+                                <path d="M160 88 C130 112, 96 128, 70 138"/>
+                            </g>
+                            <circle cx="60" cy="40" r="4" class="maml-task"/>
+                            <circle cx="262" cy="52" r="4" class="maml-task"/>
+                            <circle cx="236" cy="136" r="4" class="maml-task"/>
+                            <circle cx="70" cy="138" r="4" class="maml-task"/>
+                            <circle cx="160" cy="88" r="7" class="maml-theta"/>
+                            <text x="172" y="84" class="maml-label">θ</text>
                         </svg>
-                        <h3 class="contact-card-title">LinkedIn</h3>
-                        <p class="contact-card-value">Komil Parmar</p>
+                    </div>
+                    <div class="tile-body">
+                        <p class="tile-kicker mono">Open source · Ongoing</p>
+                        <h3 class="tile-title">Meta-Learning from Scratch</h3>
+                        <p class="tile-text">MAML, FOMAML, Prototypical Networks and more, built from first principles and documented for understanding, not just for use. (Trust me, you'll thank yourself later when the framework version changes.)</p>
+                        <div class="tags"><span>PyTorch</span><span>MAML</span><span>Few-shot</span></div>
+                        <span class="link-arrow">GitHub <span>↗</span></span>
+                    </div>
+                </a>
+
+                <!-- THOR -->
+                <article class="card tile tile-thor reveal">
+                    <div class="tile-media"><img src="images/thor-project.png" alt="THOR, Traffic Hazard Optimization and Rescue" loading="lazy"></div>
+                    <div class="tile-body">
+                        <p class="tile-kicker mono">Computer vision · Class 11-12</p>
+                        <h3 class="tile-title">THOR: Traffic Hazard Optimization &amp; Rescue</h3>
+                        <p class="tile-text">Live CCTV feeds drive traffic decisions, and ambulances get their path to the hospital cleared in advance. Fine-tuned YOLO on a custom toy-car dataset I collected myself, built a physical road model for the live demo.</p>
+                        <div class="tags"><span>YOLO</span><span>Real-time CV</span><span>Custom data</span></div>
+                        <p class="tile-award">🏆 District-level winner · multiple inter-school wins</p>
+                    </div>
+                </article>
+
+                <!-- SHIELD -->
+                <article class="card tile tile-shield reveal" style="--d:.06s">
+                    <div class="laser" aria-hidden="true"><span></span></div>
+                    <div class="tile-body">
+                        <p class="tile-kicker mono">Hardware · High school</p>
+                        <h3 class="tile-title">S.H.I.E.L.D.</h3>
+                        <p class="tile-text">Security &amp; Home Intrusion Eradication and Defense. A regular-looking pen with an embedded diode that doubles as a wearable SOS trigger and a laser tripwire, smart enough to ignore ambient light changes.</p>
+                        <div class="tags"><span>Embedded</span><span>Circuit design</span></div>
+                        <p class="tile-award">🥈 2nd of 21 schools · Defence innovation award</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 04 · WRITING ============ -->
+    <section class="section" id="writing">
+        <div class="wrap">
+            <header class="sec-head reveal">
+                <p class="sec-index"><span>04</span> Writing · Takes &amp; writeups</p>
+                <h2 class="sec-title">I write down what<br><span class="serif-i dim">I figure out.</span></h2>
+            </header>
+
+            <ol class="posts" id="posts">
+                <li class="reveal">
+                    <a class="post" href="https://www.kaggle.com/competitions/pokemon-tcg-ai-battle-challenge-strategy/writeups/new-writeup-1789132416498" target="_blank" rel="noopener noreferrer" data-img="images/ptcg-thumb.jpg">
+                        <span class="post-n mono">01</span>
+                        <span class="post-title">I replaced GPUs with tokens: Silver in a game I can't play</span>
+                        <span class="post-meta mono">Kaggle writeup</span>
+                        <span class="post-arrow">↗</span>
                     </a>
+                </li>
+                <li class="reveal">
+                    <a class="post" href="solution-csiro-biomass.html" data-img="images/competition-2-header.png">
+                        <span class="post-n mono">02</span>
+                        <span class="post-title">37th place: Self prompt-tuning with DINOv3</span>
+                        <span class="post-meta mono">Solution writeup</span>
+                        <span class="post-arrow">→</span>
+                    </a>
+                </li>
+                <li class="reveal">
+                    <a class="post" href="https://www.linkedin.com/pulse/introducing-starc-science-text-abstraction-reasoning-corpus-parmar-0wnsc/" target="_blank" rel="noopener noreferrer" data-img="images/STARC-GOT-thumb.jpg">
+                        <span class="post-n mono">03</span>
+                        <span class="post-title">Introducing STARC: can frontier models reason, or just recognize?</span>
+                        <span class="post-meta mono">Article · Apr 2026</span>
+                        <span class="post-arrow">↗</span>
+                    </a>
+                </li>
+                <li class="reveal">
+                    <a class="post" href="https://www.linkedin.com/pulse/lost-before-competition-even-began-komil-parmar-q6khf/" target="_blank" rel="noopener noreferrer" data-img="images/EPOCH-NAUTS-thumb.jpg">
+                        <span class="post-n mono">04</span>
+                        <span class="post-title">I lost a competition before it even began</span>
+                        <span class="post-meta mono">Article</span>
+                        <span class="post-arrow">↗</span>
+                    </a>
+                </li>
+                <li class="reveal">
+                    <a class="post" href="https://www.linkedin.com/posts/komil-parmar-488967243_lighting-another-candle-never-dims-your-own-activity-7401176102838185984-tyCS" target="_blank" rel="noopener noreferrer" data-img="images/Career-Fair-thumb.jpg">
+                        <span class="post-n mono">05</span>
+                        <span class="post-title">Lighting another candle never dims your own flame</span>
+                        <span class="post-meta mono">Post</span>
+                        <span class="post-arrow">↗</span>
+                    </a>
+                </li>
+                <li class="reveal">
+                    <a class="post" href="https://github.com/Komil-parmar/Komil-parmar" target="_blank" rel="noopener noreferrer">
+                        <span class="post-n mono">06</span>
+                        <span class="post-title">I skipped a CS degree and got an invite-only role without applying</span>
+                        <span class="post-meta mono">Opinion</span>
+                        <span class="post-arrow">↗</span>
+                    </a>
+                </li>
+                <li class="reveal">
+                    <div class="post is-soon">
+                        <span class="post-n mono">07</span>
+                        <span class="post-title">Why I built my meta-learning library from scratch first</span>
+                        <span class="post-meta mono">Coming soon</span>
+                        <span class="post-arrow">·</span>
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="post-preview" id="post-preview" aria-hidden="true"><img alt=""></div>
+    </section>
+
+    <!-- ============ 05 · TEACHING ============ -->
+    <section class="section" id="teaching">
+        <div class="wrap">
+            <header class="sec-head reveal">
+                <p class="sec-index"><span>05</span> Teaching · Mentoring · Community</p>
+                <h2 class="sec-title">"Lighting another candle<br><span class="serif-i dim">never dims your own."</span></h2>
+                <p class="sec-lead">A belief I've carried since class 10. Every time I teach, I end up understanding the topic more deeply myself. So if I know something that could help someone, I share it. No gatekeeping.</p>
+            </header>
+
+            <div class="teach-stats reveal">
+                <div><span class="ts-num"><span data-count="10">10</span>+</span><span class="ts-label">webinars &amp; sessions</span></div>
+                <div><span class="ts-num"><span data-count="200">200</span>+</span><span class="ts-label">peak attendees</span></div>
+                <div><span class="ts-num">SIH</span><span class="ts-label">mentored a team to the Grand Finale</span></div>
+                <div><span class="ts-num"><span data-count="100">100</span>+</span><span class="ts-label">Meta Learners members</span></div>
+            </div>
+
+            <div class="webinar-rail-wrap reveal">
+                <div class="rail-controls">
+                    <p class="mono dim">Webinars &amp; talks</p>
+                    <div>
+                        <button class="rail-btn" id="rail-prev" aria-label="Scroll webinars left">←</button>
+                        <button class="rail-btn" id="rail-next" aria-label="Scroll webinars right">→</button>
+                    </div>
+                </div>
+                <div class="webinar-rail" id="webinar-rail" tabindex="0" aria-label="Webinars"></div>
+            </div>
+
+            <div class="mentor-grid">
+                <article class="card mentor reveal">
+                    <p class="mono dim">Milestone</p>
+                    <h4>Smart India Hackathon, Grand Finale</h4>
+                    <p>Mentored a team from their very first meeting all the way to the SIH Grand Finale: framing the problem, sharpening the approach, pitch prep, and staying focused under pressure.</p>
+                    <div class="mentor-links">
+                        <a href="https://www.linkedin.com/posts/komil-parmar-488967243_oes-oesiitg-iitg-activity-7405323172046311424-LL5l" target="_blank" rel="noopener noreferrer" class="link-arrow">My post <span>↗</span></a>
+                        <a href="https://www.linkedin.com/posts/aaryan-gotad-b82aa5327_oes-oesiitg-iitg-activity-7405316261947011072-8a9u" target="_blank" rel="noopener noreferrer" class="link-arrow">Team leader's note <span>↗</span></a>
+                    </div>
+                </article>
+                <article class="card mentor reveal" style="--d:.06s">
+                    <p class="mono dim">Kaggle · Community host</p>
+                    <h4>Students ML Playground Series S1E1</h4>
+                    <p>A Kaggle competition built for students who aren't ready for the main arena yet. Webinars from the absolute basics to ensembling, covariate shift and calibration, and a closing ceremony where everyone shared their solutions.</p>
+                </article>
+                <article class="card mentor reveal" style="--d:.12s">
+                    <p class="mono dim">Since class 10</p>
+                    <h4>Tejas Vidyalaya, mentoring juniors</h4>
+                    <p>Projects, competition prep, and being the go-to person whenever someone needed direction. Teachers called me one of the most active and competitive students in the school's recent history, but bringing others along is the part I'm proudest of.</p>
+                </article>
+            </div>
+
+            <div class="community card reveal">
+                <img src="images/meta_learners_logo.png" alt="Meta Learners community logo" class="community-logo" loading="lazy">
+                <div class="community-body">
+                    <p class="mono dim">Community · 100+ members</p>
+                    <h3>Meta Learners: learning how to learn</h3>
+                    <p>A small, informal community where we share AI/ML resources, discuss the concepts that matter, and learn to adapt to new technology rather than just mastering today's tools. All the webinars above were run by or with this community.</p>
+                    <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer" class="link-arrow">Want in? Message me on LinkedIn <span>↗</span></a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ============ 06 · ORIGIN ============ -->
+    <section class="section" id="origin">
+        <div class="wrap">
+            <header class="sec-head reveal">
+                <p class="sec-index"><span>06</span> Origin · The unconventional path</p>
+                <h2 class="sec-title">Depth over<br><span class="serif-i dim">the degree.</span></h2>
+            </header>
+
+            <div class="origin-grid">
+                <div class="origin-story reveal">
+                    <p class="origin-lead">Right after class 12, I made probably the toughest decision of my life so far. Instead of spending four years in a lecture hall, I chose to go deep on the things that actually matter for ML.</p>
+                    <p>Lots and lots of failures along the way, but a few things did work out. I'm drawn to the parts of ML that are still being figured out: meta-learning, generalisation under distribution shift, and understanding <em>why</em> models work, not just that they work.</p>
+                    <blockquote class="origin-quote">"ML is not a rule-based field. At every point, there's something new to discover that you'll most likely never find in existing resources."</blockquote>
+
+                    <div class="creds">
+                        <div class="cred"><span class="cred-mark">◈</span><div><b>TensorFlow Developer Certificate</b><span>Google · earned at 18</span></div></div>
+                        <div class="cred"><span class="cred-mark">◈</span><div><b>TensorFlow: Advanced Techniques</b><span>DeepLearning.AI specialisation</span></div></div>
+                        <div class="cred"><span class="cred-mark">◈</span><div><b>Google IT Automation</b><span>Google · professional certificate</span></div></div>
+                    </div>
+
+                    <div class="stack">
+                        <p class="mono dim">Toolbox</p>
+                        <div class="tags tags-lg">
+                            <span>PyTorch</span><span>TensorFlow</span><span>Keras</span><span>scikit-learn</span>
+                            <span>nnU-Net</span><span>DINOv3</span><span>YOLO</span><span>LLM evals</span>
+                            <span>Ensembling &amp; MBR</span><span>Prompt &amp; context engineering</span><span>Jupyter</span><span>Git</span>
+                        </div>
+                    </div>
+                </div>
+
+                <ol class="path reveal" style="--d:.08s">
+                    <li><span class="path-when mono">Class 8</span><span class="path-what">Started with 3D modelling</span></li>
+                    <li><span class="path-when mono">Class 9</span><span class="path-what">Pivoted to hardware security (S.H.I.E.L.D.)</span></li>
+                    <li><span class="path-when mono">Class 10</span><span class="path-what">Found machine learning, started mentoring juniors</span></li>
+                    <li><span class="path-when mono">Class 11-12</span><span class="path-what">THOR, district-level wins</span></li>
+                    <li><span class="path-when mono">Age 18</span><span class="path-what">TensorFlow Developer Certificate</span></li>
+                    <li><span class="path-when mono">2025</span><span class="path-what">Kaggle, 10+ webinars, Community Competition Host</span></li>
+                    <li><span class="path-when mono">2026</span><span class="path-what">4 Kaggle silvers, STARC, invited to DataCurve</span></li>
+                    <li class="is-now"><span class="path-when mono">Now</span><span class="path-what">Principal Reviewer · #1 of 1200+ on Project Eris · Kaggle #867</span></li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 07 · CONTACT ============ -->
+    <section class="section contact" id="contact">
+        <canvas id="contact-noise" aria-hidden="true"></canvas>
+        <div class="wrap contact-inner">
+            <p class="sec-index reveal"><span>07</span> Contact</p>
+            <h2 class="contact-title reveal">Got a hard ML problem?<br><span class="serif-i">Let's talk.</span></h2>
+            <p class="contact-lead reveal">Open to ML engineering roles, research collaborations, and evals work. If you're building something interesting, I would love to hear about it.</p>
+
+            <div class="contact-mail reveal">
+                <a href="mailto:komilparmar57@gmail.com" class="mail-big magnetic">komilparmar57@gmail.com</a>
+                <button class="copy-btn mono" id="copy-email" type="button" data-email="komilparmar57@gmail.com">copy</button>
+            </div>
+
+            <div class="contact-links reveal">
+                <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer">LinkedIn <span>↗</span></a>
+                <a href="https://github.com/Komil-parmar" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a>
+                <a href="https://www.kaggle.com/komilparmar" target="_blank" rel="noopener noreferrer">Kaggle <span>↗</span></a>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
     <footer class="footer">
-        <div class="footer-container">
-            <p class="footer-text">
-                © 2026 Komil Parmar. Built with curiosity and lots of <s>coffee</s> tea 🍵
-            </p>
-            <div class="footer-links">
-                <a href="https://github.com/Komil-parmar" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
-                <a href="https://www.linkedin.com/in/komil-parmar-488967243/" target="_blank" rel="noopener noreferrer" class="footer-link">LinkedIn</a>
-                <a href="mailto:komilparmar57@gmail.com" class="footer-link">Email</a>
-            </div>
-        </div>
+        <p>© 2026 Komil Parmar. Built with curiosity and lots of <s>coffee</s> tea 🍵</p>
+        <p class="mono dim">Vadodara, Gujarat · <span id="local-time">IST</span></p>
     </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script src="./data.js"></script>
     <script src="./script.js"></script>

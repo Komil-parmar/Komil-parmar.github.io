@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>37th Place: Self Prompt Tuning with DINOv3 | Komil Parmar</title>
+<meta name="description" content="A full walkthrough of Komil Parmar's 37th place solution in the CSIRO Image2Biomass Kaggle competition — Self Prompt Tuning with DINOv3. No validation, no fine-tuning, pure generalization.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   VARIABLES & RESET
+   ============================================================ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --white:     #ffffff;
+  --black:     #0a0a0a;
+  --gray-50:   #f7f7f7;
+  --gray-100:  #f0f0f0;
+  --gray-200:  #e4e4e4;
+  --gray-300:  #d1d1d1;
+  --gray-400:  #a8a8a8;
+  --gray-500:  #737373;
+  --gray-600:  #525252;
+  --gray-700:  #3d3d3d;
+  --gray-800:  #262626;
+  --gray-900:  #111111;
+
+  /* Teal accent — biomass / nature theme */
+  --teal:        #0d9488;
+  --teal-light:  #14b8a6;
+  --teal-dark:   #0f766e;
+  --teal-dim:    rgba(13,148,136,0.12);
+  --teal-dimmer: rgba(13,148,136,0.06);
+
+  --green:       #10b981;
+  --amber:       #f59e0b;
+  --rose:        #f43f5e;
+  --indigo:      #6366f1;
+
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-full: 9999px;
+
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.07),  0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.04);
+  --shadow-lg:  0 10px 40px rgba(0,0,0,.1), 0 4px 12px rgba(0,0,0,.06);
+}
+
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body { font-family: var(--font-sans); color: var(--gray-900); background: var(--white); line-height: 1.65; overflow-x: hidden; }
+h1,h2,h3,h4,h5 { font-family: var(--font-display); font-weight: 700; line-height: 1.1; }
+a { text-decoration: none; color: inherit; }
+img { max-width:100%; display:block; }
+strong { font-weight:600; }
+ul { list-style:none; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+.sol-section { padding: 5rem 0; }
+.sol-section--gray { background: var(--gray-50); }
+.sol-section--dark { background: var(--gray-900); color: var(--white); }
+.sol-section--darkest { background: var(--black); color: var(--white); }
+
+.sol-label {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .7rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gray-500); margin-bottom: .875rem;
+}
+.sol-label::before {
+  content:''; display:block; width:18px; height:1.5px; background: var(--gray-400);
+}
+.sol-label--teal { color: var(--teal); }
+.sol-label--teal::before { background: var(--teal); }
+.sol-label--light { color: rgba(255,255,255,.5); }
+.sol-label--light::before { background: rgba(255,255,255,.3); }
+
+.sol-title {
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 800; letter-spacing: -.03em;
+  color: var(--black); margin-bottom: .75rem; line-height: 1.1;
+}
+.sol-title--white { color: var(--white); }
+.sol-subtitle {
+  font-size: 1rem; color: var(--gray-500); max-width: 600px; line-height: 1.7;
+}
+.sol-subtitle--light { color: rgba(255,255,255,.55); }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+.two-col--reverse { direction:rtl; }
+.two-col--reverse > * { direction:ltr; }
+@media(max-width:768px){ .two-col { grid-template-columns:1fr; gap:2rem; } .two-col--reverse { direction:ltr; } }
+
+/* ============================================================
+   SCROLL ANIMATIONS
+   ============================================================ */
+.anim-in {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.anim-in.visible { opacity:1; transform:translateY(0); }
+.anim-in.delay-1 { transition-delay: .1s; }
+.anim-in.delay-2 { transition-delay: .2s; }
+.anim-in.delay-3 { transition-delay: .3s; }
+.anim-in.delay-4 { transition-delay: .4s; }
+.anim-in.delay-5 { transition-delay: .5s; }
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+.sol-nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: rgba(10,10,10,.9); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  height: 56px; display:flex; align-items:center;
+}
+.sol-nav-inner {
+  display:flex; align-items:center; justify-content:space-between;
+  width:100%; max-width:1140px; margin:0 auto; padding:0 1.5rem;
+}
+.sol-nav-back {
+  display:flex; align-items:center; gap:.5rem;
+  font-size:.8rem; font-weight:600; color:rgba(255,255,255,.6);
+  transition: color .2s;
+}
+.sol-nav-back:hover { color:#fff; }
+.sol-nav-back svg { width:14px; height:14px; }
+.sol-nav-title {
+  font-family: var(--font-display); font-size:.85rem; font-weight:700;
+  color:rgba(255,255,255,.85); letter-spacing:-.01em;
+}
+.sol-nav-links { display:flex; gap:1.5rem; }
+.sol-nav-link {
+  font-size:.75rem; font-weight:500; color:rgba(255,255,255,.45);
+  transition:color .2s; letter-spacing:.02em;
+}
+.sol-nav-link:hover { color:#fff; }
+@media(max-width:640px){ .sol-nav-links { display:none; } }
+
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
+.hero {
+  min-height: 100vh; background: var(--black);
+  display:flex; align-items:center; padding-top:56px;
+  position:relative; overflow:hidden;
+}
+.hero-grid-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(13,148,136,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(13,148,136,.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+}
+.hero-glow {
+  position:absolute; width:600px; height:600px; border-radius:50%;
+  background: radial-gradient(circle, rgba(13,148,136,.18) 0%, transparent 70%);
+  top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;
+}
+.hero-inner {
+  position:relative; z-index:1; max-width:1140px; margin:0 auto; padding:4rem 1.5rem;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.35rem 1rem; border-radius:var(--radius-full);
+  border:1px solid rgba(13,148,136,.4);
+  background: rgba(13,148,136,.1);
+  font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color: var(--teal-light); margin-bottom:1.5rem;
+}
+.hero-badge-dot {
+  width:6px; height:6px; border-radius:50%; background:var(--teal-light);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%,100%{ opacity:1; transform:scale(1); }
+  50%{ opacity:.5; transform:scale(1.4); }
+}
+.hero-h1 {
+  font-size: clamp(2.2rem,6vw,4.5rem);
+  font-weight:800; letter-spacing:-.04em;
+  color:#fff; line-height:1.05; margin-bottom:1rem;
+}
+.hero-h1 span { color: var(--teal-light); }
+.hero-tagline {
+  font-size: clamp(1rem,2vw,1.2rem);
+  color:rgba(255,255,255,.45); font-weight:400;
+  margin-bottom:2.5rem; letter-spacing:.02em;
+}
+.hero-tagline strong { color:rgba(255,255,255,.75); font-weight:600; }
+
+.hero-stats-row {
+  display:flex; flex-wrap:wrap; gap:1.5rem; margin-bottom:3rem;
+}
+.hero-stat-card {
+  background: rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-lg);
+  padding:1.25rem 1.75rem; min-width:130px;
+  transition: border-color .3s, background .3s;
+}
+.hero-stat-card:hover { border-color: rgba(13,148,136,.4); background: rgba(13,148,136,.07); }
+.hero-stat-number {
+  font-family:var(--font-display); font-size:2rem; font-weight:800;
+  color:#fff; letter-spacing:-.03em; line-height:1;
+}
+.hero-stat-number--teal { color: var(--teal-light); }
+.hero-stat-label { font-size:.72rem; color:rgba(255,255,255,.4); margin-top:.3rem; font-weight:500; }
+
+/* Rank counter animation */
+.rank-journey {
+  display:inline-flex; align-items:center; gap:1rem;
+  background: rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-xl); padding:1rem 1.5rem; margin-bottom:2rem;
+}
+.rank-label { font-size:.72rem; color:rgba(255,255,255,.35); text-transform:uppercase; letter-spacing:.1em; font-weight:600; }
+.rank-val { font-family:var(--font-display); font-size:2.2rem; font-weight:800; color:#fff; line-height:1; }
+.rank-val--good { color: var(--teal-light); }
+.rank-arrow { color:rgba(255,255,255,.25); font-size:1.4rem; }
+
+.shake-callout {
+  background: rgba(244,63,94,.07); border:1px solid rgba(244,63,94,.2);
+  border-radius:var(--radius-lg); padding:1rem 1.25rem;
+  font-size:.8rem; color:rgba(255,255,255,.6); max-width:500px; line-height:1.6;
+}
+.shake-callout strong { color:#ff8fa3; }
+.shake-callout .upward { color: var(--teal-light); }
+
+/* ============================================================
+   ELI5 BOX (reusable)
+   ============================================================ */
+.eli5-box {
+  background: var(--teal-dim); border:1px solid rgba(13,148,136,.25);
+  border-radius:var(--radius-xl); padding:1.5rem 1.75rem;
+  position:relative; margin:1.5rem 0;
+}
+.eli5-box::before {
+  content:'ELI5';
+  position:absolute; top:-11px; left:1.25rem;
+  background:var(--teal); color:#fff;
+  font-size:.62rem; font-weight:800; letter-spacing:.12em;
+  padding:.25rem .6rem; border-radius:var(--radius-full);
+}
+.eli5-box p { font-size:.95rem; color:var(--gray-700); line-height:1.75; }
+.sol-section--dark .eli5-box p { color: rgba(255,255,255,.75); }
+
+/* ============================================================
+   SECTION 2 — PROBLEM
+   ============================================================ */
+.problem-targets {
+  display:grid; grid-template-columns: repeat(2,1fr); gap:1rem; margin-top:1.5rem;
+}
+@media(max-width:480px){ .problem-targets { grid-template-columns:1fr; } }
+.target-card {
+  border-radius:var(--radius-lg); padding:1.1rem 1.25rem;
+  border:1px solid; position:relative; overflow:hidden;
+  cursor:default;
+}
+.target-card::before {
+  content:''; position:absolute; inset:0; opacity:0;
+  transition:opacity .4s;
+}
+.target-card:hover::before { opacity:1; }
+.target-card.green  { border-color:rgba(16,185,129,.3); background:rgba(16,185,129,.06); }
+.target-card.green::before  { background:rgba(16,185,129,.06); }
+.target-card.brown  { border-color:rgba(180,120,60,.3);  background:rgba(180,120,60,.06); }
+.target-card.brown::before  { background:rgba(180,120,60,.06); }
+.target-card.dead   { border-color:rgba(156,163,175,.3); background:rgba(156,163,175,.06); }
+.target-card.dead::before   { background:rgba(156,163,175,.06); }
+.target-card.total  { border-color:rgba(99,102,241,.3);  background:rgba(99,102,241,.06); }
+.target-card.total::before  { background:rgba(99,102,241,.06); }
+
+.target-icon { font-size:1.4rem; margin-bottom:.4rem; }
+.target-name { font-family:var(--font-display); font-size:.9rem; font-weight:700; margin-bottom:.2rem; }
+.target-desc { font-size:.78rem; color:var(--gray-500); line-height:1.5; }
+
+/* Field animation */
+.field-viz {
+  border-radius:var(--radius-xl); overflow:hidden;
+  position:relative; height:280px;
+  background:linear-gradient(160deg,#1a3a1a 0%,#2d5a2d 40%,#4a7c3f 70%,#6b9e5e 100%);
+  box-shadow:var(--shadow-lg); flex-shrink:0;
+}
+.field-overlay {
+  position:absolute; inset:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+  opacity:0; transition:opacity .5s;
+}
+.field-overlay.show { opacity:1; }
+.fo-cell { position:relative; display:flex; align-items:center; justify-content:center; }
+.fo-cell.green  { background:rgba(16,185,129,.45); }
+.fo-cell.brown  { background:rgba(180,120,60,.45); }
+.fo-cell.dead   { background:rgba(156,163,175,.35); }
+.fo-cell.total  { background:rgba(99,102,241,.35); }
+.fo-label {
+  font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.6);
+  background:rgba(0,0,0,.3); padding:.25rem .6rem; border-radius:var(--radius-full);
+}
+.drone-icon {
+  position:absolute; top:1rem; right:1rem; font-size:1.5rem;
+  animation: drone-hover 3s ease-in-out infinite;
+}
+@keyframes drone-hover {
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-8px); }
+}
+.field-btn-row { display:flex; gap:.75rem; margin-top:1rem; }
+.field-btn {
+  font-size:.72rem; font-weight:600; padding:.4rem .9rem; border-radius:var(--radius-full);
+  border:1px solid var(--gray-300); cursor:pointer; background:transparent; transition:all .2s;
+}
+.field-btn.active, .field-btn:hover {
+  background:var(--black); color:#fff; border-color:var(--black);
+}
+
+/* ============================================================
+   SECTION 3 — DINO BACKBONE
+   ============================================================ */
+.backbone-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:2rem; }
+@media(max-width:640px){ .backbone-cards { grid-template-columns:1fr; } }
+.backbone-card {
+  border-radius:var(--radius-xl); padding:1.5rem; border:2px solid var(--gray-200);
+  position:relative; transition:border-color .3s, box-shadow .3s;
+  background:#fff;
+}
+.backbone-card.winner { border-color:var(--teal); box-shadow:0 0 0 4px var(--teal-dim); }
+.backbone-card.winner::after {
+  content:'✓ CHOSEN'; position:absolute; top:-12px; right:1rem;
+  background:var(--teal); color:#fff; font-size:.6rem; font-weight:800;
+  letter-spacing:.1em; padding:.25rem .7rem; border-radius:var(--radius-full);
+}
+.bc-name { font-family:var(--font-display); font-size:1.1rem; font-weight:800; margin-bottom:.3rem; }
+.bc-tag  { font-size:.7rem; color:var(--gray-500); margin-bottom:1rem; }
+.bc-metric { margin:.5rem 0; }
+.bc-metric-label { font-size:.72rem; color:var(--gray-500); margin-bottom:.3rem; }
+.bc-bar-wrap { height:6px; background:var(--gray-100); border-radius:var(--radius-full); overflow:hidden; }
+.bc-bar { height:100%; border-radius:var(--radius-full); transition:width 1.2s cubic-bezier(.4,0,.2,1); width:0; }
+.bc-bar.green { background:var(--green); }
+.bc-bar.teal  { background:var(--teal); }
+.bc-bar.amber { background:var(--amber); }
+.bc-val { font-size:.7rem; font-weight:600; margin-top:.2rem; color:var(--gray-600); }
+
+.dino-why {
+  background:var(--gray-50); border-radius:var(--radius-xl); padding:2rem;
+  margin-top:2rem; border:1px solid var(--gray-200);
+}
+.dino-why h4 { font-size:1rem; margin-bottom:1rem; }
+.dino-why-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+@media(max-width:540px){ .dino-why-grid { grid-template-columns:1fr; } }
+.dino-why-item { display:flex; gap:.75rem; align-items:flex-start; }
+.dino-why-icon { font-size:1.2rem; flex-shrink:0; margin-top:.1rem; }
+.dino-why-text strong { display:block; font-size:.85rem; margin-bottom:.2rem; }
+.dino-why-text span { font-size:.78rem; color:var(--gray-500); line-height:1.5; }
+
+/* ============================================================
+   SECTION 4 — ARCHITECTURE
+   ============================================================ */
+.arch-explainer { display:grid; grid-template-columns:1fr 1.6fr; gap:3rem; align-items:start; }
+@media(max-width:900px){ .arch-explainer { grid-template-columns:1fr; } }
+
+.arch-steps { display:flex; flex-direction:column; gap:0; }
+.arch-step {
+  display:flex; gap:1rem; padding:1rem 0; border-left:2px solid var(--gray-200);
+  padding-left:1.25rem; position:relative; cursor:pointer; transition:border-color .3s;
+}
+.arch-step.active { border-left-color:var(--teal); }
+.arch-step::before {
+  content:''; position:absolute; left:-7px; top:1.35rem;
+  width:12px; height:12px; border-radius:50%;
+  background:var(--gray-300); border:2px solid #fff; transition:background .3s;
+}
+.arch-step.active::before { background:var(--teal); }
+.arch-step-num { flex-shrink:0; }
+.arch-step-num span {
+  display:flex; align-items:center; justify-content:center;
+  width:28px; height:28px; border-radius:50%;
+  background:var(--gray-100); font-size:.72rem; font-weight:700; color:var(--gray-600);
+  transition:background .3s, color .3s;
+}
+.arch-step.active .arch-step-num span { background:var(--teal); color:#fff; }
+.arch-step-body strong { display:block; font-size:.9rem; margin-bottom:.25rem; }
+.arch-step-body p { font-size:.8rem; color:var(--gray-500); line-height:1.55; }
+
+/* Architecture SVG diagram */
+.arch-diagram-wrap {
+  background:#fff; border:1.5px solid var(--gray-200); border-radius:var(--radius-2xl);
+  padding:1.5rem; box-shadow:var(--shadow-md); position:sticky; top:80px;
+}
+.arch-svg { width:100%; height:auto; }
+
+/* Token type legend */
+.token-legend { display:flex; flex-wrap:wrap; gap:.75rem; margin-top:1.25rem; }
+.token-legend-item { display:flex; align-items:center; gap:.4rem; font-size:.72rem; color:var(--gray-600); }
+.tl-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* ============================================================
+   SECTION 5 — SELF PROMPT TUNING
+   ============================================================ */
+.spt-flow { display:flex; flex-direction:column; gap:0; margin:2rem 0; }
+.spt-step {
+  display:flex; gap:1.25rem; align-items:flex-start;
+  padding:1.25rem 0; border-bottom:1px dashed var(--gray-200);
+}
+.spt-step:last-child { border-bottom:none; }
+.spt-step-icon {
+  width:42px; height:42px; border-radius:var(--radius-lg); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+}
+.spt-step-icon.green { background:rgba(16,185,129,.1); }
+.spt-step-icon.teal  { background:var(--teal-dim); }
+.spt-step-icon.amber { background:rgba(245,158,11,.1); }
+.spt-step-icon.indigo { background:rgba(99,102,241,.1); }
+.spt-step-body strong { display:block; font-size:.95rem; margin-bottom:.3rem; }
+.spt-step-body p { font-size:.82rem; color:var(--gray-500); line-height:1.6; }
+
+.gram-schmidt-viz {
+  background:#fff; border:1.5px solid var(--gray-200); border-radius:var(--radius-xl);
+  padding:1.5rem; box-shadow:var(--shadow-md);
+}
+.gram-schmidt-viz h4 { font-size:.85rem; font-weight:700; margin-bottom:1rem; color:var(--gray-700); }
+.gsv-svg { width:100%; max-width:280px; display:block; margin:0 auto; }
+
+/* ============================================================
+   SECTION 6 — ORTHOGONALITY LOSS
+   ============================================================ */
+.orth-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-top:2rem; }
+@media(max-width:640px){ .orth-grid { grid-template-columns:1fr; } }
+.orth-panel {
+  border-radius:var(--radius-xl); padding:1.5rem;
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1);
+}
+.orth-panel-title {
+  font-size:.78rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  margin-bottom:1.25rem; display:flex; align-items:center; gap:.5rem;
+}
+.orth-panel-title .badge { font-size:.6rem; padding:.15rem .5rem; border-radius:var(--radius-full); }
+.badge-bad  { background:rgba(244,63,94,.2); color:#ff8fa3; }
+.badge-good { background:rgba(13,148,136,.2); color:var(--teal-light); }
+.orth-svg { width:100%; max-width:220px; display:block; margin:0 auto 1rem; }
+
+.heatmap-wrap { display:flex; flex-direction:column; gap:.25rem; }
+.heatmap-row  { display:flex; gap:.25rem; }
+.hm-cell {
+  width:36px; height:36px; border-radius:var(--radius-sm);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.62rem; font-weight:700; flex-shrink:0;
+  transition:background .5s, color .5s;
+}
+.hm-label-row { display:flex; gap:.25rem; padding-left:42px; }
+.hm-label-col { display:flex; flex-direction:column; gap:.25rem; }
+.hm-label-cell {
+  width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+  font-size:.6rem; font-weight:700; color:rgba(255,255,255,.35);
+}
+.hm-axis-label { font-size:.6rem; font-weight:700; color:rgba(255,255,255,.35); }
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes fadeUp {
+  from{ opacity:0; transform:translateY(24px); }
+  to  { opacity:1; transform:translateY(0); }
+}
+@keyframes lineDraw {
+  from{ stroke-dashoffset:500; }
+  to  { stroke-dashoffset:0; }
+}
+@keyframes tokenBob {
+  0%,100%{ transform:translateY(0); }
+  50%    { transform:translateY(-5px); }
+}
+@keyframes glow-pulse {
+  0%,100%{ box-shadow:0 0 0 0 rgba(13,148,136,.4); }
+  50%    { box-shadow:0 0 0 12px rgba(13,148,136,0); }
+}
+@keyframes spin-slow {
+  from{ transform:rotate(0deg); }
+  to  { transform:rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav class="sol-nav">
+  <div class="sol-nav-inner">
+    <a href="index.html" class="sol-nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to Portfolio
+    </a>
+    <span class="sol-nav-title">CSIRO Image2Biomass · 37th Place</span>
+    <div class="sol-nav-links">
+      <a href="#problem"  class="sol-nav-link">Problem</a>
+      <a href="#arch"     class="sol-nav-link">Architecture</a>
+      <a href="#bottleneck" class="sol-nav-link">Bottleneck</a>
+      <a href="#results"  class="sol-nav-link">Results</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================================================
+     SECTION 1 · HERO
+     ============================================================ -->
+<section class="hero" id="home">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      CSIRO Image2Biomass · Kaggle Competition · 2025
+    </div>
+
+    <h1 class="hero-h1">
+      Self Prompt Tuning<br>
+      <span>with DINOv3</span>
+    </h1>
+
+    <p class="hero-tagline">
+      <strong>No Validation&nbsp;&nbsp;·&nbsp;&nbsp;No Fine-Tuning&nbsp;&nbsp;·&nbsp;&nbsp;Pure Generalization</strong>
+    </p>
+
+    <!-- Rank journey -->
+    <div class="rank-journey">
+      <div>
+        <div class="rank-label">Public LB</div>
+        <div class="rank-val">#<span id="rank-pub">49</span></div>
+      </div>
+      <div class="rank-arrow">→</div>
+      <div>
+        <div class="rank-label">Private LB</div>
+        <div class="rank-val rank-val--good">#<span id="rank-priv">49</span></div>
+      </div>
+    </div>
+
+    <div class="shake-callout">
+      The <strong>#1, #2, #3 Public LB</strong> teams finished <strong>#38, #35, #36 Private.</strong>
+      I rose from <span class="upward">#49 → #37</span>, landing surrounded by the former toppers.
+      A dataset of only 357 images ruthlessly punished overfitting.
+    </div>
+
+    <div class="hero-stats-row" style="margin-top:2rem;">
+      <div class="hero-stat-card anim-in">
+        <div class="hero-stat-number">357</div>
+        <div class="hero-stat-label">Training Images</div>
+      </div>
+      <div class="hero-stat-card anim-in delay-1">
+        <div class="hero-stat-number">5</div>
+        <div class="hero-stat-label">Biomass Targets</div>
+      </div>
+      <div class="hero-stat-card anim-in delay-2">
+        <div class="hero-stat-number--teal hero-stat-number">Weighted R²</div>
+        <div class="hero-stat-label">Evaluation Metric</div>
+      </div>
+      <div class="hero-stat-card anim-in delay-3">
+        <div class="hero-stat-number">#37</div>
+        <div class="hero-stat-label">Private LB Rank</div>
+      </div>
+    </div>
+
+    <a href="#problem" style="display:inline-flex;align-items:center;gap:.5rem;margin-top:2.5rem;color:rgba(255,255,255,.4);font-size:.82rem;font-weight:500;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.4)'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      Scroll to explore the solution
+    </a>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 2 · THE PROBLEM (ELI5)
+     ============================================================ -->
+<section class="sol-section" id="problem">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 01</div>
+    <h2 class="sol-title anim-in">What Are We Predicting?</h2>
+    <p class="sol-subtitle anim-in delay-1">A plain-English look at the competition, the data, and the challenge.</p>
+
+    <div class="two-col" style="margin-top:3rem;">
+      <div>
+        <div class="eli5-box anim-in">
+          <p>Imagine you're flying a drone over an Australian pasture and taking a photo. From <em>only that photo</em>, you need to answer five distinct questions a farmer would ask: How much living green grass is here? How much dead litter? How much clover specifically? What's the total "green energy" available for grazing (GDM)? And what's the total weight of everything combined? — all without ever stepping on the ground.</p>
+        </div>
+        <p style="font-size:.92rem;color:var(--gray-600);line-height:1.75;margin-bottom:1.5rem;" class="anim-in delay-1">
+          This is the CSIRO Image2Biomass challenge. Given aerial images of Australian pastures, predict <strong>5 continuous biomass targets</strong>, each weighted differently in the evaluation because they matter differently to real-world farmers.
+        </p>
+        <p style="font-size:.92rem;color:var(--gray-600);line-height:1.75;margin-bottom:1.5rem;" class="anim-in delay-2">
+          With only <strong>357 training images</strong> across diverse sites and seasons, the dataset was intentionally tiny. This mercilessly punished overfitting — standard approaches like heavy augmentation or fine-tuned ensembles all fell apart on the private leaderboard.
+        </p>
+
+        <div class="problem-targets anim-in delay-3" style="grid-template-columns:1fr 1fr;">
+
+          <div class="target-card green">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div class="target-icon">🌿</div>
+              <span style="font-size:.62rem;font-weight:800;padding:.15rem .5rem;border-radius:999px;background:rgba(16,185,129,.15);color:#059669;">weight: 0.1</span>
+            </div>
+            <div class="target-name" style="color:#059669;">Dry_Green_g</div>
+            <div class="target-desc">The dry weight of all <strong>living, green plant material</strong> — grasses and forbs that are still actively photosynthesising. This is what the animals eat first.</div>
+          </div>
+
+          <div class="target-card dead">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div class="target-icon">🍂</div>
+              <span style="font-size:.62rem;font-weight:800;padding:.15rem .5rem;border-radius:999px;background:rgba(156,163,175,.15);color:#6b7280;">weight: 0.1</span>
+            </div>
+            <div class="target-name" style="color:#6b7280;">Dry_Dead_g</div>
+            <div class="target-desc">The dry weight of <strong>fallen, decomposing litter</strong> — material that is no longer alive. The most ambiguous and noisy target; <em>derived</em> in the model rather than predicted directly.</div>
+          </div>
+
+          <div class="target-card" style="border-color:rgba(236,72,153,.3);background:rgba(236,72,153,.05);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div class="target-icon">🍀</div>
+              <span style="font-size:.62rem;font-weight:800;padding:.15rem .5rem;border-radius:999px;background:rgba(236,72,153,.12);color:#be185d;">weight: 0.1</span>
+            </div>
+            <div class="target-name" style="color:#be185d;">Dry_Clover_g</div>
+            <div class="target-desc">The dry weight of <strong>clover specifically</strong> — a high-value legume that enriches soil nitrogen. Tracking it separately helps farmers manage pasture composition and quality.</div>
+          </div>
+
+          <div class="target-card" style="border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.05);">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div class="target-icon">☀️</div>
+              <span style="font-size:.62rem;font-weight:800;padding:.15rem .5rem;border-radius:999px;background:rgba(245,158,11,.15);color:#b45309;">weight: 0.2</span>
+            </div>
+            <div class="target-name" style="color:#b45309;">GDM_g</div>
+            <div class="target-desc"><strong>Green Dry Matter</strong> — the "nutritional energy" available for livestock. Unlike raw green weight, GDM accounts for moisture and digestibility. It's the farmer's most-used grazing decision metric.</div>
+          </div>
+
+          <div class="target-card total" style="grid-column:1/-1;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div class="target-icon">⚖️</div>
+              <span style="font-size:.62rem;font-weight:800;padding:.15rem .5rem;border-radius:999px;background:rgba(99,102,241,.15);color:#4f46e5;">weight: 0.5</span>
+            </div>
+            <div class="target-name" style="color:#4f46e5;">Dry_Total_g</div>
+            <div class="target-desc"><strong>Total dry biomass</strong> — the sum of everything (green + dead + clover + other material). Carries <strong>50% of the total score weight</strong> — getting this right matters most. It's the headline number for pasture productivity.</div>
+          </div>
+
+        </div>
+
+        <!-- Evaluation Metric callout -->
+        <div style="margin-top:1.5rem;padding:1.25rem;background:var(--black);border-radius:var(--radius-xl);" class="anim-in delay-4">
+          <p style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.35);margin-bottom:.5rem;">Evaluation Metric</p>
+          <p style="font-size:.88rem;color:rgba(255,255,255,.75);line-height:1.7;">A single <strong style="color:#fff;">globally weighted R²</strong> is computed across all (image, target) pairs together — not averaged per-target. Each prediction row is weighted by its target's weight. This means nailing <code style="background:rgba(255,255,255,.1);padding:.1rem .35rem;border-radius:4px;font-size:.8rem;color:var(--teal-light);">Dry_Total_g</code> (50% weight) drives most of the score, while the four other targets contribute the remaining 50%.</p>
+        </div>
+      </div>
+
+      <div class="anim-in delay-2">
+        <div class="field-viz" id="fieldViz">
+          <div class="drone-icon">🛸</div>
+          <div class="field-overlay" id="fieldOverlay" style="grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr;">
+            <div class="fo-cell green"><span class="fo-label">Dry_Green_g</span></div>
+            <div class="fo-cell dead"><span class="fo-label">Dry_Dead_g</span></div>
+            <div class="fo-cell" style="background:rgba(236,72,153,.45);"><span class="fo-label">Dry_Clover_g</span></div>
+            <div class="fo-cell" style="background:rgba(245,158,11,.4);"><span class="fo-label">GDM_g</span></div>
+            <div class="fo-cell total" style="grid-column:span 2;"><span class="fo-label">Dry_Total_g ← 50% weight</span></div>
+          </div>
+          <div style="position:absolute;bottom:1rem;left:1rem;font-size:.7rem;font-weight:600;color:rgba(255,255,255,.5);letter-spacing:.08em;text-transform:uppercase;">Aerial View</div>
+        </div>
+        <div class="field-btn-row">
+          <button class="field-btn active" id="btn-raw"     onclick="toggleField('raw')">Raw Image</button>
+          <button class="field-btn"        id="btn-overlay" onclick="toggleField('overlay')">Show Targets</button>
+        </div>
+        <p style="font-size:.75rem;color:var(--gray-400);margin-top:.75rem;line-height:1.55;">
+          Toggle to see how the same aerial image maps to 5 biomass targets. Note that Dry_Total_g carries 50% of the score — the model never sees these labels and must infer all five purely from RGB pixels.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3 · WHY DINOv3?
+     ============================================================ -->
+<section class="sol-section sol-section--gray" id="backbone">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 02</div>
+    <h2 class="sol-title anim-in">Backbone Selection: The DINOv3 Advantage</h2>
+    <p class="sol-subtitle anim-in delay-1">Three strong vision models competed. Only one generalized beyond the training distribution.</p>
+
+    <div class="eli5-box anim-in delay-2">
+      <p>Think of the backbone as the AI's "vision centre" — it takes a raw image and converts it into a rich numerical description. Some backbones memorize training images well but panic on new ones. DINOv3 learned by watching images <em>without any labels</em>, so it became an expert at describing textures and structures it had never seen before.</p>
+    </div>
+
+    <div class="backbone-cards anim-in delay-1">
+      <div class="backbone-card">
+        <div class="bc-name">EVA-02</div>
+        <div class="bc-tag">Supervised pre-training · ViT-B</div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">Cross-Val Score</div>
+          <div class="bc-bar-wrap"><div class="bc-bar green" data-w="88"></div></div>
+          <div class="bc-val">High — easiest CV gains</div>
+        </div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">LB Generalization</div>
+          <div class="bc-bar-wrap"><div class="bc-bar amber" data-w="52"></div></div>
+          <div class="bc-val">Underperformed consistently</div>
+        </div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">Train↔Val Gap</div>
+          <div class="bc-bar-wrap"><div class="bc-bar amber" data-w="70"></div></div>
+          <div class="bc-val">Large — signs of overfit</div>
+        </div>
+      </div>
+      <div class="backbone-card">
+        <div class="bc-name">DINOv2</div>
+        <div class="bc-tag">Self-supervised · ViT-B/14</div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">Cross-Val Score</div>
+          <div class="bc-bar-wrap"><div class="bc-bar green" data-w="75"></div></div>
+          <div class="bc-val">Moderate</div>
+        </div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">LB Generalization</div>
+          <div class="bc-bar-wrap"><div class="bc-bar green" data-w="68"></div></div>
+          <div class="bc-val">Better than EVA-02</div>
+        </div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">Train↔Val Gap</div>
+          <div class="bc-bar-wrap"><div class="bc-bar green" data-w="48"></div></div>
+          <div class="bc-val">Smaller gap</div>
+        </div>
+      </div>
+      <div class="backbone-card winner">
+        <div class="bc-name">DINOv3</div>
+        <div class="bc-tag">Self-supervised · Gram statistics</div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">Cross-Val Score</div>
+          <div class="bc-bar-wrap"><div class="bc-bar teal" data-w="78"></div></div>
+          <div class="bc-val">Good — consistent</div>
+        </div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">LB Generalization</div>
+          <div class="bc-bar-wrap"><div class="bc-bar teal" data-w="92"></div></div>
+          <div class="bc-val">Best on leaderboard</div>
+        </div>
+        <div class="bc-metric">
+          <div class="bc-metric-label">Train↔Val Gap</div>
+          <div class="bc-bar-wrap"><div class="bc-bar teal" data-w="22"></div></div>
+          <div class="bc-val">Smallest — true generalization</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dino-why anim-in delay-2">
+      <h4>Why does DINOv3 generalize better?</h4>
+      <div class="dino-why-grid">
+        <div class="dino-why-item">
+          <div class="dino-why-icon">🔄</div>
+          <div class="dino-why-text">
+            <strong>Self-supervised objective</strong>
+            <span>Trained without labels — forces the model to learn deep structural and textural representations rather than shortcut class associations.</span>
+          </div>
+        </div>
+        <div class="dino-why-item">
+          <div class="dino-why-icon">📐</div>
+          <div class="dino-why-text">
+            <strong>Gram matrix statistics</strong>
+            <span>Retains rich second-order texture statistics (how feature correlations distribute across the image), crucial for dense regression tasks.</span>
+          </div>
+        </div>
+        <div class="dino-why-item">
+          <div class="dino-why-icon">🌍</div>
+          <div class="dino-why-text">
+            <strong>Dense prediction suitability</strong>
+            <span>Its patch-level representations transfer naturally to tasks where every spatial location contributes to the prediction.</span>
+          </div>
+        </div>
+        <div class="dino-why-item">
+          <div class="dino-why-icon">🔒</div>
+          <div class="dino-why-text">
+            <strong>Backbone kept frozen</strong>
+            <span>The backbone was never fine-tuned. Only lightweight task and prompt tokens were trained — preserving the pre-trained generalization.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4 · ARCHITECTURE
+     ============================================================ -->
+<section class="sol-section" id="arch">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 03</div>
+    <h2 class="sol-title anim-in">Model Architecture</h2>
+    <p class="sol-subtitle anim-in delay-1">Visual Prompt Tuning meets DETR-style task tokens — inside a frozen DINOv3 transformer.</p>
+
+    <div class="arch-explainer" style="margin-top:3rem;">
+      <!-- Step-by-step left side -->
+      <div>
+        <div class="eli5-box anim-in">
+          <p>Imagine giving a pre-trained AI <strong>four coloured sticky notes</strong> — one for Green, one for Clover, one for GDM, one for Total — plus sixteen guide cards. They all travel through the AI together. Dead matter is then <em>derived</em> from the others rather than predicted directly, since it's the noisiest target. When the tokens come out the other side, each has absorbed exactly the knowledge relevant to its target.</p>
+        </div>
+
+        <div class="arch-steps anim-in delay-1">
+          <div class="arch-step active" data-step="0" onclick="setArchStep(0)">
+            <div class="arch-step-num"><span>1</span></div>
+            <div class="arch-step-body">
+              <strong>Image → Patches</strong>
+              <p>The input image is sliced into a grid of 16×16 pixel patches. Each patch is linearly projected into a 768-dimensional embedding vector.</p>
+            </div>
+          </div>
+          <div class="arch-step" data-step="1" onclick="setArchStep(1)">
+            <div class="arch-step-num"><span>2</span></div>
+            <div class="arch-step-body">
+              <strong>Append 4 Task Tokens</strong>
+              <p>4 learnable task tokens are appended — one each for <strong>Dry_Green_g, Dry_Clover_g, GDM_g, and Dry_Total_g</strong>. Dry_Dead_g is derived separately (it's the noisiest target). Each token is initialized from real training data (→ Section 04).</p>
+            </div>
+          </div>
+          <div class="arch-step" data-step="2" onclick="setArchStep(2)">
+            <div class="arch-step-num"><span>3</span></div>
+            <div class="arch-step-body">
+              <strong>Append 16 Prompt Tokens</strong>
+              <p>16 learnable prompt tokens join the sequence. These are the <em>only truly trainable parameters</em> in the entire model — the backbone is 100% frozen. They don't carry predictions; they steer the frozen backbone's attention toward what matters for biomass regression.</p>
+            </div>
+          </div>
+          <div class="arch-step" data-step="3" onclick="setArchStep(3)">
+            <div class="arch-step-num"><span>4</span></div>
+            <div class="arch-step-body">
+              <strong>DINOv3 Forward Pass (Frozen)</strong>
+              <p>The frozen transformer processes all tokens jointly via self-attention — patches, task tokens, and prompt tokens all attend to each other across every layer. <strong>Zero backbone parameters are updated.</strong></p>
+            </div>
+          </div>
+          <div class="arch-step" data-step="4" onclick="setArchStep(4)">
+            <div class="arch-step-num"><span>5</span></div>
+            <div class="arch-step-body">
+              <strong>Feature Extraction — Prompt Tokens Discarded</strong>
+              <p>From the backbone output, only <strong>patch outputs and task token outputs</strong> are kept. The 16 prompt token outputs are discarded — they've done their job by shaping attention during the forward pass. Two statistics are then computed from all patch outputs: <strong>GAP</strong> (Global Average Pool — the mean patch vector, capturing the average scene description) and <strong>STD</strong> (Global Std Pool — the standard deviation, capturing how diverse or varied the patch features are).</p>
+            </div>
+          </div>
+          <div class="arch-step" data-step="5" onclick="setArchStep(5)">
+            <div class="arch-step-num"><span>6</span></div>
+            <div class="arch-step-body">
+              <strong>Per-Target Heads + Dead Derivation</strong>
+              <p>Each of the 4 MLP heads receives an input formed by concatenating three things: <strong>[its own task token output] + [GAP] + [STD]</strong>. Crucially, no head sees another target's task token — keeping the predictions independent. <strong>Dry_Dead_g is then derived</strong> from the other outputs rather than predicted directly.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prompt token insight callout -->
+        <div style="margin-top:1.5rem;padding:1.25rem 1.5rem;background:linear-gradient(135deg,rgba(13,148,136,.07),rgba(13,148,136,.03));border:1.5px solid rgba(13,148,136,.3);border-radius:var(--radius-xl);" class="anim-in delay-3">
+          <p style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-dark);margin-bottom:.6rem;">💡 Wait — why bother with prompt tokens if they're discarded at the output?</p>
+          <p style="font-size:.85rem;color:var(--gray-700);line-height:1.75;">
+            Great question. The backbone has <strong>zero trainable parameters</strong> — every weight is frozen. So how does the model learn anything at all? <em>Entirely through the prompt tokens.</em> During the forward pass, the frozen transformer's self-attention layers see the prompt tokens as part of the input sequence. They influence which patches the attention heads focus on, and how the task tokens mix information from the image. Think of it like a tour guide walking an expert through a museum: the guide doesn't become the output, but without the guide the expert stares at the wrong exhibits. The prompt tokens are the guide — they're the <strong>entire adaptation mechanism</strong>, and they're only 16 × 768 = ~12k learnable numbers vs. millions of frozen backbone weights. That's why this avoids overfitting on just 357 images.
+          </p>
+        </div>
+
+        <div class="token-legend anim-in delay-2" style="margin-top:1.5rem;">
+          <div class="token-legend-item"><div class="tl-dot" style="background:#10b981;"></div> Dry_Green_g task token</div>
+          <div class="token-legend-item"><div class="tl-dot" style="background:#ec4899;"></div> Dry_Clover_g task token</div>
+          <div class="token-legend-item"><div class="tl-dot" style="background:#f59e0b;"></div> GDM_g task token</div>
+          <div class="token-legend-item"><div class="tl-dot" style="background:#6366f1;"></div> Dry_Total_g task token</div>
+          <div class="token-legend-item"><div class="tl-dot" style="background:rgba(13,148,136,.6);border:1.5px dashed var(--teal);"></div> Prompt tokens (×16, only trainable params)</div>
+          <div class="token-legend-item"><div class="tl-dot" style="background:#e5e7eb;border:1px solid #d1d5db;"></div> Patch embeddings</div>
+          <div class="token-legend-item"><div class="tl-dot" style="background:#9ca3af;border:1.5px dashed #9ca3af;"></div> Dry_Dead_g (derived, not a task token)</div>
+        </div>
+      </div>
+
+      <!-- Diagram right side -->
+      <div class="anim-in delay-2">
+        <div class="arch-diagram-wrap">
+          <svg class="arch-svg" id="archSvg" viewBox="0 0 400 740" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- ═══ INPUT IMAGE ═══ -->
+            <rect x="130" y="8" width="140" height="62" rx="8" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+            <text x="200" y="26" text-anchor="middle" font-family="Inter" font-size="9" fill="#6b7280" font-weight="700">INPUT IMAGE</text>
+            <text x="200" y="39" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#9ca3af">1000 × 2000 px (crop: 448×448)</text>
+            <!-- Mini patch grid -->
+            <rect x="148" y="46" width="104" height="18" rx="2" fill="none" stroke="#d1d5db" stroke-width=".8"/>
+            <line x1="174" y1="46" x2="174" y2="64" stroke="#d1d5db" stroke-width=".6"/>
+            <line x1="200" y1="46" x2="200" y2="64" stroke="#d1d5db" stroke-width=".6"/>
+            <line x1="226" y1="46" x2="226" y2="64" stroke="#d1d5db" stroke-width=".6"/>
+            <line x1="148" y1="55" x2="252" y2="55" stroke="#d1d5db" stroke-width=".6"/>
+
+            <!-- Arrow 1 -->
+            <line x1="200" y1="70" x2="200" y2="90" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <polygon points="196,88 200,96 204,88" fill="#d1d5db"/>
+
+            <!-- ═══ PATCH EMBEDDINGS ═══ -->
+            <rect x="90" y="96" width="220" height="36" rx="8" fill="#f9fafb" stroke="#d1d5db" stroke-width="1.5" id="ab-1"/>
+            <text x="200" y="111" text-anchor="middle" font-family="Inter" font-size="9" fill="#374151" font-weight="700">Patch Embeddings</text>
+            <text x="200" y="124" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#9ca3af">N patches · each → 768-dim vector</text>
+
+            <!-- Arrow 2 -->
+            <line x1="200" y1="132" x2="200" y2="150" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <polygon points="196,148 200,155 204,148" fill="#d1d5db"/>
+            <text x="202" y="144" font-family="Inter" font-size="7" fill="#9ca3af">+ append</text>
+
+            <!-- ═══ TOKEN SEQUENCE ═══ -->
+            <rect x="12" y="155" width="376" height="80" rx="10" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5" id="ab-2"/>
+            <text x="200" y="170" text-anchor="middle" font-family="Inter" font-size="9" fill="#065f46" font-weight="700">Full Token Sequence (input to DINOv3)</text>
+
+            <!-- Patch tokens -->
+            <rect x="22"  y="179" width="11" height="11" rx="2" fill="#e5e7eb"/>
+            <rect x="36"  y="179" width="11" height="11" rx="2" fill="#e5e7eb"/>
+            <rect x="50"  y="179" width="11" height="11" rx="2" fill="#e5e7eb"/>
+            <rect x="64"  y="179" width="11" height="11" rx="2" fill="#e5e7eb"/>
+            <rect x="78"  y="179" width="11" height="11" rx="2" fill="#e5e7eb"/>
+            <text x="100" y="188" font-family="Inter" font-size="9" fill="#9ca3af">···</text>
+
+            <!-- Separator line -->
+            <line x1="118" y1="175" x2="118" y2="200" stroke="#bbf7d0" stroke-width="1"/>
+
+            <!-- Task tokens (correct colours) -->
+            <rect x="123" y="179" width="11" height="11" rx="2" fill="#10b981" id="tt-0"/>
+            <rect x="138" y="179" width="11" height="11" rx="2" fill="#ec4899" id="tt-1"/>
+            <rect x="153" y="179" width="11" height="11" rx="2" fill="#f59e0b" id="tt-2"/>
+            <rect x="168" y="179" width="11" height="11" rx="2" fill="#6366f1" id="tt-3"/>
+
+            <!-- Separator line -->
+            <line x1="186" y1="175" x2="186" y2="200" stroke="#bbf7d0" stroke-width="1"/>
+
+            <!-- Prompt tokens (dashed teal) — trainable! -->
+            <rect x="191" y="179" width="9" height="11" rx="2" fill="rgba(13,148,136,.15)" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,1"/>
+            <rect x="203" y="179" width="9" height="11" rx="2" fill="rgba(13,148,136,.15)" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,1"/>
+            <rect x="215" y="179" width="9" height="11" rx="2" fill="rgba(13,148,136,.15)" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,1"/>
+            <rect x="227" y="179" width="9" height="11" rx="2" fill="rgba(13,148,136,.15)" stroke="#0d9488" stroke-width="1.2" stroke-dasharray="3,1"/>
+            <text x="244" y="188" font-family="Inter" font-size="9" fill="#0d9488">···×16</text>
+
+            <!-- Sub-labels -->
+            <text x="65"  y="202" text-anchor="middle" font-family="Inter" font-size="7" fill="#9ca3af">patch tokens (frozen)</text>
+            <text x="148" y="202" text-anchor="middle" font-family="Inter" font-size="7" fill="#065f46" font-weight="600">task tokens ×4</text>
+            <text x="232" y="202" text-anchor="middle" font-family="Inter" font-size="7" fill="#0d9488" font-weight="700">prompt tokens ×16 ← only trainable!</text>
+
+            <!-- Row 2: colour labels -->
+            <text x="123" y="218" font-family="Inter" font-size="6.5" fill="#10b981" font-weight="600">G</text>
+            <text x="138" y="218" font-family="Inter" font-size="6.5" fill="#ec4899" font-weight="600">C</text>
+            <text x="153" y="218" font-family="Inter" font-size="6.5" fill="#f59e0b" font-weight="600">D</text>
+            <text x="168" y="218" font-family="Inter" font-size="6.5" fill="#6366f1" font-weight="600">T</text>
+            <text x="112" y="225" font-family="Inter" font-size="6" fill="#9ca3af">(Green/Clover/GDM/Total)</text>
+
+            <!-- Arrow 3 -->
+            <line x1="200" y1="235" x2="200" y2="255" stroke="#374151" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <polygon points="196,253 200,260 204,253" fill="#374151"/>
+
+            <!-- ═══ DINOV3 (FROZEN) ═══ -->
+            <rect x="40" y="260" width="320" height="68" rx="10" fill="#0a0a0a" stroke="#374151" stroke-width="2" id="ab-3"/>
+            <!-- Frozen badge -->
+            <rect x="266" y="266" width="86" height="16" rx="8" fill="rgba(244,63,94,.15)" stroke="rgba(244,63,94,.3)" stroke-width="1"/>
+            <text x="309" y="278" text-anchor="middle" font-family="Inter" font-size="7" fill="#f87171" font-weight="700">🔒 FROZEN — 0 trainable params</text>
+            <text x="200" y="283" text-anchor="middle" font-family="Inter" font-size="11" fill="#ffffff" font-weight="800" letter-spacing="-0.5">DINOv3 Transformer</text>
+            <text x="200" y="298" text-anchor="middle" font-family="Inter" font-size="7.5" fill="rgba(255,255,255,.4)">All tokens attend to all tokens via self-attention · across all layers</text>
+            <!-- Attention wave decoration -->
+            <path d="M60 308 Q80 303 100 308 Q120 313 140 308 Q160 303 180 308 Q200 313 220 308 Q240 303 260 308 Q280 313 300 308 Q320 303 340 308 Q350 308 360 308" stroke="rgba(13,148,136,.35)" stroke-width="1" fill="none"/>
+
+            <!-- Arrow 4 -->
+            <line x1="200" y1="328" x2="200" y2="348" stroke="#374151" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <polygon points="196,346 200,353 204,346" fill="#374151"/>
+
+            <!-- ═══ OUTPUT TOKENS ═══ -->
+            <rect x="12" y="353" width="376" height="72" rx="10" fill="#fff7ed" stroke="#fed7aa" stroke-width="1.5" id="ab-4"/>
+            <text x="200" y="368" text-anchor="middle" font-family="Inter" font-size="9" fill="#7c2d12" font-weight="700">Backbone Output — What We Keep vs Discard</text>
+
+            <!-- Output patches (keep) -->
+            <rect x="22"  y="376" width="11" height="11" rx="2" fill="#d1d5db"/>
+            <rect x="36"  y="376" width="11" height="11" rx="2" fill="#d1d5db"/>
+            <rect x="50"  y="376" width="11" height="11" rx="2" fill="#d1d5db"/>
+            <rect x="64"  y="376" width="11" height="11" rx="2" fill="#d1d5db"/>
+            <rect x="78"  y="376" width="11" height="11" rx="2" fill="#d1d5db"/>
+            <text x="100" y="385" font-family="Inter" font-size="9" fill="#9ca3af">···</text>
+            <text x="65"  y="399" text-anchor="middle" font-family="Inter" font-size="7" fill="#78716c" font-weight="600">✓ KEEP → GAP + STD</text>
+
+            <!-- Output task tokens (keep) -->
+            <rect x="123" y="376" width="11" height="11" rx="2" fill="#10b981"/>
+            <rect x="138" y="376" width="11" height="11" rx="2" fill="#ec4899"/>
+            <rect x="153" y="376" width="11" height="11" rx="2" fill="#f59e0b"/>
+            <rect x="168" y="376" width="11" height="11" rx="2" fill="#6366f1"/>
+            <text x="148" y="399" text-anchor="middle" font-family="Inter" font-size="7" fill="#78716c" font-weight="600">✓ KEEP — per-head</text>
+
+            <!-- Output prompt tokens (DISCARD) -->
+            <rect x="191" y="376" width="9" height="11" rx="2" fill="rgba(156,163,175,.2)" stroke="#d1d5db" stroke-width="1"/>
+            <rect x="203" y="376" width="9" height="11" rx="2" fill="rgba(156,163,175,.2)" stroke="#d1d5db" stroke-width="1"/>
+            <rect x="215" y="376" width="9" height="11" rx="2" fill="rgba(156,163,175,.2)" stroke="#d1d5db" stroke-width="1"/>
+            <text x="244" y="385" font-family="Inter" font-size="9" fill="#9ca3af">···</text>
+            <!-- X marks over prompt outputs -->
+            <line x1="191" y1="376" x2="200" y2="387" stroke="#ef4444" stroke-width="1.5"/>
+            <line x1="200" y1="376" x2="191" y2="387" stroke="#ef4444" stroke-width="1.5"/>
+            <text x="232" y="399" text-anchor="middle" font-family="Inter" font-size="7" fill="#ef4444" font-weight="700">✗ DISCARD — job done</text>
+
+            <!-- Arrow 5 — split: patches go left for GAP/STD, task tokens go right to heads -->
+            <line x1="65"  y1="425" x2="65"  y2="448" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <polygon points="61,446 65,453 69,446" fill="#9ca3af"/>
+
+            <!-- ═══ GAP + STD ═══ -->
+            <rect x="12" y="453" width="106" height="48" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+            <text x="65" y="468" text-anchor="middle" font-family="Inter" font-size="8" fill="#0c4a6e" font-weight="700">GAP + STD</text>
+            <text x="65" y="480" text-anchor="middle" font-family="Inter" font-size="7" fill="#38bdf8">mean of patches</text>
+            <text x="65" y="491" text-anchor="middle" font-family="Inter" font-size="7" fill="#38bdf8">std of patches</text>
+
+            <!-- GAP+STD → each head (4 lines going right and down) -->
+            <line x1="118" y1="477" x2="160" y2="505" stroke="#bae6fd" stroke-width="1.2" stroke-dasharray="4,2"/>
+            <line x1="118" y1="477" x2="215" y2="505" stroke="#bae6fd" stroke-width="1.2" stroke-dasharray="4,2"/>
+            <line x1="118" y1="477" x2="270" y2="505" stroke="#bae6fd" stroke-width="1.2" stroke-dasharray="4,2"/>
+            <line x1="118" y1="477" x2="325" y2="505" stroke="#bae6fd" stroke-width="1.2" stroke-dasharray="4,2"/>
+
+            <!-- Task token lines → each head -->
+            <line x1="128" y1="387" x2="128" y2="430" stroke="#10b981" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="128" y1="430" x2="160" y2="505" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <line x1="143" y1="387" x2="143" y2="435" stroke="#ec4899" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="143" y1="435" x2="215" y2="505" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <line x1="158" y1="387" x2="158" y2="440" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="158" y1="440" x2="270" y2="505" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <line x1="173" y1="387" x2="173" y2="445" stroke="#6366f1" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="173" y1="445" x2="325" y2="505" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+            <!-- Concat label -->
+            <text x="244" y="501" text-anchor="middle" font-family="Inter" font-size="7" fill="#9ca3af" font-style="italic">each head input = [task_token_i ∥ GAP ∥ STD]</text>
+
+            <!-- ═══ 4 HEAD BOXES ═══ -->
+            <rect x="130" y="505" width="60" height="38" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="1.5" id="ab-5"/>
+            <text x="160" y="520" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#065f46" font-weight="700">Dry_Green</text>
+            <text x="160" y="533" text-anchor="middle" font-family="Inter" font-size="7"   fill="#6ee7b7">MLP Head</text>
+
+            <rect x="198" y="505" width="60" height="38" rx="6" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
+            <text x="228" y="520" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#9d174d" font-weight="700">Dry_Clover</text>
+            <text x="228" y="533" text-anchor="middle" font-family="Inter" font-size="7"   fill="#f472b6">MLP Head</text>
+
+            <rect x="266" y="505" width="60" height="38" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+            <text x="296" y="520" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#78350f" font-weight="700">GDM_g</text>
+            <text x="296" y="533" text-anchor="middle" font-family="Inter" font-size="7"   fill="#fcd34d">MLP Head</text>
+
+            <rect x="334" y="505" width="60" height="38" rx="6" fill="#ede9fe" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="364" y="520" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#3730a3" font-weight="700">Dry_Total</text>
+            <text x="364" y="533" text-anchor="middle" font-family="Inter" font-size="7"   fill="#a5b4fc">MLP Head</text>
+
+            <!-- Output arrows from heads -->
+            <line x1="160" y1="543" x2="160" y2="560" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="228" y1="543" x2="228" y2="560" stroke="#ec4899" stroke-width="1.5"/>
+            <line x1="296" y1="543" x2="296" y2="560" stroke="#f59e0b" stroke-width="1.5"/>
+            <line x1="364" y1="543" x2="364" y2="560" stroke="#6366f1" stroke-width="1.5"/>
+
+            <!-- Output values -->
+            <text x="160" y="572" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#10b981" font-weight="700">ŷ Green</text>
+            <text x="228" y="572" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#ec4899" font-weight="700">ŷ Clover</text>
+            <text x="296" y="572" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#f59e0b" font-weight="700">ŷ GDM</text>
+            <text x="364" y="572" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#6366f1" font-weight="700">ŷ Total</text>
+
+            <!-- Dry_Dead derived note -->
+            <line x1="200" y1="565" x2="200" y2="590" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+            <polygon points="196,588 200,595 204,588" fill="#9ca3af"/>
+            <rect x="120" y="595" width="160" height="28" rx="6" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.2"/>
+            <text x="200" y="607" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#6b7280" font-weight="700">Dry_Dead_g  (derived)</text>
+            <text x="200" y="618" text-anchor="middle" font-family="Inter" font-size="7"   fill="#9ca3af" font-style="italic">computed from other outputs — not a head</text>
+
+            <!-- Arch-step highlight overlay -->
+            <rect id="arch-highlight" x="0" y="0" width="400" height="740" fill="none" rx="10"/>
+          </svg>
+        </div>
+        <p style="font-size:.75rem;color:var(--gray-400);margin-top:.75rem;text-align:center;">Click any step on the left to highlight the corresponding component.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5 · SELF PROMPT TUNING INITIALIZATION
+     ============================================================ -->
+<section class="sol-section sol-section--gray" id="spt">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 04</div>
+    <h2 class="sol-title anim-in">Self Prompt Tuning</h2>
+    <p class="sol-subtitle anim-in delay-1">Smarter token initialization — seeding each token with domain knowledge before training even begins.</p>
+
+    <div class="two-col" style="margin-top:3rem;">
+      <div>
+        <div class="eli5-box anim-in">
+          <p>Instead of starting your sticky notes blank (random), you look at the 10 training images with the <em>highest value</em> for each target. You average their AI "fingerprints" (CLS embeddings) and use that as the starting point for that target's token. It's like handing a student the most extreme, clearest examples before the exam, rather than starting from zero.</p>
+        </div>
+        <div class="spt-flow anim-in delay-1">
+          <div class="spt-step">
+            <div class="spt-step-icon green">🔍</div>
+            <div class="spt-step-body">
+              <strong>Top-10 Selection per Target</strong>
+              <p>For each of the 4 targets, select the 10 training samples with the highest value of that target. These represent the clearest, most extreme signal for that biomass type.</p>
+            </div>
+          </div>
+          <div class="spt-step">
+            <div class="spt-step-icon teal">🧠</div>
+            <div class="spt-step-body">
+              <strong>Extract CLS Embeddings</strong>
+              <p>Pass each selected image through DINOv3 and extract the [CLS] token — the model's global summary vector of the image. This is a 768-dimensional fingerprint.</p>
+            </div>
+          </div>
+          <div class="spt-step">
+            <div class="spt-step-icon amber">📐</div>
+            <div class="spt-step-body">
+              <strong>Average → Initialize Task Token</strong>
+              <p>Compute the mean of the 10 CLS embeddings. Use this as the initial value of that target's task token. Done for all 4 task tokens (<strong>Dry_Green_g, Dry_Clover_g, GDM_g, Dry_Total_g</strong>) and for all 16 prompt tokens (split into 4 groups of 4, one group per target).</p>
+            </div>
+          </div>
+          <div class="spt-step">
+            <div class="spt-step-icon indigo">🔄</div>
+            <div class="spt-step-body">
+              <strong>Gram–Schmidt Orthogonalization</strong>
+              <p>Because all tokens now start from correlated representations, they'd immediately collapse. We apply Gram–Schmidt to make every token mutually perpendicular — preserving informed starting points while ensuring diversity.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="anim-in delay-2">
+        <div class="gram-schmidt-viz">
+          <h4>Gram–Schmidt: Before &amp; After</h4>
+          <svg class="gsv-svg" viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg">
+            <!-- Axes -->
+            <line x1="10" y1="130" x2="270" y2="130" stroke="#e5e7eb" stroke-width="1"/>
+            <line x1="140" y1="10"  x2="140" y2="250" stroke="#e5e7eb" stroke-width="1"/>
+            <text x="265" y="128" font-family="Inter" font-size="9" fill="#9ca3af">x</text>
+            <text x="143" y="16"  font-family="Inter" font-size="9" fill="#9ca3af">y</text>
+
+            <!-- BEFORE label -->
+            <text x="14" y="20" font-family="Inter" font-size="8.5" fill="#ef4444" font-weight="700">BEFORE</text>
+            <!-- Correlated vectors (clustered together near same direction) -->
+            <line x1="140" y1="130" x2="215" y2="68" stroke="#10b981" stroke-width="2" id="gsv-v1-before" marker-end="url(#arrow-green)"/>
+            <line x1="140" y1="130" x2="220" y2="72" stroke="#d97706" stroke-width="2" id="gsv-v2-before" marker-end="url(#arrow-amber)"/>
+            <line x1="140" y1="130" x2="210" y2="65" stroke="#9ca3af" stroke-width="2" id="gsv-v3-before" marker-end="url(#arrow-gray)"/>
+            <line x1="140" y1="130" x2="218" y2="70" stroke="#6366f1" stroke-width="2" id="gsv-v4-before" marker-end="url(#arrow-indigo)"/>
+            <!-- Cluster annotation -->
+            <text x="200" y="58" font-family="Inter" font-size="7" fill="#ef4444">clustered!</text>
+
+            <!-- Divider -->
+            <line x1="140" y1="140" x2="140" y2="145" stroke="none"/>
+            <text x="130" y="142" font-family="Inter" font-size="20" fill="#e5e7eb">↓</text>
+
+            <!-- AFTER label -->
+            <text x="14" y="165" font-family="Inter" font-size="8.5" fill="#10b981" font-weight="700">AFTER Gram–Schmidt</text>
+            <!-- Orthogonal vectors spreading out -->
+            <line x1="140" y1="200" x2="215" y2="150" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-green2)"/>
+            <line x1="140" y1="200" x2="188" y2="143" stroke="#d97706" stroke-width="2" marker-end="url(#arrow-amber2)"/>
+            <line x1="140" y1="200" x2="73"  y2="155" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow-gray2)"/>
+            <line x1="140" y1="200" x2="90"  y2="167" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow-indigo2)"/>
+            <!-- Right angle marks -->
+            <rect x="171" y="177" width="6" height="6" fill="none" stroke="#10b981" stroke-width="1" opacity=".5" transform="rotate(-35 174 180)"/>
+
+            <defs>
+              <marker id="arrow-green"   markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#10b981"/></marker>
+              <marker id="arrow-amber"   markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#d97706"/></marker>
+              <marker id="arrow-gray"    markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#9ca3af"/></marker>
+              <marker id="arrow-indigo"  markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#6366f1"/></marker>
+              <marker id="arrow-green2"  markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#10b981"/></marker>
+              <marker id="arrow-amber2"  markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#d97706"/></marker>
+              <marker id="arrow-gray2"   markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#9ca3af"/></marker>
+              <marker id="arrow-indigo2" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><polygon points="0 0, 5 2.5, 0 5" fill="#6366f1"/></marker>
+            </defs>
+          </svg>
+          <p style="font-size:.75rem;color:var(--gray-500);text-align:center;margin-top:.5rem;line-height:1.55;">Before: all task tokens point in nearly the same direction. After Gram–Schmidt: each token is forced perpendicular, ensuring diverse representations from the very first step.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 · ORTHOGONALITY LOSS
+     ============================================================ -->
+<section class="sol-section sol-section--darkest" id="orth">
+  <div class="container">
+    <div class="sol-label sol-label--light">Section 05</div>
+    <h2 class="sol-title sol-title--white anim-in">Orthogonality Loss</h2>
+    <p class="sol-subtitle sol-subtitle--light anim-in delay-1">Preventing token collapse — making sure each token stays distinct throughout training.</p>
+
+    <div class="eli5-box anim-in delay-2" style="max-width:680px;margin-bottom:2.5rem;">
+      <p>Imagine 4 people in a meeting who all start saying the exact same thing. Pointless. The orthogonality loss is a rule that says: "You're only useful if you contribute something different from everyone else." It keeps each task token focused on a unique aspect of the input — just like multi-head attention keeps each head looking in a different direction.</p>
+    </div>
+
+    <div class="orth-grid anim-in delay-2">
+      <!-- Without -->
+      <div class="orth-panel">
+        <div class="orth-panel-title">
+          Without Orthogonality Loss <span class="badge badge-bad">COLLAPSE</span>
+        </div>
+        <svg class="orth-svg" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+          <!-- Token vectors converging over time -->
+          <text x="110" y="14" text-anchor="middle" font-family="Inter" font-size="8.5" fill="rgba(255,255,255,.35)" font-weight="600">TRAINING PROGRESSES →</text>
+          <!-- Early: spread -->
+          <text x="20" y="32" font-family="Inter" font-size="7" fill="rgba(255,255,255,.25)">early</text>
+          <line x1="40" y1="90" x2="80"  y2="46" stroke="#10b981" stroke-width="1.5" opacity=".9"/>
+          <line x1="40" y1="90" x2="76"  y2="50" stroke="#d97706" stroke-width="1.5" opacity=".9"/>
+          <line x1="40" y1="90" x2="68"  y2="54" stroke="#9ca3af" stroke-width="1.5" opacity=".9"/>
+          <line x1="40" y1="90" x2="72"  y2="48" stroke="#6366f1" stroke-width="1.5" opacity=".9"/>
+          <!-- Converging -->
+          <text x="100" y="32" font-family="Inter" font-size="7" fill="rgba(255,255,255,.25)">mid</text>
+          <line x1="110" y1="90" x2="152" y2="52" stroke="#10b981" stroke-width="1.5" opacity=".9"/>
+          <line x1="110" y1="90" x2="154" y2="54" stroke="#d97706" stroke-width="1.5" opacity=".9"/>
+          <line x1="110" y1="90" x2="150" y2="56" stroke="#9ca3af" stroke-width="1.5" opacity=".9"/>
+          <line x1="110" y1="90" x2="153" y2="53" stroke="#6366f1" stroke-width="1.5" opacity=".9"/>
+          <!-- Collapsed -->
+          <text x="172" y="32" font-family="Inter" font-size="7" fill="rgba(255,255,255,.25)">late</text>
+          <line x1="180" y1="90" x2="220" y2="52" stroke="#10b981" stroke-width="1.5" opacity=".9"/>
+          <line x1="180" y1="90" x2="221" y2="53" stroke="#d97706" stroke-width="1.5" opacity=".9"/>
+          <line x1="180" y1="90" x2="219" y2="51" stroke="#9ca3af" stroke-width="1.5" opacity=".9"/>
+          <line x1="180" y1="90" x2="220" y2="52" stroke="#6366f1" stroke-width="1.5" opacity=".9"/>
+          <circle cx="220" cy="52" r="4" fill="#ef4444" opacity=".8"/>
+          <text x="220" y="44" text-anchor="middle" font-family="Inter" font-size="7" fill="#ef4444">collapsed!</text>
+          <!-- Annotation -->
+          <text x="110" y="150" text-anchor="middle" font-family="Inter" font-size="8" fill="rgba(255,255,255,.4)" font-weight="500">All 4 tokens become identical.</text>
+          <text x="110" y="163" text-anchor="middle" font-family="Inter" font-size="8" fill="rgba(255,255,255,.3)">The multi-token design is wasted.</text>
+        </svg>
+        <!-- Cosine heatmap - high similarity = bad -->
+        <p style="font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;">Cosine Similarity Matrix</p>
+        <div class="heatmap-wrap" id="hmBad">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <!-- With -->
+      <div class="orth-panel">
+        <div class="orth-panel-title">
+          With Orthogonality Loss <span class="badge badge-good">DIVERSE</span>
+        </div>
+        <svg class="orth-svg" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+          <text x="110" y="14" text-anchor="middle" font-family="Inter" font-size="8.5" fill="rgba(255,255,255,.35)" font-weight="600">TRAINING PROGRESSES →</text>
+          <!-- Early: spread -->
+          <text x="20" y="32" font-family="Inter" font-size="7" fill="rgba(255,255,255,.25)">early</text>
+          <line x1="40" y1="90" x2="80"  y2="46" stroke="#10b981" stroke-width="1.5"/>
+          <line x1="40" y1="90" x2="76"  y2="50" stroke="#d97706" stroke-width="1.5"/>
+          <line x1="40" y1="90" x2="68"  y2="54" stroke="#9ca3af" stroke-width="1.5"/>
+          <line x1="40" y1="90" x2="72"  y2="48" stroke="#6366f1" stroke-width="1.5"/>
+          <!-- Stays spread -->
+          <text x="100" y="32" font-family="Inter" font-size="7" fill="rgba(255,255,255,.25)">mid</text>
+          <line x1="110" y1="90" x2="152" y2="50" stroke="#10b981" stroke-width="1.5"/>
+          <line x1="110" y1="90" x2="136" y2="53" stroke="#d97706" stroke-width="1.5"/>
+          <line x1="110" y1="90" x2="115" y2="46" stroke="#9ca3af" stroke-width="1.5"/>
+          <line x1="110" y1="90" x2="98"  y2="52" stroke="#6366f1" stroke-width="1.5"/>
+          <!-- Spread at end -->
+          <text x="172" y="32" font-family="Inter" font-size="7" fill="rgba(255,255,255,.25)">late</text>
+          <line x1="180" y1="90" x2="220" y2="48" stroke="#10b981" stroke-width="2"/>
+          <line x1="180" y1="90" x2="200" y2="44" stroke="#d97706" stroke-width="2"/>
+          <line x1="180" y1="90" x2="176" y2="44" stroke="#9ca3af" stroke-width="2"/>
+          <line x1="180" y1="90" x2="158" y2="50" stroke="#6366f1" stroke-width="2"/>
+          <text x="190" y="42" text-anchor="middle" font-family="Inter" font-size="7" fill="#10b981">diverse!</text>
+          <!-- Right angle marks between the spread vectors -->
+          <text x="110" y="150" text-anchor="middle" font-family="Inter" font-size="8" fill="rgba(255,255,255,.4)" font-weight="500">Each token captures unique features.</text>
+          <text x="110" y="163" text-anchor="middle" font-family="Inter" font-size="8" fill="rgba(255,255,255,.3)">Like multi-head attention heads.</text>
+        </svg>
+        <p style="font-size:.72rem;color:rgba(255,255,255,.35);margin-bottom:.6rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;">Cosine Similarity Matrix</p>
+        <div class="heatmap-wrap" id="hmGood">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;padding:1.25rem;background:rgba(255,255,255,.04);border-radius:var(--radius-xl);border:1px solid rgba(255,255,255,.08);" class="anim-in delay-3">
+      <p style="font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.7;">
+        <strong style="color:#fff;">The math behind it:</strong> For tokens <em>t₁, t₂, …, tₙ</em>, the orthogonality loss penalizes non-zero off-diagonal entries in the Gram matrix <em>G = TᵀT</em>. Specifically: <code style="background:rgba(255,255,255,.1);padding:.15rem .4rem;border-radius:4px;font-size:.82rem;color:var(--teal-light);">L_orth = ‖G − I‖²_F</code>, where I is the identity matrix. This forces each token pair to be uncorrelated, maintaining the full representational capacity of the multi-token design.
+      </p>
+    </div>
+  </div>
+</section>
+<style>
+/* ============================================================
+   SECTION 7 — TWO-STREAM EVOLUTION
+   ============================================================ */
+.stream-tabs { display:flex; gap:.5rem; margin-bottom:2rem; flex-wrap:wrap; }
+.stream-tab {
+  padding:.5rem 1.1rem; border-radius:var(--radius-full);
+  border:1.5px solid var(--gray-200); font-size:.78rem; font-weight:600;
+  cursor:pointer; background:#fff; color:var(--gray-600); transition:all .2s;
+}
+.stream-tab.active { background:var(--black); color:#fff; border-color:var(--black); }
+.stream-panel { display:none; }
+.stream-panel.active { display:block; }
+
+.stream-diagram {
+  background:#fff; border:1.5px solid var(--gray-200); border-radius:var(--radius-xl);
+  padding:1.5rem; box-shadow:var(--shadow-md);
+}
+.stream-svg { width:100%; max-width:440px; display:block; margin:0 auto; }
+
+.stream-verdict {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.4rem 1rem; border-radius:var(--radius-full);
+  font-size:.72rem; font-weight:700; margin-top:1rem;
+}
+.stream-verdict.bad  { background:rgba(244,63,94,.1); color:#f43f5e; }
+.stream-verdict.ok   { background:rgba(245,158,11,.1); color:#d97706; }
+.stream-verdict.good { background:rgba(13,148,136,.12); color:var(--teal); }
+
+/* ============================================================
+   SECTION 8 — INFORMATION BOTTLENECK
+   ============================================================ */
+.crop-demo-wrap {
+  position:relative; width:100%; max-width:340px; height:200px;
+  border-radius:var(--radius-xl); overflow:hidden; background:#2d5a2d;
+  box-shadow:var(--shadow-lg);
+}
+.crop-image-bg {
+  width:100%; height:100%; object-fit:cover;
+  background: linear-gradient(135deg, #1a3a1a 0%, #2d5a2d 30%, #4a7c3f 60%, #6b9e5e 100%);
+}
+.crop-grid-overlay {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+.crop-window {
+  position:absolute; width:135px; height:135px;
+  border:3px solid var(--teal-light); border-radius:4px;
+  box-shadow:0 0 0 2000px rgba(0,0,0,.45);
+  animation: cropMove 4s ease-in-out infinite;
+  transition:none;
+}
+@keyframes cropMove {
+  0%   { top:5px;  left:5px; }
+  25%  { top:5px;  left:195px; }
+  50%  { top:55px; left:195px; }
+  75%  { top:55px; left:5px; }
+  100% { top:5px;  left:5px; }
+}
+.crop-pct-label {
+  position:absolute; bottom:.5rem; right:.75rem;
+  font-size:.7rem; font-weight:700; color:var(--teal-light);
+  background:rgba(0,0,0,.7); padding:.2rem .5rem; border-radius:var(--radius-full);
+  letter-spacing:.06em;
+}
+
+.multicrop-grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:1.25rem; margin-top:2rem; }
+@media(max-width:640px){ .multicrop-grid { grid-template-columns:1fr; } }
+.mc-card {
+  border-radius:var(--radius-xl); padding:1.25rem; background:#fff;
+  border:1.5px solid var(--gray-200); transition:border-color .3s, box-shadow .3s;
+}
+.mc-card:hover { border-color:var(--teal); box-shadow:0 0 0 3px var(--teal-dim); }
+.mc-card-num { font-family:var(--font-display); font-size:2rem; font-weight:800; color:var(--teal); line-height:1; }
+.mc-card-label { font-size:.7rem; color:var(--gray-500); margin-bottom:.75rem; }
+.mc-bar-pair { display:flex; flex-direction:column; gap:.4rem; }
+.mc-bar-item { display:flex; align-items:center; gap:.5rem; }
+.mc-bar-item-label { font-size:.65rem; font-weight:600; color:var(--gray-500); width:28px; flex-shrink:0; }
+.mc-bar-wrap { flex:1; height:8px; background:var(--gray-100); border-radius:var(--radius-full); overflow:hidden; }
+.mc-bar-fill { height:100%; border-radius:var(--radius-full); width:0; transition:width 1.2s cubic-bezier(.4,0,.2,1); }
+.mc-bar-val  { font-size:.65rem; font-weight:700; width:28px; flex-shrink:0; color:var(--gray-600); }
+
+/* The big chart */
+.insight-table {
+  margin-top:2.5rem; border-radius:var(--radius-xl); overflow:hidden;
+  border:1.5px solid var(--gray-200); background:#fff;
+}
+.insight-table-header {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  background:var(--gray-900); padding:.9rem 1.5rem;
+}
+.insight-table-header span { font-size:.72rem; font-weight:700; color:rgba(255,255,255,.55); letter-spacing:.08em; text-transform:uppercase; }
+.insight-row {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  padding:.9rem 1.5rem; border-bottom:1px solid var(--gray-100);
+  align-items:center; transition:background .2s;
+}
+.insight-row:last-child { border-bottom:none; }
+.insight-row:hover { background:var(--gray-50); }
+.insight-row .train-r2 { font-family:var(--font-display); font-weight:700; font-size:.95rem; }
+.insight-row .lb-val   { font-family:var(--font-display); font-weight:700; font-size:.95rem; color:var(--teal); }
+.insight-bar-wrap { height:8px; background:var(--gray-100); border-radius:var(--radius-full); overflow:hidden; max-width:140px; }
+.insight-bar { height:100%; border-radius:var(--radius-full); width:0; transition:width 1.4s cubic-bezier(.4,0,.2,1); }
+.insight-bar.train { background:var(--gray-400); }
+.insight-bar.lb    { background:var(--teal); }
+
+.counterintuitive-box {
+  margin-top:2rem; border-radius:var(--radius-xl); padding:1.5rem;
+  background:linear-gradient(135deg,rgba(13,148,136,.08),rgba(13,148,136,.03));
+  border:1.5px solid rgba(13,148,136,.25);
+}
+.counterintuitive-box h4 { font-size:1rem; margin-bottom:.5rem; color:var(--teal-dark); }
+.counterintuitive-box p  { font-size:.88rem; color:var(--gray-600); line-height:1.7; }
+
+/* ============================================================
+   SECTION 9 — FULL DATASET TRAINING
+   ============================================================ */
+.training-timeline {
+  display:flex; gap:0; margin:2.5rem 0; position:relative; flex-wrap:wrap;
+}
+.training-timeline::before {
+  content:''; position:absolute; top:24px; left:0; right:0; height:2px; background:var(--gray-200); z-index:0;
+}
+.tt-step {
+  flex:1; min-width:120px; display:flex; flex-direction:column; align-items:center; position:relative; z-index:1;
+}
+.tt-dot {
+  width:48px; height:48px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  background:#fff; border:2px solid var(--gray-200); box-shadow:var(--shadow-sm);
+  transition: border-color .4s, box-shadow .4s;
+}
+.tt-step.active .tt-dot { border-color:var(--teal); box-shadow:0 0 0 6px var(--teal-dim); }
+.tt-step-label { margin-top:.75rem; text-align:center; font-size:.72rem; font-weight:600; color:var(--gray-600); max-width:100px; line-height:1.4; }
+
+/* ============================================================
+   SECTION 10 — INFERENCE
+   ============================================================ */
+.tile-grid-wrap {
+  position:relative; background:#fff; border:1.5px solid var(--gray-200);
+  border-radius:var(--radius-xl); padding:1.5rem; box-shadow:var(--shadow-md);
+}
+.tile-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:4px;
+  width:100%; aspect-ratio:2/1; max-width:360px; margin:0 auto;
+}
+.tile {
+  border-radius:4px; background:linear-gradient(135deg,#2d5a2d,#4a7c3f);
+  position:relative; cursor:pointer; transition:transform .2s, box-shadow .2s;
+  opacity:.3; transform:scale(.95);
+  transition:opacity .4s, transform .4s;
+}
+.tile.revealed { opacity:1; transform:scale(1); }
+.tile:hover { transform:scale(1.04); box-shadow:0 4px 12px rgba(0,0,0,.2); }
+.tile-label {
+  position:absolute; bottom:4px; right:4px;
+  font-size:.55rem; font-weight:700; color:rgba(255,255,255,.8);
+  background:rgba(0,0,0,.5); padding:.1rem .3rem; border-radius:2px;
+}
+.tile-crop-indicator {
+  position:absolute; inset:8%; border:2px dashed rgba(13,148,136,.8); border-radius:3px;
+}
+
+.tta-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-top:1.5rem; }
+@media(max-width:500px){ .tta-grid { grid-template-columns:repeat(2,1fr); } }
+.tta-card {
+  border-radius:var(--radius-lg); padding:1rem; text-align:center;
+  background:var(--gray-50); border:1px solid var(--gray-200);
+}
+.tta-icon { font-size:1.4rem; margin-bottom:.4rem; }
+.tta-label { font-size:.72rem; font-weight:600; color:var(--gray-600); }
+
+/* ============================================================
+   SECTION 11 — RESULTS
+   ============================================================ */
+.leaderboard-viz {
+  margin-top:2rem; background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08); border-radius:var(--radius-2xl);
+  padding:2rem; overflow-x:auto;
+}
+.lb-chart {
+  min-width:380px; display:flex; gap:1.5rem; align-items:flex-end;
+  height:220px; position:relative;
+}
+.lb-chart-axis {
+  position:absolute; bottom:30px; left:0; right:0;
+  border-top:1px dashed rgba(255,255,255,.08);
+}
+.lb-participant {
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:.5rem; position:relative;
+}
+.lb-bar-group { display:flex; gap:4px; align-items:flex-end; width:100%; justify-content:center; }
+.lb-bar {
+  width:28px; border-radius:4px 4px 0 0;
+  transition:height 1.2s cubic-bezier(.4,0,.2,1);
+  height:0; position:relative;
+}
+.lb-bar-pub  { background:rgba(255,255,255,.18); }
+.lb-bar-priv { background:var(--teal); }
+.lb-bar-priv.highlight { background:var(--teal-light); box-shadow:0 0 12px rgba(20,184,166,.5); }
+.lb-name { font-size:.65rem; color:rgba(255,255,255,.4); text-align:center; max-width:60px; line-height:1.3; font-weight:500; }
+.lb-legend { display:flex; gap:1.5rem; margin-top:1.5rem; }
+.lb-legend-item { display:flex; align-items:center; gap:.5rem; font-size:.75rem; color:rgba(255,255,255,.45); }
+.lb-legend-dot { width:12px; height:12px; border-radius:3px; }
+
+.results-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:2rem; }
+@media(max-width:640px){ .results-grid { grid-template-columns:1fr; } }
+.result-card {
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius-xl); padding:1.5rem; text-align:center;
+  transition:border-color .3s;
+}
+.result-card:hover { border-color:rgba(13,148,136,.4); }
+.result-card-num { font-family:var(--font-display); font-size:2.2rem; font-weight:800; color:var(--teal-light); line-height:1; }
+.result-card-label { font-size:.75rem; color:rgba(255,255,255,.4); margin-top:.4rem; }
+
+/* ============================================================
+   SECTION 12 — TAKEAWAYS
+   ============================================================ */
+.takeaway-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5rem; margin-top:2.5rem; }
+.takeaway-card {
+  border-radius:var(--radius-xl); padding:1.5rem;
+  border:1.5px solid var(--gray-200); background:#fff;
+  transition:border-color .3s, box-shadow .3s, transform .3s;
+}
+.takeaway-card:hover { border-color:var(--teal); box-shadow:0 8px 32px rgba(13,148,136,.1); transform:translateY(-3px); }
+.tc-icon { font-size:1.8rem; margin-bottom:.75rem; }
+.tc-title { font-family:var(--font-display); font-size:1rem; font-weight:700; margin-bottom:.5rem; }
+.tc-body  { font-size:.82rem; color:var(--gray-500); line-height:1.65; }
+
+/* Back to top + kaggle link */
+.page-footer {
+  padding:3rem 0 4rem; border-top:1px solid var(--gray-200); text-align:center;
+}
+.page-footer-links { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1.5rem; }
+</style>
+
+<!-- ============================================================
+     SECTION 7 · TWO-STREAM EVOLUTION
+     ============================================================ -->
+<section class="sol-section sol-section--gray" id="twostream">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 06</div>
+    <h2 class="sol-title anim-in">Two-Stream Architecture Evolution</h2>
+    <p class="sol-subtitle anim-in delay-1">Three iterations. One breakthrough. Why mean aggregation outperformed both concat and sum.</p>
+
+    <div class="eli5-box anim-in delay-2" style="max-width:680px;">
+      <p>Imagine two people each see <em>half</em> of a jigsaw puzzle separately. Strategy A: combine all their pieces before guessing — messy. Strategy B: each person guesses from their half and you sum — no one knows who was wrong. Strategy C: each person guesses the <em>full picture</em> from just their half, then you average — independent thinkers who agree are far more trustworthy.</p>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="stream-tabs anim-in delay-1">
+        <button class="stream-tab" onclick="setStreamTab(0)">A: Concat</button>
+        <button class="stream-tab active" onclick="setStreamTab(1)">B: Sum</button>
+        <button class="stream-tab" onclick="setStreamTab(2)">C: Mean ✓</button>
+      </div>
+
+      <!-- Panel A: Concat -->
+      <div class="stream-panel" id="sp-0">
+        <div class="two-col">
+          <div>
+            <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Strategy A: Concat then Predict</h3>
+            <p style="font-size:.88rem;color:var(--gray-600);line-height:1.7;margin-bottom:1rem;">Each image is split into two halves. Both halves are independently embedded, then the embeddings are concatenated into one large feature vector, which is fed to a single prediction head.</p>
+            <div class="stream-verdict bad">❌ Too complex — sensitive to noise, high dimensionality</div>
+            <p style="font-size:.8rem;color:var(--gray-500);margin-top:1rem;line-height:1.65;">The concatenated representation doubles the head's input size, making it harder to learn. Small perturbations in either half propagate amplified to the output.</p>
+          </div>
+          <div class="stream-diagram">
+            <svg class="stream-svg" viewBox="0 0 380 200">
+              <rect x="10"  y="20" width="70" height="50" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+              <text x="45" y="40" text-anchor="middle" font-family="Inter" font-size="9" fill="#166534" font-weight="700">Half 1</text>
+              <text x="45" y="53" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">Embed</text>
+              <rect x="10"  y="100" width="70" height="50" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+              <text x="45" y="120" text-anchor="middle" font-family="Inter" font-size="9" fill="#166534" font-weight="700">Half 2</text>
+              <text x="45" y="133" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">Embed</text>
+              <line x1="80" y1="45"  x2="130" y2="85"  stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <line x1="80" y1="125" x2="130" y2="95"  stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="130" y="70" width="80" height="30" rx="6" fill="#fef9c3" stroke="#fde047" stroke-width="1.5"/>
+              <text x="170" y="83" text-anchor="middle" font-family="Inter" font-size="8.5" fill="#713f12" font-weight="700">Concat</text>
+              <text x="170" y="93" text-anchor="middle" font-family="Inter" font-size="7" fill="#a16207">2× embedding</text>
+              <line x1="210" y1="85" x2="260" y2="85" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="260" y="62" width="70" height="46" rx="6" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5"/>
+              <text x="295" y="82" text-anchor="middle" font-family="Inter" font-size="8.5" fill="#7f1d1d" font-weight="700">Head</text>
+              <text x="295" y="94" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#f87171">→ ŷ</text>
+              <text x="190" y="155" text-anchor="middle" font-family="Inter" font-size="8" fill="#ef4444">Problem: noisy, high-dim, hard to train</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel B: Sum -->
+      <div class="stream-panel active" id="sp-1">
+        <div class="two-col">
+          <div>
+            <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Strategy B: Sum Predictions</h3>
+            <p style="font-size:.88rem;color:var(--gray-600);line-height:1.7;margin-bottom:1rem;">Each half independently produces a prediction through its own head. The two predictions are summed to give the final output. Cleaner than concat, but a fundamental issue remains.</p>
+            <div class="stream-verdict ok">⚠️ No supervision signal — which half caused the error?</div>
+            <p style="font-size:.8rem;color:var(--gray-500);margin-top:1rem;line-height:1.65;">Because the loss is computed on the sum, neither stream knows how much it individually contributed to the error. This limits what the model can learn. Pseudo-labels didn't help here either.</p>
+          </div>
+          <div class="stream-diagram">
+            <svg class="stream-svg" viewBox="0 0 380 200">
+              <rect x="10"  y="20" width="70" height="50" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+              <text x="45" y="40" text-anchor="middle" font-family="Inter" font-size="9" fill="#166534" font-weight="700">Half 1</text>
+              <text x="45" y="53" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">Head A</text>
+              <rect x="10"  y="100" width="70" height="50" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+              <text x="45" y="120" text-anchor="middle" font-family="Inter" font-size="9" fill="#166534" font-weight="700">Half 2</text>
+              <text x="45" y="133" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">Head B</text>
+              <line x1="80" y1="45"  x2="160" y2="85" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <line x1="80" y1="125" x2="160" y2="95" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="160" y="72" width="60" height="26" rx="6" fill="#fef9c3" stroke="#fde047" stroke-width="1.5"/>
+              <text x="190" y="89" text-anchor="middle" font-family="Inter" font-size="9" fill="#713f12" font-weight="700">Σ Sum</text>
+              <line x1="220" y1="85" x2="270" y2="85" stroke="#d1d5db" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="270" y="68" width="70" height="34" rx="6" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5"/>
+              <text x="305" y="83" text-anchor="middle" font-family="Inter" font-size="8.5" fill="#7f1d1d" font-weight="700">ŷ = A+B</text>
+              <text x="190" y="155" text-anchor="middle" font-family="Inter" font-size="8" fill="#d97706">Problem: gradient doesn't isolate which half erred</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel C: Mean -->
+      <div class="stream-panel" id="sp-2">
+        <div class="two-col">
+          <div>
+            <h3 style="font-size:1.1rem;margin-bottom:.75rem;">Strategy C: Mean Aggregation ✓</h3>
+            <p style="font-size:.88rem;color:var(--gray-600);line-height:1.7;margin-bottom:1rem;">Each half predicts the <em>total biomass of the full region</em> using only half the visual information. The mean of both predictions is compared against the ground truth. A crucial information bottleneck emerges.</p>
+            <div class="stream-verdict good">✅ Forces independent robustness per stream</div>
+            <p style="font-size:.8rem;color:var(--gray-500);margin-top:1rem;line-height:1.65;">Each head is now forced to be correct on its own. The gradient from the mean loss flows equally to both heads. This dramatically reduced the train-val gap and improved leaderboard performance.</p>
+          </div>
+          <div class="stream-diagram">
+            <svg class="stream-svg" viewBox="0 0 380 200">
+              <rect x="10"  y="15" width="85" height="56" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+              <text x="52" y="35" text-anchor="middle" font-family="Inter" font-size="9" fill="#166534" font-weight="700">Half 1 only</text>
+              <text x="52" y="47" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">predicts full</text>
+              <text x="52" y="58" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">biomass → ŷ₁</text>
+              <rect x="10"  y="100" width="85" height="56" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+              <text x="52" y="120" text-anchor="middle" font-family="Inter" font-size="9" fill="#166534" font-weight="700">Half 2 only</text>
+              <text x="52" y="132" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">predicts full</text>
+              <text x="52" y="143" text-anchor="middle" font-family="Inter" font-size="7.5" fill="#4ade80">biomass → ŷ₂</text>
+              <line x1="95" y1="43"  x2="165" y2="85" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <line x1="95" y1="128" x2="165" y2="95" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="165" y="72" width="60" height="26" rx="6" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5"/>
+              <text x="195" y="89" text-anchor="middle" font-family="Inter" font-size="9" fill="#0f766e" font-weight="800">μ Mean</text>
+              <line x1="225" y1="85" x2="275" y2="85" stroke="#0d9488" stroke-width="1.5" stroke-dasharray="4,3"/>
+              <rect x="275" y="68" width="72" height="34" rx="6" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+              <text x="311" y="83" text-anchor="middle" font-family="Inter" font-size="8.5" fill="#0f766e" font-weight="800">ŷ final</text>
+              <text x="192" y="155" text-anchor="middle" font-family="Inter" font-size="8" fill="#0d9488" font-weight="600">Each stream independently robust. ✓</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 8 · INFORMATION BOTTLENECK
+     ============================================================ -->
+<section class="sol-section" id="bottleneck">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 07</div>
+    <h2 class="sol-title anim-in">The Information Bottleneck</h2>
+    <p class="sol-subtitle anim-in delay-1">What happens when you force a model to predict the whole from a tiny piece — again and again?</p>
+
+    <div class="two-col" style="margin-top:3rem;">
+      <div>
+        <div class="eli5-box anim-in">
+          <p>Could you recognize a forest by looking through a keyhole? If you practise enough, you'd stop memorizing the whole scene and start learning what truly matters: the texture of the leaves, the density of the undergrowth, the quality of the light. That's exactly what random cropping forces the model to do.</p>
+        </div>
+        <p style="font-size:.9rem;color:var(--gray-600);line-height:1.75;margin-bottom:1.5rem;" class="anim-in delay-1">
+          Training images are 1000×2000 pixels. Random crops of 448×448 are taken — covering roughly <strong>~10% of the total image area</strong>. The model must predict the biomass of the <em>entire region</em> from this tiny window.
+        </p>
+        <p style="font-size:.9rem;color:var(--gray-600);line-height:1.75;margin-bottom:1.5rem;" class="anim-in delay-2">
+          Despite this drastic restriction, the model achieved <strong>LB scores above 0.6</strong> — proving it was learning global textural cues, not memorizing local patterns.
+        </p>
+
+        <div class="multicrop-grid anim-in delay-2">
+          <div class="mc-card">
+            <div class="mc-card-num">2</div>
+            <div class="mc-card-label">crops / image</div>
+            <div class="mc-bar-pair">
+              <div class="mc-bar-item">
+                <span class="mc-bar-item-label">Train</span>
+                <div class="mc-bar-wrap"><div class="mc-bar-fill" data-w="72" style="background:#9ca3af;"></div></div>
+                <span class="mc-bar-val">0.72</span>
+              </div>
+              <div class="mc-bar-item">
+                <span class="mc-bar-item-label">Val</span>
+                <div class="mc-bar-wrap"><div class="mc-bar-fill" data-w="72" style="background:var(--teal);"></div></div>
+                <span class="mc-bar-val">0.72</span>
+              </div>
+            </div>
+            <p style="font-size:.7rem;color:var(--green);margin-top:.75rem;font-weight:600;">✓ Equilibrium — identical scores!</p>
+          </div>
+          <div class="mc-card">
+            <div class="mc-card-num">4</div>
+            <div class="mc-card-label">crops / image</div>
+            <div class="mc-bar-pair">
+              <div class="mc-bar-item">
+                <span class="mc-bar-item-label">Train</span>
+                <div class="mc-bar-wrap"><div class="mc-bar-fill" data-w="85" style="background:#9ca3af;"></div></div>
+                <span class="mc-bar-val">0.85</span>
+              </div>
+              <div class="mc-bar-item">
+                <span class="mc-bar-item-label">Val</span>
+                <div class="mc-bar-wrap"><div class="mc-bar-fill" data-w="72" style="background:var(--teal);"></div></div>
+                <span class="mc-bar-val">0.72</span>
+              </div>
+            </div>
+            <p style="font-size:.7rem;color:var(--amber);margin-top:.75rem;font-weight:600;">⚠ Overfitting starts — val stays flat!</p>
+          </div>
+          <div class="mc-card">
+            <div class="mc-card-num">8</div>
+            <div class="mc-card-label">crops / image</div>
+            <div class="mc-bar-pair">
+              <div class="mc-bar-item">
+                <span class="mc-bar-item-label">Train</span>
+                <div class="mc-bar-wrap"><div class="mc-bar-fill" data-w="95" style="background:#9ca3af;"></div></div>
+                <span class="mc-bar-val">0.95</span>
+              </div>
+              <div class="mc-bar-item">
+                <span class="mc-bar-item-label">Val</span>
+                <div class="mc-bar-wrap"><div class="mc-bar-fill" data-w="72" style="background:var(--teal);"></div></div>
+                <span class="mc-bar-val">0.72</span>
+              </div>
+            </div>
+            <p style="font-size:.7rem;color:var(--rose);margin-top:.75rem;font-weight:600;">🔥 Heavy overfit — val still 0.72!</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="anim-in delay-2">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1.25rem;">
+          <div class="crop-demo-wrap">
+            <div class="crop-grid-overlay"></div>
+            <div class="crop-window"></div>
+            <div class="crop-pct-label">~10% of image</div>
+          </div>
+          <p style="font-size:.78rem;color:var(--gray-400);text-align:center;line-height:1.6;max-width:300px;">The animated window shows a 448×448 crop jumping around a 1000×2000 image — only a tiny portion seen per forward pass.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- The Key Insight Table -->
+    <div class="anim-in delay-2" style="margin-top:3rem;">
+      <h3 style="font-size:1.2rem;margin-bottom:.5rem;">The Counterintuitive Finding</h3>
+      <p style="font-size:.88rem;color:var(--gray-500);margin-bottom:1rem;line-height:1.65;">As training R² rises with more crops, the leaderboard score also rises — slowly but surely. The model memorizes noise, but the <em>generalizable features learned through bottlenecking remain intact</em>.</p>
+
+      <div class="insight-table">
+        <div class="insight-table-header">
+          <span>Train R²</span>
+          <span>LB R² Score</span>
+          <span>Visualization</span>
+        </div>
+        <div class="insight-row" data-train="72" data-lb="72">
+          <div class="train-r2">0.72</div>
+          <div class="lb-val">0.72</div>
+          <div>
+            <div style="margin-bottom:.3rem;"><div class="insight-bar-wrap"><div class="insight-bar train" data-w="72"></div></div></div>
+            <div><div class="insight-bar-wrap"><div class="insight-bar lb"    data-w="72"></div></div></div>
+          </div>
+        </div>
+        <div class="insight-row" data-train="80" data-lb="72">
+          <div class="train-r2">0.80</div>
+          <div class="lb-val">0.72</div>
+          <div>
+            <div style="margin-bottom:.3rem;"><div class="insight-bar-wrap"><div class="insight-bar train" data-w="80"></div></div></div>
+            <div><div class="insight-bar-wrap"><div class="insight-bar lb"    data-w="72"></div></div></div>
+          </div>
+        </div>
+        <div class="insight-row" data-train="85" data-lb="73">
+          <div class="train-r2">0.85</div>
+          <div class="lb-val">0.73</div>
+          <div>
+            <div style="margin-bottom:.3rem;"><div class="insight-bar-wrap"><div class="insight-bar train" data-w="85"></div></div></div>
+            <div><div class="insight-bar-wrap"><div class="insight-bar lb"    data-w="73"></div></div></div>
+          </div>
+        </div>
+        <div class="insight-row" data-train="90" data-lb="74">
+          <div class="train-r2">0.90</div>
+          <div class="lb-val">0.74</div>
+          <div>
+            <div style="margin-bottom:.3rem;"><div class="insight-bar-wrap"><div class="insight-bar train" data-w="90"></div></div></div>
+            <div><div class="insight-bar-wrap"><div class="insight-bar lb"    data-w="74"></div></div></div>
+          </div>
+        </div>
+        <div class="insight-row" data-train="95" data-lb="75">
+          <div class="train-r2" style="color:var(--teal);">0.95</div>
+          <div class="lb-val"  style="color:var(--teal);">0.75 ✓</div>
+          <div>
+            <div style="margin-bottom:.3rem;"><div class="insight-bar-wrap"><div class="insight-bar train" data-w="95"></div></div></div>
+            <div><div class="insight-bar-wrap"><div class="insight-bar lb"    data-w="75"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="counterintuitive-box">
+        <h4>Every +0.05 Train R² ≈ +0.01 LB R²</h4>
+        <p>Rather than fighting overfitting, the strategy was to allow it <em>in a controlled way</em>. The information bottleneck from severe random cropping ensured that the fundamental, generalizable representations couldn't be erased — even as the model memorized noise on top. The backbone was never touched throughout all of this.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 9 · FULL DATASET TRAINING
+     ============================================================ -->
+<section class="sol-section sol-section--gray" id="training">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 08</div>
+    <h2 class="sol-title anim-in">Full Dataset Training Without Validation</h2>
+    <p class="sol-subtitle anim-in delay-1">Once you know how long to train, why hold back any data? The Chris Deotte method applied to vision.</p>
+
+    <div class="two-col" style="margin-top:3rem;">
+      <div>
+        <div class="eli5-box anim-in">
+          <p>Cross-validation told us the optimal training duration. So instead of wasting 20% of our only 357 images for monitoring, we trained on all 357 images and simply stopped at the same point. More data, same stopping criterion — consistently better leaderboard results.</p>
+        </div>
+        <p style="font-size:.9rem;color:var(--gray-600);line-height:1.75;margin:.75rem 0;" class="anim-in delay-1">
+          The approach is most famously applied in tabular ML (XGBoost, etc.) by Chris Deotte, but the principle transfers: estimate optimal training duration from CV, then retrain on the full dataset to that duration.
+        </p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.5rem;" class="anim-in delay-2">
+          <div style="flex:1;min-width:180px;background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--radius-xl);padding:1.25rem;">
+            <div style="font-size:1.5rem;font-weight:800;font-family:var(--font-display);color:var(--gray-500);">285</div>
+            <div style="font-size:.72rem;color:var(--gray-400);margin-top:.25rem;">images used in CV training</div>
+          </div>
+          <div style="font-size:1.5rem;display:flex;align-items:center;color:var(--gray-400);">→</div>
+          <div style="flex:1;min-width:180px;background:var(--teal-dimmer);border:1.5px solid rgba(13,148,136,.25);border-radius:var(--radius-xl);padding:1.25rem;">
+            <div style="font-size:1.5rem;font-weight:800;font-family:var(--font-display);color:var(--teal);">357</div>
+            <div style="font-size:.72rem;color:var(--teal-dark);margin-top:.25rem;">images in full dataset training</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="anim-in delay-2">
+        <div style="background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--radius-2xl);padding:1.75rem;box-shadow:var(--shadow-md);">
+          <p style="font-size:.8rem;font-weight:700;color:var(--gray-700);margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:.08em;">Training Strategy Timeline</p>
+          <div class="training-timeline" id="trainTimeline">
+            <div class="tt-step active">
+              <div class="tt-dot">📊</div>
+              <div class="tt-step-label">Run cross-validation folds</div>
+            </div>
+            <div class="tt-step">
+              <div class="tt-dot">📉</div>
+              <div class="tt-step-label">Compute mean training loss per epoch</div>
+            </div>
+            <div class="tt-step">
+              <div class="tt-dot">🎯</div>
+              <div class="tt-step-label">Identify optimal stopping point</div>
+            </div>
+            <div class="tt-step">
+              <div class="tt-dot">🔁</div>
+              <div class="tt-step-label">Retrain on all 357 images</div>
+            </div>
+            <div class="tt-step">
+              <div class="tt-dot">🏆</div>
+              <div class="tt-step-label">Stop at mean CV loss → submit</div>
+            </div>
+          </div>
+          <p style="font-size:.78rem;color:var(--gray-400);line-height:1.6;margin-top:.5rem;">The mean training loss from CV folds serves as the stopping criterion. No validation set needed — the model trains on every available sample.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 10 · INFERENCE
+     ============================================================ -->
+<section class="sol-section" id="inference">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 09</div>
+    <h2 class="sol-title anim-in">Inference: Tiling, TTA &amp; Ensembling</h2>
+    <p class="sol-subtitle anim-in delay-1">A structured approach to extracting maximum signal from each 1000×2000 test image at prediction time.</p>
+
+    <div class="two-col" style="margin-top:3rem;">
+      <div>
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;" class="anim-in">Step 1 — Tile the Image</h3>
+        <p style="font-size:.88rem;color:var(--gray-600);line-height:1.75;margin-bottom:1.5rem;" class="anim-in delay-1">
+          Each 1000×2000 test image is divided into <strong>8 tiles of 500×500 pixels</strong> (4 columns × 2 rows). From each tile, a central 448×448 crop is extracted — matching the training crop size.
+        </p>
+
+        <div class="tile-grid-wrap anim-in delay-2">
+          <p style="font-size:.72rem;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;">1000 × 2000 image → 8 tiles</p>
+          <div class="tile-grid" id="tileGrid">
+            <div class="tile" style="background:linear-gradient(135deg,#1a3a1a,#2d5a2d);"><div class="tile-crop-indicator"></div><div class="tile-label">T1</div></div>
+            <div class="tile" style="background:linear-gradient(135deg,#2d5a2d,#4a7c3f);"><div class="tile-crop-indicator"></div><div class="tile-label">T2</div></div>
+            <div class="tile" style="background:linear-gradient(135deg,#3a6b3a,#5a8e4e);"><div class="tile-crop-indicator"></div><div class="tile-label">T3</div></div>
+            <div class="tile" style="background:linear-gradient(135deg,#4a7c3f,#6b9e5e);"><div class="tile-crop-indicator"></div><div class="tile-label">T4</div></div>
+            <div class="tile" style="background:linear-gradient(135deg,#5c6b2a,#7a8c3f);"><div class="tile-crop-indicator"></div><div class="tile-label">T5</div></div>
+            <div class="tile" style="background:linear-gradient(135deg,#6b7c3a,#8a9c4f);"><div class="tile-crop-indicator"></div><div class="tile-label">T6</div></div>
+            <div class="tile" style="background:linear-gradient(135deg,#7a8c3a,#9aac5e);"><div class="tile-crop-indicator"></div><div class="tile-label">T7</div></div>
+            <div class="tile" style="background:linear-gradient(135deg,#8a9c3a,#aabf6e);"><div class="tile-crop-indicator"></div><div class="tile-label">T8</div></div>
+          </div>
+          <p style="font-size:.72rem;color:var(--gray-400);margin-top:.75rem;">Dashed borders show the central 448×448 crop extracted from each 500×500 tile.</p>
+        </div>
+
+        <h3 style="font-size:1rem;font-weight:700;margin:1.75rem 0 .75rem;" class="anim-in">Step 2 — Test-Time Augmentation (TTA)</h3>
+        <p style="font-size:.88rem;color:var(--gray-600);line-height:1.75;margin-bottom:1rem;" class="anim-in delay-1">Each tile crop is evaluated 4 times with geometric flips. The 4 predictions are averaged.</p>
+        <div class="tta-grid anim-in delay-2">
+          <div class="tta-card"><div class="tta-icon">🔲</div><div class="tta-label">Original</div></div>
+          <div class="tta-card"><div class="tta-icon">↔️</div><div class="tta-label">H-Flip</div></div>
+          <div class="tta-card"><div class="tta-icon">↕️</div><div class="tta-label">V-Flip</div></div>
+          <div class="tta-card"><div class="tta-icon">🔃</div><div class="tta-label">HV-Flip</div></div>
+        </div>
+      </div>
+
+      <div class="anim-in delay-2">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;">Step 3 — Checkpoint Ensembling</h3>
+        <div style="background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--radius-2xl);padding:1.75rem;box-shadow:var(--shadow-md);">
+          <p style="font-size:.85rem;color:var(--gray-600);line-height:1.75;margin-bottom:1.5rem;">Multiple checkpoints from the same training run are ensembled. The final prediction is the average across all checkpoints × all 8 tiles × 4 TTA augmentations.</p>
+
+          <div style="display:flex;flex-direction:column;gap:.75rem;">
+            <div style="display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--gray-50);border-radius:var(--radius-lg);">
+              <span style="font-size:1.1rem;">💾</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;">Checkpoint 1, 2, … N</div>
+                <div style="font-size:.72rem;color:var(--gray-500);">From the same full-dataset training run</div>
+              </div>
+            </div>
+            <div style="text-align:center;color:var(--gray-300);font-size:1.1rem;">↓</div>
+            <div style="display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--gray-50);border-radius:var(--radius-lg);">
+              <span style="font-size:1.1rem;">🔲</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;">× 8 Tiles</div>
+                <div style="font-size:.72rem;color:var(--gray-500);">Each tile processes its region independently</div>
+              </div>
+            </div>
+            <div style="text-align:center;color:var(--gray-300);font-size:1.1rem;">↓</div>
+            <div style="display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--gray-50);border-radius:var(--radius-lg);">
+              <span style="font-size:1.1rem;">🔃</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;">× 4 TTA flips</div>
+                <div style="font-size:.72rem;color:var(--gray-500);">Each crop seen from 4 geometric perspectives</div>
+              </div>
+            </div>
+            <div style="text-align:center;color:var(--gray-300);font-size:1.1rem;">↓</div>
+            <div style="display:flex;align-items:center;gap:.75rem;padding:.75rem;background:var(--teal-dimmer);border:1.5px solid rgba(13,148,136,.2);border-radius:var(--radius-lg);">
+              <span style="font-size:1.1rem;">🎯</span>
+              <div>
+                <div style="font-size:.82rem;font-weight:700;color:var(--teal-dark);">Final Mean Prediction</div>
+                <div style="font-size:.72rem;color:var(--teal);">N × 8 × 4 = robust ensemble</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:1.5rem;padding:1rem;background:var(--gray-50);border-radius:var(--radius-lg);">
+            <p style="font-size:.78rem;color:var(--gray-500);line-height:1.6;">
+              <strong>Note:</strong> EMA and SWA were also tested and improved convergence smoothness, but did not meaningfully raise the performance ceiling. Simple checkpoint averaging was sufficient.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 11 · RESULTS
+     ============================================================ -->
+<section class="sol-section sol-section--darkest" id="results">
+  <div class="container">
+    <div class="sol-label sol-label--light">Section 10</div>
+    <h2 class="sol-title sol-title--white anim-in">Results &amp; The Leaderboard Story</h2>
+    <p class="sol-subtitle sol-subtitle--light anim-in delay-1">The dataset's small size became its greatest feature — mercilessly separating true generalization from clever overfitting.</p>
+
+    <div class="results-grid anim-in delay-2">
+      <div class="result-card">
+        <div class="result-card-num">#49 → #37</div>
+        <div class="result-card-label">Public → Private Rank</div>
+      </div>
+      <div class="result-card">
+        <div class="result-card-num">0.75</div>
+        <div class="result-card-label">Final Private LB R² Score</div>
+      </div>
+      <div class="result-card">
+        <div class="result-card-num">357</div>
+        <div class="result-card-label">Training images — all used</div>
+      </div>
+    </div>
+
+    <!-- Leaderboard chart -->
+    <div class="leaderboard-viz anim-in delay-2">
+      <p style="font-size:.75rem;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.5rem;">Public vs. Private Rank — Key Competitors</p>
+      <div class="lb-chart" id="lbChart">
+        <!-- Populated by JS -->
+      </div>
+      <div class="lb-legend">
+        <div class="lb-legend-item"><div class="lb-legend-dot" style="background:rgba(255,255,255,.18);"></div>Public LB rank (lower = better)</div>
+        <div class="lb-legend-item"><div class="lb-legend-dot" style="background:var(--teal);"></div>Private LB rank</div>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;padding:1.5rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-xl);" class="anim-in delay-3">
+      <p style="font-size:.9rem;color:rgba(255,255,255,.6);line-height:1.75;">
+        The alignment between cross-validation scores and leaderboard scores was <strong style="color:#fff;">strikingly consistent throughout the competition</strong>. From a CV R² of 0.63 early on, the gap to the LB was minimal — confirming that modeling choices were targeting genuinely generalizable patterns rather than validation artifacts.
+      </p>
+      <p style="font-size:.9rem;color:rgba(255,255,255,.6);line-height:1.75;margin-top:.75rem;">
+        Ironically, the apparent "overfitting" (high Train R², stable Val R²) was actually the final strategy's engine. By <strong style="color:#fff;">controlling how the model overfit</strong> — memorizing only surface noise, not the underlying structure — the bottleneck-trained representations held up on unseen data.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 12 · TAKEAWAYS
+     ============================================================ -->
+<section class="sol-section" id="takeaways">
+  <div class="container">
+    <div class="sol-label sol-label--teal">Section 11</div>
+    <h2 class="sol-title anim-in">Key Takeaways</h2>
+    <p class="sol-subtitle anim-in delay-1">Five lessons from this competition that apply broadly across vision and ML challenges.</p>
+
+    <div class="takeaway-grid">
+      <div class="takeaway-card anim-in">
+        <div class="tc-icon">🏛️</div>
+        <div class="tc-title">Generalization > Memorization</div>
+        <div class="tc-body">On small datasets, a model's ability to generalize to unseen data matters far more than squeezing CV performance. Self-supervised backbones like DINOv3 provide representations that transfer without fine-tuning.</div>
+      </div>
+      <div class="takeaway-card anim-in delay-1">
+        <div class="tc-icon">🔑</div>
+        <div class="tc-title">Information Bottleneck as Regularizer</div>
+        <div class="tc-body">Forcing the model to predict the whole from a tiny part (10% of the image) acts as a powerful implicit regularizer. The model is compelled to learn structural and textural priors, not memorize specific pixel patterns.</div>
+      </div>
+      <div class="takeaway-card anim-in delay-2">
+        <div class="tc-icon">🎯</div>
+        <div class="tc-title">Prompt &amp; Task Tokens for Dense Regression</div>
+        <div class="tc-body">Visual Prompt Tuning is an underused technique for regression tasks. Learnable task tokens routed to per-target heads, combined with orthogonality loss, provides a lightweight yet powerful way to adapt frozen backbones.</div>
+      </div>
+      <div class="takeaway-card anim-in delay-3">
+        <div class="tc-icon">📈</div>
+        <div class="tc-title">Full-Dataset Training with CV Signal</div>
+        <div class="tc-body">Once CV tells you how long to train, using a validation split is wasteful — especially on tiny datasets. Retrain on everything until you hit the mean CV training loss. Consistently outperforms ensembling the CV models.</div>
+      </div>
+      <div class="takeaway-card anim-in delay-4">
+        <div class="tc-icon">🔀</div>
+        <div class="tc-title">Token Diversity is Learnable</div>
+        <div class="tc-body">Without explicit supervision, multiple learnable tokens collapse into identical representations. Orthogonality loss is a simple, effective solution that maintains the multi-token design's full representational capacity throughout training.</div>
+      </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div style="margin-top:4rem;padding:2.5rem;background:var(--black);border-radius:var(--radius-2xl);text-align:center;" class="anim-in delay-3">
+      <p style="font-size:.8rem;color:rgba(255,255,255,.35);font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem;">Want to discuss the solution?</p>
+      <p style="font-size:1.1rem;font-weight:700;color:#fff;font-family:var(--font-display);margin-bottom:1.5rem;">Questions, ideas, or critiques are warmly welcome.</p>
+      <a href="https://www.kaggle.com/competitions/csiro-biomass/writeups/41st-place-solution-self-prompt-tuning-with-di" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:.5rem;background:var(--teal);color:#fff;padding:.75rem 1.75rem;border-radius:var(--radius-full);font-size:.85rem;font-weight:700;transition:background .2s;"
+         onmouseover="this.style.background='var(--teal-dark)'" onmouseout="this.style.background='var(--teal)'">
+        💬 Comment on Kaggle
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE FOOTER -->
+<footer class="page-footer">
+  <div class="container">
+    <p style="font-size:.8rem;color:var(--gray-400);">Built with curiosity, failures, and community support.</p>
+    <div class="page-footer-links">
+      <a href="index.html" style="display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;color:var(--gray-700);border:1.5px solid var(--gray-200);padding:.5rem 1.1rem;border-radius:var(--radius-full);transition:all .2s;"
+         onmouseover="this.style.borderColor='var(--black)';this.style.background='var(--black)';this.style.color='#fff';"
+         onmouseout="this.style.borderColor='var(--gray-200)';this.style.background='transparent';this.style.color='var(--gray-700)';">
+        ← Back to Portfolio
+      </a>
+      <a href="https://www.kaggle.com/komilparmar" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;color:var(--gray-700);border:1.5px solid var(--gray-200);padding:.5rem 1.1rem;border-radius:var(--radius-full);transition:all .2s;"
+         onmouseover="this.style.borderColor='var(--teal)';this.style.color='var(--teal)';"
+         onmouseout="this.style.borderColor='var(--gray-200)';this.style.color='var(--gray-700)';">
+        🏅 Kaggle Profile
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+/* ---- IntersectionObserver for .anim-in ---- */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.anim-in').forEach(el => observer.observe(el));
+
+/* ---- Rank Counter (49 → 37) ---- */
+function animateCounter(el, from, to, duration){
+  const start = performance.now();
+  const update = (now) => {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(from - (from - to) * ease);
+    if(t < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    animateCounter(document.getElementById('rank-pub'), 49, 49, 600);
+    setTimeout(() => animateCounter(document.getElementById('rank-priv'), 49, 37, 1200), 800);
+  }, 600);
+});
+
+/* ---- Field toggle ---- */
+function toggleField(mode){
+  const overlay = document.getElementById('fieldOverlay');
+  const btnRaw  = document.getElementById('btn-raw');
+  const btnOv   = document.getElementById('btn-overlay');
+  if(mode === 'overlay'){
+    overlay.classList.add('show');
+    btnOv.classList.add('active'); btnRaw.classList.remove('active');
+  } else {
+    overlay.classList.remove('show');
+    btnRaw.classList.add('active'); btnOv.classList.remove('active');
+  }
+}
+
+/* ---- Backbone bars (animate on scroll) ---- */
+const barObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.bc-bar[data-w]').forEach(bar => {
+        bar.style.width = bar.dataset.w + '%';
+      });
+      barObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.backbone-card').forEach(c => barObserver.observe(c));
+
+/* ---- Architecture step highlighting ---- */
+const archHighlights = [
+  { x:125, y:4,   w:155, h:72  },  // step 0: image
+  { x:85,  y:92,  w:230, h:42  },  // step 1: patch embeddings
+  { x:8,   y:151, w:384, h:88  },  // step 2: token sequence (task tokens)
+  { x:8,   y:151, w:384, h:88  },  // step 3: token sequence (prompt tokens)
+  { x:35,  y:256, w:330, h:76  },  // step 4: DINOv3
+  { x:8,   y:349, w:384, h:80  },  // step 5: output / discard
+  { x:125, y:501, w:274, h:50  },  // step 6: heads
+];
+function setArchStep(idx){
+  document.querySelectorAll('.arch-step').forEach((s,i) => s.classList.toggle('active', i === idx));
+  const hl = document.getElementById('arch-highlight');
+  const a = archHighlights[idx];
+  if(a){
+    hl.setAttribute('x',    String((a.x ?? 10) - 4));
+    hl.setAttribute('y',    String(a.y - 4));
+    hl.setAttribute('width',  String((a.w ?? 380) + 8));
+    hl.setAttribute('height', String(a.h + 8));
+    hl.setAttribute('stroke', 'rgba(13,148,136,0.6)');
+    hl.setAttribute('stroke-width','2');
+    hl.setAttribute('stroke-dasharray','6,3');
+    hl.setAttribute('fill','rgba(13,148,136,0.05)');
+    hl.setAttribute('rx','8');
+  } else {
+    hl.setAttribute('stroke','none'); hl.setAttribute('fill','none');
+  }
+}
+setArchStep(0);
+
+/* ---- Stream tabs ---- */
+function setStreamTab(idx){
+  document.querySelectorAll('.stream-tab').forEach((t,i)   => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.stream-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+/* ---- Multi-crop bars ---- */
+const mcObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.mc-bar-fill[data-w]').forEach(b => { b.style.width = (b.dataset.w) + '%'; });
+      mcObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.mc-card').forEach(c => mcObserver.observe(c));
+
+/* ---- Insight table bars ---- */
+const insightObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.insight-bar[data-w]').forEach(b => { b.style.width = b.dataset.w + '%'; });
+      insightObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+document.querySelectorAll('.insight-table').forEach(t => insightObserver.observe(t));
+
+/* ---- Tile grid reveal ---- */
+const tileObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const tiles = e.target.querySelectorAll('.tile');
+      tiles.forEach((t, i) => setTimeout(() => t.classList.add('revealed'), i * 140));
+      tileObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const tileGrid = document.getElementById('tileGrid');
+if(tileGrid) tileObserver.observe(tileGrid);
+
+/* ---- Training timeline step animation ---- */
+const ttObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      const steps = e.target.querySelectorAll('.tt-step');
+      steps.forEach((s, i) => setTimeout(() => s.classList.add('active'), i * 300));
+      ttObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+const tt = document.getElementById('trainTimeline');
+if(tt){ tt.querySelectorAll('.tt-step').forEach(s => s.classList.remove('active')); ttObserver.observe(tt); }
+
+/* ---- Cosine similarity heatmaps ---- */
+function buildHeatmap(id, isGood){
+  const wrap = document.getElementById(id);
+  if(!wrap) return;
+  const labels = ['G','B','D','T'];
+  // Header row labels
+  const hRow = document.createElement('div');
+  hRow.className = 'heatmap-row';
+  hRow.style.marginBottom = '.25rem';
+  hRow.innerHTML = '<div style="width:42px;height:20px;"></div>';
+  labels.forEach(l => {
+    const lc = document.createElement('div');
+    lc.className = 'hm-label-cell'; lc.style.height = '20px';
+    lc.style.fontSize = '.6rem'; lc.style.fontWeight = '700';
+    lc.style.color = 'rgba(255,255,255,.35)'; lc.style.width = '36px';
+    lc.textContent = l; hRow.appendChild(lc);
+  });
+  wrap.appendChild(hRow);
+  labels.forEach((rl, ri) => {
+    const row = document.createElement('div'); row.className = 'heatmap-row';
+    const rowLabel = document.createElement('div');
+    rowLabel.className = 'hm-label-cell'; rowLabel.style.width = '36px'; rowLabel.style.height = '36px';
+    rowLabel.style.fontSize = '.6rem'; rowLabel.style.fontWeight = '700'; rowLabel.style.color = 'rgba(255,255,255,.35)';
+    rowLabel.style.display = 'flex'; rowLabel.style.alignItems = 'center'; rowLabel.style.justifyContent = 'center';
+    rowLabel.style.marginRight = '6px';
+    rowLabel.textContent = rl; row.appendChild(rowLabel);
+    labels.forEach((cl, ci) => {
+      const cell = document.createElement('div'); cell.className = 'hm-cell';
+      let val, bg, color;
+      if(ri === ci){ val = 1.0; bg = 'rgba(13,148,136,0.7)'; color = '#fff'; }
+      else if(!isGood){ val = (0.85 + Math.random()*0.12).toFixed(2); bg = `rgba(239,68,68,${0.4 + parseFloat(val)*0.4})`; color = '#fff'; }
+      else { val = (Math.random()*0.08).toFixed(2); bg = `rgba(255,255,255,${0.04 + parseFloat(val)*0.3})`; color = 'rgba(255,255,255,.5)'; }
+      cell.style.background = bg; cell.style.color = color;
+      cell.textContent = val; row.appendChild(cell);
+    });
+    wrap.appendChild(row);
+  });
+}
+buildHeatmap('hmBad', false);
+buildHeatmap('hmGood', true);
+
+/* ---- Leaderboard chart ---- */
+(function buildLBChart(){
+  const container = document.getElementById('lbChart');
+  if(!container) return;
+  // [name, pubRank, privRank, isMe]
+  const data = [
+    ['#1 Public', 1, 38, false],
+    ['#2 Public', 2, 35, false],
+    ['#3 Public', 3, 36, false],
+    ['Me (Komil)', 49, 37, true],
+    ['Avg Top-10', 8, 22, false],
+  ];
+  const maxRank = 52;
+  const chartH = 180;
+  data.forEach(([name, pub, priv, isMe]) => {
+    const p = document.createElement('div'); p.className = 'lb-participant';
+    const bg = document.createElement('div'); bg.className = 'lb-bar-group';
+    const pubBar  = document.createElement('div');
+    const privBar = document.createElement('div');
+    pubBar.className  = 'lb-bar lb-bar-pub';
+    privBar.className = 'lb-bar lb-bar-priv' + (isMe ? ' highlight' : '');
+    pubBar.style.height  = '0px';
+    privBar.style.height = '0px';
+    pubBar.dataset.target  = Math.round((pub / maxRank) * chartH) + 'px';
+    privBar.dataset.target = Math.round((priv / maxRank) * chartH) + 'px';
+    // Labels on bars
+    const pubLabel = document.createElement('div');
+    pubLabel.style.cssText = 'position:absolute;top:-16px;left:0;right:0;text-align:center;font-size:.55rem;color:rgba(255,255,255,.4);font-weight:700;';
+    pubLabel.textContent = '#' + pub;
+    const privLabel = document.createElement('div');
+    privLabel.style.cssText = 'position:absolute;top:-16px;left:0;right:0;text-align:center;font-size:.55rem;font-weight:700;';
+    privLabel.style.color = isMe ? 'var(--teal-light)' : 'rgba(13,148,136,.7)';
+    privLabel.textContent = '#' + priv;
+    pubBar.style.position  = 'relative'; pubBar.appendChild(pubLabel);
+    privBar.style.position = 'relative'; privBar.appendChild(privLabel);
+    bg.appendChild(pubBar); bg.appendChild(privBar);
+    const nameEl = document.createElement('div'); nameEl.className = 'lb-name';
+    nameEl.textContent = name;
+    if(isMe) nameEl.style.color = 'var(--teal-light)';
+    p.appendChild(bg); p.appendChild(nameEl);
+    container.appendChild(p);
+  });
+  // Axis line
+  const axis = document.createElement('div'); axis.className = 'lb-chart-axis'; container.appendChild(axis);
+  // Animate on scroll
+  const lbObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.lb-bar').forEach((b, i) => {
+          setTimeout(() => { b.style.transition = 'height 1s cubic-bezier(.4,0,.2,1)'; b.style.height = b.dataset.target; }, i * 100);
+        });
+        lbObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  lbObs.observe(container);
+})();
+</script>
+</body>
+</html>
