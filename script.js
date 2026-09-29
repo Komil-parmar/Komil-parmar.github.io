@@ -14,6 +14,46 @@
     /* ---------- page load ---------- */
     requestAnimationFrame(() => document.body.classList.add('is-loaded'));
 
+    /* ---------- theme: dark (default) / light ---------- */
+    const root = document.documentElement;
+    const themeSwitch = $('#theme-switch');
+    const themeMeta = $('meta[name="theme-color"]');
+    const THEME_BG = { dark: '#0b0b0c', light: '#f6f6f3' };
+    const currentTheme = () => (root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+    const syncThemeSwitch = () => {
+        const light = currentTheme() === 'light';
+        themeSwitch.setAttribute('aria-checked', String(light));
+        themeSwitch.title = light ? 'Switch to dark mode' : 'Switch to light mode';
+        if (themeMeta) themeMeta.setAttribute('content', THEME_BG[currentTheme()]);
+    };
+    const setTheme = (t) => {
+        if (t === 'light') root.setAttribute('data-theme', 'light');
+        else root.removeAttribute('data-theme');
+        try { localStorage.setItem('theme', t); } catch { /* private mode etc. */ }
+        syncThemeSwitch();
+        document.dispatchEvent(new CustomEvent('themechange', { detail: t }));
+    };
+
+    if (themeSwitch) {
+        syncThemeSwitch();
+        themeSwitch.addEventListener('click', () => {
+            const next = currentTheme() === 'light' ? 'dark' : 'light';
+            if (reduceMotion || !document.startViewTransition) { setTheme(next); return; }
+            // new theme grows out of the switch as a circle
+            const r = themeSwitch.getBoundingClientRect();
+            const x = r.left + r.width / 2, y = r.top + r.height / 2;
+            const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+            const vt = document.startViewTransition(() => setTheme(next));
+            vt.ready.then(() => {
+                root.animate(
+                    { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+                    { duration: 700, easing: 'cubic-bezier(.16, 1, .3, 1)', pseudoElement: '::view-transition-new(root)' }
+                );
+            }).catch(() => {});
+        });
+    }
+
     /* ---------- nav: hide on scroll, active section, mobile menu ---------- */
     const nav = $('#nav');
     const bar = $('#scroll-progress-bar');
@@ -506,6 +546,15 @@
     if (nc && !reduceMotion) {
         const c = nc.getContext('2d');
         let w, h, dpr, pts = [], visible = false, raf2 = null;
+        // dust colors follow the theme: light specks on dark, graphite specks on light
+        let dustInk = '#ecebe6', dustBlue = '#8490ff';
+        const readDust = () => {
+            const cs = getComputedStyle(document.documentElement);
+            dustInk = cs.getPropertyValue('--text').trim() || dustInk;
+            dustBlue = cs.getPropertyValue('--accent').trim() || dustBlue;
+        };
+        readDust();
+        document.addEventListener('themechange', readDust);
         const size = () => {
             const r = nc.getBoundingClientRect();
             dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -529,7 +578,7 @@
                 p.x += Math.sin(t * 0.0004 + p.p) * 0.25;
                 if (p.y < -4) { p.y = h + 4; p.x = Math.random() * w; }
                 c.globalAlpha = p.a * (0.6 + 0.4 * Math.sin(t * 0.001 + p.p));
-                c.fillStyle = p.blue ? '#8490ff' : '#ecebe6';
+                c.fillStyle = p.blue ? dustBlue : dustInk;
                 c.beginPath(); c.arc(p.x, p.y, p.r, 0, Math.PI * 2); c.fill();
             }
             c.globalAlpha = 1;
