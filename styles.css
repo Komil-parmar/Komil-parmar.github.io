@@ -551,12 +551,12 @@ main, .footer { position: relative; z-index: 1; }
     animation: bob 4s ease-in-out infinite;
     transition: transform .6s var(--ease-out);
 }
-.shelf-row { display: grid; grid-template-columns: repeat(6, minmax(0, 58px)); gap: clamp(8px, 1vw, 14px); width: 100%; justify-content: center; }
+.shelf-row { display: grid; grid-template-columns: repeat(7, minmax(0, 58px)); gap: clamp(8px, 1vw, 14px); width: 100%; justify-content: center; }
 .shelf-cap { margin: 0; color: var(--muted); text-align: center; }
 .medal::before { content: ""; position: absolute; inset: 14%; border-radius: 50%; border: 1px dashed rgba(0,0,0,.22); }
 .medal span { font-family: var(--serif); font-size: clamp(18px, 1.8vw, 24px); color: rgba(0,0,0,.45); text-shadow: 0 1px 0 rgba(255,255,255,.5); }
 .medal:nth-child(2) { animation-delay: -.6s; } .medal:nth-child(3) { animation-delay: -1.2s; }
-.medal:nth-child(4) { animation-delay: -1.8s; } .medal:nth-child(5) { animation-delay: -2.4s; } .medal:nth-child(6) { animation-delay: -3s; }
+.medal:nth-child(4) { animation-delay: -1.8s; } .medal:nth-child(5) { animation-delay: -2.4s; } .medal:nth-child(6) { animation-delay: -3s; } .medal:nth-child(7) { animation-delay: -3.6s; }
 .m-bronze { --c1: #ffe0c4; --c2: var(--bronze); --c3: #6e4020; }
 .medal:hover { transform: rotateY(180deg) scale(1.08); }
 @keyframes bob { 50% { translate: 0 -6px; } }
@@ -822,3 +822,6 @@ a.tile:hover, .tile:hover { border-color: var(--line-2); }
     *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
     .ticker-track { animation: none; }
 }
+
+.lb-pos-unit { display: none; }
+@media (max-width: 720px) { .lb-pos-unit { display: inline; color: var(--muted); } }
