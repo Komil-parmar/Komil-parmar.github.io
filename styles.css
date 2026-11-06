@@ -551,7 +551,9 @@ main, .footer { position: relative; z-index: 1; }
     animation: bob 4s ease-in-out infinite;
     transition: transform .6s var(--ease-out);
 }
-.shelf-row { display: grid; grid-template-columns: repeat(7, minmax(0, 58px)); gap: clamp(8px, 1vw, 14px); width: 100%; justify-content: center; }
+/* Flex-wrap, sized so 6 medals fill a row: silvers on top, bronzes centred below */
+.shelf-row { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 1vw, 14px); width: 100%; max-width: 420px; }
+.shelf-row .medal { width: clamp(40px, 13%, 58px); }
 .shelf-cap { margin: 0; color: var(--muted); text-align: center; }
 .medal::before { content: ""; position: absolute; inset: 14%; border-radius: 50%; border: 1px dashed rgba(0,0,0,.22); }
 .medal span { font-family: var(--serif); font-size: clamp(18px, 1.8vw, 24px); color: rgba(0,0,0,.45); text-shadow: 0 1px 0 rgba(255,255,255,.5); }

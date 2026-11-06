@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Komil Parmar · Resume</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=block" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+
+  :root {
+    --ink: #17171a;
+    --ink-2: #3a3a41;
+    --ink-3: #6b6b74;
+    --rule: #dcdce2;
+    --accent: #2f3bd0;        /* ballpoint blue, same as the portfolio */
+    --silver: #9aa0ab;
+    --bronze: #b5784a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { background: #e9e9ee; }
+  body {
+    font-family: "Geist", system-ui, sans-serif;
+    font-size: 8.8pt;
+    line-height: 1.36;
+    color: var(--ink-2);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-feature-settings: "tnum" 1;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    margin: 10mm auto;
+    padding: 10.5mm 13mm 9mm;
+    background: #fff;
+    box-shadow: 0 2px 24px rgba(0,0,0,.12);
+    overflow: hidden;
+  }
+  @media print {
+    html { background: #fff; }
+    .page { margin: 0; box-shadow: none; }
+  }
+
+  a { color: inherit; text-decoration: none; }
+  b, strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Header ---------- */
+  header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 6mm;
+    padding-bottom: 3mm;
+    border-bottom: 1.4pt solid var(--ink);
+  }
+  h1 {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-weight: 400;
+    font-size: 34pt;
+    line-height: .9;
+    letter-spacing: -.01em;
+    color: var(--ink);
+  }
+  h1 i { color: var(--accent); }
+  .role {
+    margin-top: 2.2mm;
+    font-size: 10pt;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .role span { color: var(--ink-3); font-weight: 400; }
+  .contact {
+    list-style: none;
+    text-align: right;
+    font-size: 8.2pt;
+    line-height: 1.55;
+  }
+  .contact a { border-bottom: .5pt solid var(--rule); }
+
+  /* ---------- Summary + stats ---------- */
+  .summary {
+    margin-top: 3mm;
+    font-size: 9.2pt;
+    line-height: 1.45;
+  }
+  .stats {
+    margin-top: 2.8mm;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: .6pt solid var(--rule);
+    border-radius: 2mm;
+    background: #fafafc;
+  }
+  .stat { padding: 1.8mm 3mm 1.7mm; border-left: .6pt solid var(--rule); }
+  .stat:first-child { border-left: 0; }
+  .stat-n {
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: 18pt;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-n small { font-size: 11pt; color: var(--accent); }
+  .stat-l { margin-top: .7mm; font-size: 7.3pt; line-height: 1.3; color: var(--ink-3); }
+
+  /* ---------- Sections ---------- */
+  section { margin-top: 3.7mm; }
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 2.5mm;
+    font-size: 7.6pt;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.7mm;
+  }
+  h2::after { content: ""; flex: 1; height: .6pt; background: var(--rule); }
+  h2 .aside { letter-spacing: .02em; text-transform: none; font-weight: 500; color: var(--ink-3); font-size: 7.8pt; }
+
+  .item + .item { margin-top: 1.7mm; }
+  .item-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4mm;
+  }
+  .item-title { font-size: 9.3pt; font-weight: 600; color: var(--ink); }
+  .item-title .org { font-weight: 400; color: var(--ink-3); font-size: 8.4pt; }
+  .when { font-size: 8pt; color: var(--ink-3); white-space: nowrap; }
+  .item-body { margin-top: .4mm; }
+
+  ul.pts { list-style: none; }
+  ul.pts li { position: relative; padding-left: 3.4mm; }
+  ul.pts li + li { margin-top: .7mm; }
+  ul.pts li::before {
+    content: ""; position: absolute; left: .4mm; top: .62em;
+    width: 1.1mm; height: 1.1mm; border-radius: 50%; background: var(--accent);
+  }
+
+  /* Role ladder inside the Eris job */
+  .lead { margin-top: .6mm; }
+  .ladder { margin-top: 1.1mm; display: grid; grid-template-columns: 29mm 27mm 1fr; row-gap: .6mm; column-gap: 2.5mm; }
+  .ladder .r { font-weight: 600; color: var(--ink); }
+  .ladder .d { color: var(--ink-3); font-size: 8pt; }
+
+  /* ---------- Kaggle ---------- */
+  .comp { display: grid; grid-template-columns: 1fr auto; column-gap: 4mm; }
+  .comp + .comp { margin-top: 1.5mm; }
+  .comp-name { font-size: 9.2pt; font-weight: 600; color: var(--ink); }
+  .comp-name .tag { font-weight: 400; color: var(--ink-3); font-size: 8pt; }
+  .comp-res { text-align: right; font-size: 8pt; color: var(--ink-3); white-space: nowrap; }
+  .comp-res b { font-family: "Geist Mono", monospace; font-weight: 500; color: var(--ink); }
+  .comp-desc { grid-column: 1 / -1; margin-top: .3mm; }
+  .medal {
+    display: inline-block; width: 2.3mm; height: 2.3mm; border-radius: 50%;
+    vertical-align: -.2mm; margin-right: 1mm;
+    box-shadow: inset 0 0 0 .35mm rgba(255,255,255,.45);
+  }
+  .medal.s { background: var(--silver); }
+  .medal.b { background: var(--bronze); }
+  .comp-more {
+    margin-top: 1.7mm; padding-top: 1.4mm; border-top: .6pt dashed var(--rule);
+    font-size: 8.3pt;
+  }
+
+  /* ---------- Bottom grid ---------- */
+  .two { display: grid; grid-template-columns: 80mm 1fr; column-gap: 6mm; }
+  .skills { display: grid; grid-template-columns: 15mm 1fr; row-gap: .7mm; column-gap: 2.5mm; }
+  .skills dt { font-weight: 600; color: var(--ink); }
+  .plain { list-style: none; }
+  .plain li + li { margin-top: .7mm; }
+  .sub { color: var(--ink-3); }
+</style>
+</head>
+<body>
+<main class="page">
+
+  <header>
+    <div>
+      <h1>Komil <i>Parmar</i></h1>
+      <p class="role">Machine Learning Engineer <span>· Computer Vision · NLP · LLM Evals</span></p>
+    </div>
+    <ul class="contact">
+      <li>Vadodara, Gujarat, India · Open to remote</li>
+      <li><a href="tel:+919427737125">+91 94277 37125</a> · <a href="mailto:komilparmar57@gmail.com">komilparmar57@gmail.com</a></li>
+      <li><a href="https://komil-parmar.github.io/personal-portfolio/">komil-parmar.github.io/personal-portfolio</a></li>
+      <li><a href="https://github.com/Komil-parmar">github.com/Komil-parmar</a> · <a href="https://www.kaggle.com/komilparmar">kaggle.com/komilparmar</a></li>
+      <li><a href="https://www.linkedin.com/in/komil-parmar-488967243/">linkedin.com/in/komil-parmar-488967243</a></li>
+    </ul>
+  </header>
+
+  <p class="summary">
+    Self-taught ML engineer who learns by competing. <b>#1 of 1,200+ solvers</b> and <b>Principal Reviewer</b> on Project Eris
+    at DataCurve.ai (YC-backed), owning the quality of data that trains frontier LLMs. <b>Kaggle Competitions Expert</b>,
+    <b>#492 of 224,263</b> worldwide, with six silver medals across vision, medical imaging, 3D segmentation, NLP and agents.
+  </p>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-n"><small>#</small>1</div><div class="stat-l">All-time leaderboard, Project Eris<br>of 1,200+ solvers</div></div>
+    <div class="stat"><div class="stat-n"><small>#</small>492</div><div class="stat-l">Kaggle competitions rank<br>of 224,263 (top 0.22%)</div></div>
+    <div class="stat"><div class="stat-n">6<small> S</small> · 3<small> B</small></div><div class="stat-l">Kaggle medals<br>6 silver, 3 bronze</div></div>
+    <div class="stat"><div class="stat-n">0</div><div class="stat-l">Applications sent<br>invited to DataCurve directly</div></div>
+  </div>
+
+  <!-- ================= EXPERIENCE ================= -->
+  <section>
+    <h2>Experience</h2>
+    <div class="item">
+      <div class="item-head">
+        <div class="item-title">DataCurve.ai <span class="org">(YC-backed) · Project Eris · Remote, part-time, invite-only</span></div>
+        <div class="when">Feb 2026 – Present</div>
+      </div>
+      <p class="lead"><b>Rank #1 on the all-time leaderboard</b> of 1,200+ solvers with 198 medals (79 gold, 64 silver, 55 bronze). Promoted twice in six months and still solving the hardest challenges alongside reviewing.</p>
+      <div class="ladder">
+        <span class="r">Principal Reviewer</span><span class="d">Aug 2026 – Present</span><span>Responsible for the quality of the data used to train frontier LLMs.</span>
+        <span class="r">Reviewer</span><span class="d">Apr – Aug 2026</span><span>One of 10 reviewers, checking challenges and solutions from 1,200+ solvers.</span>
+        <span class="r">ML Evals Engineer</span><span class="d">Feb – Apr 2026</span><span>Invited as a solver after a core team member found my LinkedIn profile.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= KAGGLE ================= -->
+  <section>
+    <h2>Kaggle Competitions <span class="aside">Competitions Expert · Global #492 / 224,263</span></h2>
+
+    <div class="comp">
+      <div class="comp-name">RSNA · Knee MRI Abnormality Detection <span class="tag">· solo · medical imaging</span></div>
+      <div class="comp-res"><span class="medal s"></span>Silver · <b>47</b> / 24,797 · top 0.19%</div>
+      <div class="comp-desc">12 findings per knee MRI, but only 58 of 4.4k scans labelled: turned radiology reports into labels to train a scan-only model.</div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-name">CSIRO · Image2Biomass Prediction <span class="tag">· solo · computer vision</span></div>
+      <div class="comp-res"><span class="medal s"></span>Silver · <b>37</b> / 13,779 · top 0.27%</div>
+      <div class="comp-desc">DINOv3 self prompt-tuning (visual prompts, task tokens, orthogonality loss) on just 357 images; 6th most-voted writeup.</div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-name">Vesuvius Challenge · Surface Detection <span class="tag">· team of 5 · 3D segmentation</span></div>
+      <div class="comp-res"><span class="medal s"></span>Silver · <b>48</b> / 7,759 · top 0.62%</div>
+      <div class="comp-desc">nnU-Net on 3D CT scans of a 79 AD scroll. Stable training held Public 47 → Private 48 while most teams fell ~20.</div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-name">Deep Past · Akkadian → English Translation <span class="tag">· team of 3 · NLP</span></div>
+      <div class="comp-res"><span class="medal s"></span>Silver · <b>104</b> / 10,743 · top 0.97%</div>
+      <div class="comp-desc">Joined with 2 weeks left. OCR over cuneiform PDFs + 8-model MBR ensemble (chrF++): 30–34 → 36.3 geo-mean.</div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-name">Biohub · Cell Tracking During Development <span class="tag">· solo · 3D + time microscopy</span></div>
+      <div class="comp-res"><span class="medal s"></span>Silver · <b>191</b> / 13,351 · top 1.43%</div>
+      <div class="comp-desc">Tracked cells through 3D light-sheet videos of developing embryos, learning from sparse, partial annotations.</div>
+    </div>
+
+    <div class="comp">
+      <div class="comp-name">The Pokémon Company · PTCG AI Battle Challenge <span class="tag">· solo · game-playing agents</span></div>
+      <div class="comp-res"><span class="medal s"></span>Silver · <b>205</b> / 14,081 · top 1.46%</div>
+      <div class="comp-desc">An LLM-driven agent that battles every other entrant's bot. Writeup: “I Replaced GPUs With Tokens: Silver in a Game I Can't Play”.</div>
+    </div>
+
+    <div class="comp-more">
+      <span class="medal b"></span><b>Bronze:</b> Kaggriculture (767 / 10,148 teams) · ROGII Wellbore Geology (381 / 16,341) · AI Agent Security (411 / 12,142)
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section>
+    <h2>Projects &amp; Research</h2>
+    <div class="item">
+      <div class="item-head">
+        <div class="item-title">STARC: Science Text Abstraction &amp; Reasoning Corpus <span class="org">· Google DeepMind “Measuring AGI”, Kaggle</span></div>
+        <div class="when">Apr 2026</div>
+      </div>
+      <p class="item-body">Rule-induction benchmark locating where frontier LLMs fail: domain discovery or logical inference. Team of 3, one week.</p>
+    </div>
+    <div class="item">
+      <div class="item-head">
+        <div class="item-title">Meta-Learning from Scratch <span class="org">· PyTorch · open source, Hacktoberfest-accepted</span></div>
+        <div class="when">Ongoing</div>
+      </div>
+      <p class="item-body">8 algorithms (MAML, FOMAML, ProtoNets and more) from first principles, benchmarked, with docs and Jupyter tutorials.</p>
+    </div>
+    <div class="item">
+      <div class="item-head">
+        <div class="item-title">THOR: Traffic Hazard Optimization &amp; Rescue <span class="org">· YOLO · real-time CV</span></div>
+        <div class="when">High school</div>
+      </div>
+      <p class="item-body">YOLO on a self-collected toy-car dataset; a live CCTV feed clears ambulance routes on a physical model. District winner.</p>
+    </div>
+  </section>
+
+  <!-- ================= TEACHING ================= -->
+  <section>
+    <h2>Teaching &amp; Leadership</h2>
+    <ul class="pts">
+      <li><b>10+ webinars, 200+ attendees</b> on ML from the ground up: Kaggle strategy, EDA, ensembling, LLMs.</li>
+      <li><b>Mentored team Meta Learners to the Smart India Hackathon Grand Finale</b>, from problem framing through pitch prep.</li>
+      <li><b>Hosted “Students ML Playground Series S1E1”</b>, a Kaggle community competition for IIT Guwahati peers.</li>
+    </ul>
+  </section>
+
+  <!-- ================= EDUCATION / SKILLS ================= -->
+  <section class="two">
+    <div>
+      <h2>Education &amp; Certifications</h2>
+      <ul class="plain">
+        <li><b>B.Sc. (Hons.) AI &amp; Data Science</b>, IIT Guwahati<br><span class="sub">3rd year · online · Sep 2024 – 2028 (expected)</span></li>
+        <li><b>TensorFlow Developer Certificate</b> <span class="sub">· Google, at 18</span></li>
+        <li><b>TensorFlow: Advanced Techniques</b> <span class="sub">· DeepLearning.AI</span></li>
+        <li><b>Google IT Automation</b> <span class="sub">· Professional Certificate</span></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Skills</h2>
+      <dl class="skills">
+        <dt>Core</dt><dd>Python, PyTorch, TensorFlow, Keras, Hugging Face, <span style="white-space:nowrap">scikit-learn</span>, OpenCV, Git</dd>
+        <dt>Models</dt><dd>nnU-Net, DINOv3, YOLO, transformers, LLMs</dd>
+        <dt>Areas</dt><dd>Computer vision, medical imaging, 3D segmentation, NLP, LLM evals, meta-learning</dd>
+        <dt>Methods</dt><dd>Pseudo-labelling, fine-tuning, MBR ensembling, prompt &amp; harness engineering</dd>
+      </dl>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

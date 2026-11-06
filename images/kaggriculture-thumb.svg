@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3140"/>
+      <stop offset="1" stop-color="#4b5163"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6f8a4e"/>
+      <stop offset="1" stop-color="#3d5230"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="200" fill="url(#sky)"/>
+  <circle cx="248" cy="56" r="20" fill="#e9d9a6" opacity=".9"/>
+  <path d="M0 92 Q160 76 320 92 V200 H0 Z" fill="url(#field)"/>
+  <!-- crop rows converging on the horizon -->
+  <g stroke="#a9c27a" stroke-width="3" stroke-linecap="round" opacity=".75" fill="none">
+    <path d="M160 88 L-40 200"/><path d="M160 88 L30 200"/><path d="M160 88 L100 200"/>
+    <path d="M160 88 L160 200"/><path d="M160 88 L220 200"/><path d="M160 88 L290 200"/>
+    <path d="M160 88 L360 200"/>
+  </g>
+</svg>
